@@ -55,7 +55,9 @@ jobs:
           run: npx postcss production/japanterebi.css -u autoprefixer -u postcss-preset-env -u cssnano-preset-default -o production/japanterebi.css
 
         - name: Compiling JS
-          run: npx google-closure-compiler --js='scripts/**.js' --js='!scripts/login.js' --js_output_file 'production/japanterebi.js'
+          run: |
+            npx google-closure-compiler --js='scripts/**.js' --js='!scripts/login.js' --js_output_file 'production/japanterebi.js'
+            npx google-closure-compiler --js='scripts/login.js' --js_output_file 'production/login.js'
 
         - name: Deleting unnecessary files
           run: |

@@ -31,6 +31,5 @@ This project is licensed under the GNU Affero General Public License v3.0 Licens
 
 
 ## Disclaimer
-This project has no aim to infringe the copyright just for the sake of it.
 
 Please look at the [Terms of Services](TERMSOFSERVICES.md)

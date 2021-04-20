@@ -7,7 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
         - name: Create new branch
-          uses: actions/checkout@v2
           run: |
             git branch -D production
             git checkout main
@@ -26,11 +25,9 @@ jobs:
           run: pip install beautifulsoup4 htmlmin
 
         - name: Compiling HTML
-          uses: actions/checkout@v2
           run: python compilers/compile_html.py
 
         - name: Compiling CSS
-          uses: actions/checkout@v2
           run: python compilers/compile_css.py
 
         - name: Installing Node 14.16
@@ -48,7 +45,6 @@ jobs:
           run: google-closure-compiler --js='scripts/**.js' --js='!login.js' --js_output_file 'production/japanterebi.js' --warning_level VERBOSE
 
         - name: Deleting unnecessary files
-          uses: actions/checkout@v2
           run: |
             rm -r compilers
             rm -r experimental
@@ -60,7 +56,6 @@ jobs:
             rm postcss.config.js
 
         - name: Pusing the results
-          uses: actions/checkout@v2
           run: |
             git config --global user.name 'Animenosekai'
             git config --global user.email '40539549+Animenosekai@users.noreply.github.com'

@@ -7,20 +7,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
         - name: Delete current production branch
-        uses: dawidd6/action-delete-branch@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branches: production
+          uses: dawidd6/action-delete-branch@v3
+          with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            branches: production
         
-        uses: peterjgrainger/action-create-branch@v2.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          branch: 'production'
+        - name: Creating production branch
+          uses: peterjgrainger/action-create-branch@v2.0.1
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          with:
+            branch: 'production'
 
         - uses: actions/checkout@v2
-        with:
-          ref: production
+          with:
+            ref: production
                 
         - name: Installing Python 3.9
           uses: actions/setup-python@v2

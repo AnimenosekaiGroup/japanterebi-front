@@ -61,7 +61,6 @@ jobs:
 
         - name: Deleting unnecessary files
           run: |
-            rm -r compilers
             rm -r experimental
             rm -r scripts
             rm -r styles
@@ -74,11 +73,10 @@ jobs:
           run: |
             mkdir styles
             mkdir scripts
-            cd production
-            cp index.html login.html ..
-            cp japanterebi.css login.css ../styles
-            cp japanterebi.js login.js ../scripts
-            cd ..
+            mv production/index.html .
+            mv production/login.html .
+            python compilers/copy_files.py
+            rm -r compilers
             rm -r production
 
         - name: Pusing the results

@@ -7,7 +7,7 @@
 module.exports = {
   plugins: [
     require('postcss-preset-env')({}),
-    require('autoprefixer')({ browsers: ['defaults'] }),
+    require('autoprefixer')({ overrideBrowserslist: ['defaults'] }),
     require('cssnano')({preset: 'default'})
   ]
 }

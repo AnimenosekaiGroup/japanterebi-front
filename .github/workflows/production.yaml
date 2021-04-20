@@ -74,17 +74,17 @@ jobs:
           run: |
             mkdir styles
             mkdir scripts
-            mv production/index.html index.html
-            mv production/login.html login.html
-            mv production/japanterebi.css styles/japanterebi.css
-            mv production/login.css styles/login.css
-            mv production/japanterebi.js scripts/japanterebi.js
-            mv production/login.js scripts/login.js
+            mv production/index.html .
+            mv production/login.html .
+            mv production/japanterebi.css styles
+            mv production/login.css styles
+            mv production/japanterebi.js scripts
+            mv production/login.js scripts
             rm -r production
 
         - name: Pusing the results
           run: |
             git config --global user.name 'Animenosekai'
             git config --global user.email '40539549+Animenosekai@users.noreply.github.com'
-            git commit -am "[new] Production Build"
+            git commit -am "[build] Production Build"
             git push

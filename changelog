@@ -1,0 +1,103 @@
+• Version 4.0
+Changes come less from the design but rather from subtle changes that makes the UX even better.
+Lots of issues got fixed (especially on the responsive side)
+New backend architecture with a load balancing system, different cache layers and mainly serverless Vercel instances (AWS lambda)
+A better source fetching, a better EPG fetching
+Increased security, including protection of all endpoints
+A cleaned code split up in different pieces
+Localization in 3 different languages
+A truly useful account, with profile pictures, language, etc.
+Account management added on the website
+A slightly better home page
+A slightly better watch page with direct AirPlay streaming
+The possibility to get more information by clicking on the program in the EPG
+A finally working thumbnail generation system
+A mobile version
+Performance improvement
+New channels added
+Streams proxied and coming directly from my server, but without any problem and with an efficient caching system
+Direct page linking (from the URL Params) and dynamic page title
+Servers Status Monitoring right from the "Guide"/"More" Page
+
+• Version 3.0
+A complete renewal of Japan Terebi
+Now with a completely different and unique single page design, it focus on the main usage: watching TV
+It has some cool features such as the built in EPG and a real server handling the requests
+It is now available exclusively to the invited members and they all have an account assigned
+Stream are now taken from their source playlist rather than with different annoying <iframes> which could hide trackers and all kinds of not wanted things
+
+• Version 2.5
+Terms of Services update.
+Privacy Policy update.
+Migrating from Cookies (for the site theme) to LocalStorage
+Fixing some minor issues.
+
+• Version 2.4
+BS11 arrives on Japan Terebi! (might not be available quite often)
+Fixing some problems on AT-X webpage.
+
+• Version 2.3
+New API! (from my server)
+Adding a way of switching to mov3 if Dテレ doesn't work.
+Adding a message which warns about issues if using adblock with the VK Player.
+Direct access to a Japanese TV Guide instead of the v1 of Japan Terebi.
+
+• Version 2.2
+A universal changelog to change it more quickly.
+A better stream for TBS with Dテレ (when available)!
+Setting some redirects (like the API endpoint 'channels')
+Reorganizing the website
+VK API Checking from the development site (dev-japanterebi.netlify.app) (requires a VK Account)
+
+• Version 2.1
+AT-X arrives on Japan Terebi!
+A better stream for Tokyo MX with a brand new provider (Dテレ) (when available)!
+
+• Version 2.0
+Welcome to the fully-made, HTML (CSS and JS) Version of Japan Terebi!
+Cool animations to make the site dynamic
+A cool background
+7 Japanese TV Channels available
+A description of each channel on their watching page
+All the credits are here for the description
+Two nice Privacy Policy and Terms of Services pages
+A cool vertical sidenav (you can access with the 3 stripes on the top-left corner)
+Settings: 
+
+A nice dark mode (I took a lot of time making it) 
+
+A JS Cookie keeps the last state of this Dark Mode (called the 'site version') and restore it even if you reload the page
+Channel Selection: 
+
+You can choose the channel you wanna watch with cool buttons ^^ 
+
+A link to the Japan Terebi discord server and my YouTube channel 
+
+(You can also choose the channel you wanna watch directly from the watching page) 
+
+A nice Changelog (you're seeing now)
+
+• Version1.3.1〜Version 1.3.9
+Replacing broken TV channels links
+
+• Version 1.3
+Adding the Discord Server Access Widget to the navbar, the homepage and the TV Channels watching pages
+Adding NHK World Japan
+
+• Version 1.2.1
+Adding a link to Disgusting Otaku in the horizontal navbar
+
+• Version 1.2
+Adding the Discord widget
+Adding the structure for the upcoming Discord server access widget
+
+• Version 1.1
+Adding translations in English, Japanese and French
+
+• Version 1.0
+Initial Release
+7 channels added + JapaNews24
+Crunchyroll Linking in the horizontal navbar
+Local Time and Japan Time on TV watching pages
+A homepage with a portofolio of available TV channels
+Adding a horizontal navbar on the whole site + a vertical navbar on TV watching pages

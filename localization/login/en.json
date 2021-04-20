@@ -1,0 +1,56 @@
+{
+    "language": "english",
+    "version": "v2.0",
+    "UI": {
+        "title": "Japan Terebi — Login",
+        "static": {
+            "login": {
+                "title": "Login to Japan Terebi",
+                "placeholders": {
+                    "username": "Username",
+                    "password": "Password"
+                },
+                "buttons": {
+                    "login": "Login",
+                    "create": "Create Account"
+                }
+            },
+            "create": {
+                "title": "Create your account for Japan Terebi",
+                "placeholders": {
+                    "invite": "Invite",
+                    "username": "Username",
+                    "password": "New Password"
+                },
+                "buttons": {
+                    "submit": "Submit",
+                    "login": "Go to Login"
+                }
+            }
+        },
+        "announce": {
+            "sessionExpired": "Your session expired.\nLog in once again to continue watching Japan Terebi!"
+        }
+    },
+    "Requests": {
+        "errors": {
+            "SECTOR_NOT_FOUND": "An error occured while trying to request some information",
+            "AUTH_ERROR": "We are sorry but to ensure your security, this session expired",
+            "SERVER_ERROR": "We are sorry but an error occured on the server while processing a request",
+            "UNKNOWN_ERROR": "We are sorry but an unknown error occured on the server",
+            "NO_TOKEN": "We are sorry but we couldn't verify your request",
+            "ACCOUNT_NOT_FOUND": "We couldn't find your account",
+            "MISSING_ARG": "We are sorry but an error occured while sending a request",
+            "WRONG_TOKEN": "We are sorry but your seem to have a wrong token",
+            "NOT_FOUND": "We are sorry but something couldn't be found while requesting it",
+            "WRONG_PASSWORD": "This seems to be the wrong password",
+            "USERNAME_ALREADY_IN_USE": "This username is already taken",
+            "INVITE_ALREADY_IN_USE": "This invite is already used by another account",
+            "INVITE_NOT_FOUND": "We don't know this invite",
+            "other": "An unknown error occured while processing your request"
+        },
+        "success": {
+            "loggedIn": "Successfully logged in!"
+        }
+    }
+}

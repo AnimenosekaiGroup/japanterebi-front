@@ -1,0 +1,132 @@
+{
+    "language": "japanese",
+    "channelNameLanguage": "japanese",
+    "translateDescription": false,
+    "version": "v2.0",
+    "UI": {
+        "static": {
+            "navbar": {
+                "home": "ホーム",
+                "watch": "見る",
+                "guide": "番組表"
+            },
+            "tvplayer": {
+                "goToGuide": "番組表を表示する",
+                "header": {
+                    "title": "ご視聴中のチャンネル"
+                },
+                "controls": {
+                    "watching": {
+                        "tooltip": "ただいまこの番組を観ている視聴者数"
+                    }
+                }
+            },
+            "more": {
+                "returnButton": "テレビに戻る",
+                "account": {
+                    "title": "アカウント",
+                    "submit": "オッケー",
+                    "username": {
+                        "title": "名前: ",
+                        "placeholder": "名"
+                    },
+                    "invite": {
+                        "title": "招待キー: "
+                    },
+                    "passwordChange": {
+                        "button": "パスワードを変化する",
+                        "currentPasswordPlaceholder": "現在お使いのパスーワード",
+                        "newPasswordPlaceholder": "新しいパスワード"
+                    },
+                    "picture": {
+                        "edit": "編集"
+                    }
+                },
+                "guide": {
+                    "title": "番組表",
+                    "returnToCurrentTime": "現在の時間帯に戻る",
+                    "timestamps": ["00<span style=\"font-size: 15px;\">時</span>00", "01<span style=\"font-size: 15px;\">時</span>00", "02<span style=\"font-size: 15px;\">時</span>00", "03<span style=\"font-size: 15px;\">時</span>00", "04<span style=\"font-size: 15px;\">時</span>00", "05<span style=\"font-size: 15px;\">時</span>00", "06<span style=\"font-size: 15px;\">時</span>00", "07<span style=\"font-size: 15px;\">時</span>00", "08<span style=\"font-size: 15px;\">時</span>00", "09<span style=\"font-size: 15px;\">時</span>00", "10<span style=\"font-size: 15px;\">時</span>00", "11<span style=\"font-size: 15px;\">時</span>00", "12<span style=\"font-size: 15px;\">時</span>00", "13<span style=\"font-size: 15px;\">時</span>00", "14<span style=\"font-size: 15px;\">時</span>00", "15<span style=\"font-size: 15px;\">時</span>00", "16<span style=\"font-size: 15px;\">時</span>00", "17<span style=\"font-size: 15px;\">時</span>00", "18<span style=\"font-size: 15px;\">時</span>00", "19<span style=\"font-size: 15px;\">時</span>00", "20<span style=\"font-size: 15px;\">時</span>00", "21<span style=\"font-size: 15px;\">時</span>00", "22<span style=\"font-size: 15px;\">時</span>00", "23<span style=\"font-size: 15px;\">時</span>00"],
+                    "currentTimeDefault": "時間なし"
+                }
+            }
+        },
+        "dynamic": {
+            "home": {
+                "noprogram": {
+                    "title": "現在の番組情報がありません",
+                    "description": "申し訳ございませんが、現在このチャンネルの番組情報が見つかりませんでした",
+                    "tileTitle": "番組情報なし"
+                },
+                "currentlyAiring": "ただいま {channel} で放送中"
+            },
+            "more": {
+                "information": {
+                    "channel": "{channel} で放送",
+                    "timestamp": "{startTime}から{endTime}まで",
+                    "url": "番組のホームページ"
+                },
+                "status": {
+                    "mainStatusTitle": "メインサーバーの状態:",
+                    "channelsStatusTitle": "チャンネルサーバーの状態:",
+                    "paused": "モニタリングオフ",
+                    "notCheckedYet": "まだデータがありません",
+                    "up": "問題なし",
+                    "seemsDown": "問題が発生しているよう",
+                    "down": "停止",
+                    "unknown": "不明"
+                }
+            }
+        },
+        "announce": {
+            "browserNotCompatible": "申し訳ございませんが、お使いのブラウザは互換性がありません",
+            "unknownChannel": "不明なチャンネル",
+            "nextChannelSwitch": "次のチャンネルを観るには、もう一回押してください",
+            "previousChannelSwitch": "前のチャンネルを観るには、もう一回押してください",
+            "noInformationForSelectedProgram": "ご選択の番組の情報が見つかりませんでした",
+            "channelLoadUnknownError": "チャンネルの読み込み中に不明なエラーが発生しました",
+            "online": "インターネット接続が戻りました!",
+            "offline": "インターネット接続が切られています",
+            "unknownPlayerError": "プレイヤーに不明なエラーが発生しました。何かの問題が起きたら、更新してください。",
+            "noAvailableChannels": "観れるチャンネルのリストを見つかりませんでした"
+        }
+    },
+    "Requests": {
+        "errors": {
+            "SECTOR_NOT_FOUND": "リクエスト中に何かの問題が起こりました",
+            "AUTH_ERROR": "申し訳ございませんが、お客様のアカウントの安全を守るため、もう一度ログインしてください。",
+            "SERVER_ERROR": "申し訳ございませんが、サーバー上で何かしらの問題が起こりました",
+            "UNKNOWN_ERROR": "申し訳ございませんが、サーバー上で不明の問題が起こりました",
+            "NO_TOKEN": "申し訳ございませんが、お客様のアカウント情報の確認が出来ませんでした",
+            "ACCOUNT_NOT_FOUND": "アカウントが見つかりません",
+            "MISSING_ARG": "申し訳ございませんが、リクエストの送信中に何かしらの問題が起こりました",
+            "WRONG_TOKEN": "申し訳ございませんが、セッションキーが間違えてます",
+            "NOT_FOUND": "申し訳ございませんが、何かがサーバー上で見つかりませんでした",
+            "WRONG_PASSWORD": "パスワードが間違えているようです",
+            "USERNAME_ALREADY_IN_USE": "このユーザー名は現在別のアカウントで使われています",
+            "NO_IMAGE": "画像がありません",
+            "INVITE_ALREADY_IN_USE": "この招待キーは既に別のアカウントで使われています",
+            "INVITE_NOT_FOUND": "この招待キーが見つかりません",
+            "CHANNEL_NOT_FOUND": "要求したチャンネルが見つかりません",
+            "other": "リクエストの処理中に何かしらの問題が起こりました",
+            "account": {
+                "picture": {
+                    "new": "プロファイル画像の変更に何かの問題が起こりました"
+                }
+            },
+            "channels": {
+                "available": "現在視聴できるチャンネルはありません"
+            }
+        },
+        "success": {
+            "account": {
+                "change": {
+                    "password": "パスワードを変更しました！",
+                    "username": "アカウント名を変更しました!"
+                },
+                "picture": {
+                    "new": "新しいプロファイル画像を追加しました!"
+                }
+            }
+        }
+    }
+}

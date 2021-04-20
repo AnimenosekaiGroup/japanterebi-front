@@ -1,0 +1,132 @@
+{
+    "language": "english",
+    "channelNameLanguage": "english",
+    "translateDescription": true,
+    "version": "v2.0",
+    "UI": {
+        "static": {
+            "navbar": {
+                "home": "Home",
+                "watch": "Watch",
+                "guide": "TV Guide"
+            },
+            "tvplayer": {
+                "goToGuide": "Go to the TV Guide",
+                "header": {
+                    "title": "You are currently watching"
+                },
+                "controls": {
+                    "watching": {
+                        "tooltip": "The number of people currently watching the channel"
+                    }
+                }
+            },
+            "more": {
+                "returnButton": "Go back to TV",
+                "account": {
+                    "title": "Account",
+                    "submit": "Submit",
+                    "username": {
+                        "title": "Username: ",
+                        "placeholder": "Username"
+                    },
+                    "invite": {
+                        "title": "Invite: "
+                    },
+                    "passwordChange": {
+                        "button": "Change password",
+                        "currentPasswordPlaceholder": "Current Password",
+                        "newPasswordPlaceholder": "New Password"
+                    },
+                    "picture": {
+                        "edit": "Edit"
+                    }
+                },
+                "guide": {
+                    "title": "TV Guide",
+                    "returnToCurrentTime": "Return to current time",
+                    "timestamps": ["00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"],
+                    "currentTimeDefault": "No time"
+                }
+            }
+        },
+        "dynamic": {
+            "home": {
+                "noprogram": {
+                    "title": "No program information",
+                    "description": "We are sorry but I couldn't find any program information for this channel",
+                    "tileTitle": "No program information"
+                },
+                "currentlyAiring": "Currently airing on: {channel}"
+            },
+            "more": {
+                "information": {
+                    "channel": "Airing on {channel}",
+                    "timestamp": "From {startTime} to {endTime}",
+                    "url": "Link to the program site"
+                },
+                "status": {
+                    "mainStatusTitle": "Main API Status:",
+                    "channelsStatusTitle": "Channels Status:",
+                    "paused": "Monitoring Paused",
+                    "notCheckedYet": "Not checking",
+                    "up": "Operational",
+                    "seemsDown": "Seems Down",
+                    "down": "Down",
+                    "unknown": "Unknown"
+                }
+            }
+        },
+        "announce": {
+            "browserNotCompatible": "We are sorry but your browser is not compatible",
+            "unknownChannel": "We don't know this channel",
+            "nextChannelSwitch": "Press one more time to switch to the next channel",
+            "previousChannelSwitch": "Press one more time to switch to the previous channel",
+            "noInformationForSelectedProgram": "I couldn't get the information for the selected program",
+            "channelLoadUnknownError": "An unknown error occured while loading the channel",
+            "online": "You are back online!",
+            "offline": "You seem to be disconnected",
+            "unknownPlayerError": "An unknown error occured with the player, please restart the webpage if it doesn't work",
+            "noAvailableChannels": "I couldn't get the available channels"
+        }
+    },
+    "Requests": {
+        "errors": {
+            "SECTOR_NOT_FOUND": "An error occured while trying to request some information",
+            "AUTH_ERROR": "We are sorry but to ensure your security, this session expired",
+            "SERVER_ERROR": "We are sorry but an error occured on the server while processing a request",
+            "UNKNOWN_ERROR": "We are sorry but an unknown error occured on the server",
+            "NO_TOKEN": "We are sorry but we couldn't verify your request",
+            "ACCOUNT_NOT_FOUND": "We couldn't find your account",
+            "MISSING_ARG": "We are sorry but an error occured while sending a request",
+            "WRONG_TOKEN": "We are sorry but your seem to have a wrong token",
+            "NOT_FOUND": "We are sorry but something couldn't be found while requesting it",
+            "WRONG_PASSWORD": "This seems to be the wrong password",
+            "USERNAME_ALREADY_IN_USE": "This username is already taken",
+            "NO_IMAGE": "There is no image",
+            "INVITE_ALREADY_IN_USE": "This invite is already used by another account",
+            "INVITE_NOT_FOUND": "We don't know this invite",
+            "CHANNEL_NOT_FOUND": "We couldn't find the requested channel",
+            "other": "An unknown error occured while processing a request",
+            "account": {
+                "picture": {
+                    "new": "An error occured while setting your profile picture"
+                }
+            },
+            "channels": {
+                "available": "No channel is available for now"
+            }
+        },
+        "success": {
+            "account": {
+                "change": {
+                    "password": "We successfully changed your password!",
+                    "username": "We successfully changed your username!"
+                },
+                "picture": {
+                    "new": "New profile picture set successfully!"
+                }
+            }
+        }
+    }
+}

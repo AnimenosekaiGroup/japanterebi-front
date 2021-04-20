@@ -1,0 +1,56 @@
+{
+    "language": "japanese",
+    "version": "v2.0",
+    "UI": {
+        "title": "Japan Terebi — ログイン",
+        "static": {
+            "login": {
+                "title": "Japan Terebiにログインする",
+                "placeholders": {
+                    "username": "ユーザー名",
+                    "password": "パスワード"
+                },
+                "buttons": {
+                    "login": "ログインする",
+                    "create": "アカウント構成へ行く"
+                }
+            },
+            "create": {
+                "title": "Japan Terebiでアカウントを作る",
+                "placeholders": {
+                    "invite": "招待キー",
+                    "username": "ユーザー名",
+                    "password": "新しいパスワード"
+                },
+                "buttons": {
+                    "submit": "アカウントを作る",
+                    "login": "ログインする"
+                }
+            }
+        },
+        "announce": {
+            "sessionExpired": "アカウントの安全を守るため、お客様のセッション有効期限が切れました。\nもう一度Japan Terebiにログインして番組の続きを観よう!"
+        }
+    },
+    "Requests": {
+        "errors": {
+            "SECTOR_NOT_FOUND": "リクエスト中に何かの問題が起こりました",
+            "AUTH_ERROR": "申し訳ございませんが、お客様のアカウントの安全を守るため、もう一度ログインしてください。",
+            "SERVER_ERROR": "申し訳ございませんが、サーバー上で何かしらの問題が起こりました",
+            "UNKNOWN_ERROR": "申し訳ございませんが、サーバー上で不明の問題が起こりました",
+            "NO_TOKEN": "申し訳ございませんが、お客様のアカウント情報の確認が出来ませんでした",
+            "ACCOUNT_NOT_FOUND": "アカウントが見つかりません",
+            "MISSING_ARG": "申し訳ございませんが、リクエストの送信中に何かしらの問題が起こりました",
+            "WRONG_TOKEN": "申し訳ございませんが、セッションキーが間違えてます",
+            "NOT_FOUND": "申し訳ございませんが、何かがサーバー上で見つかりませんでした",
+            "WRONG_PASSWORD": "パスワードが間違えているようです",
+            "USERNAME_ALREADY_IN_USE": "このユーザー名は現在別のアカウントで使われています",
+            "INVITE_ALREADY_IN_USE": "この招待キーは既に別のアカウントで使われています",
+            "INVITE_NOT_FOUND": "この招待キーが見つかりません",
+            "other": "リクエストの処理中に何かしらの問題が起こりました"
+        },
+        "success": {
+            "loggedIn": "ログインに成功しました!"
+        }
+    }
+}

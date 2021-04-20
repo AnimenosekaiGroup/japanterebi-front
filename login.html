@@ -26,25 +26,24 @@
     <script src="/scripts/login.js"></script>
     <link rel="stylesheet" href="/styles/login.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/styles/infoBox.css">
 </head>
 <body>
     <login-form class="loginForm hidden" id="loginPage">
-        <login-title>Login to Japan Terebi</login-title>
+        <login-title id="localization-loginTitle">Login to Japan Terebi</login-title>
         <input type="text" id="usernameInput" placeholder="Username">
         <input type="password" id="passwordInput" placeholder="Password" onkeypress="loginInputCallback(event)" >
         <button-container>
-            <button onclick="login()">Login</button>
+            <button id="localization-LoginButton" onclick="login()">Login</button>
             <button onclick="setPage()" id="goToSet">Create Account</button>
         </button-container>
     </login-form>
     <password-set-form class="loginForm hidden" id="setPage">
-        <login-title>Set your password for Japan Terebi</login-title>
+        <login-title id="localization-createTitle">Create your account for Japan Terebi</login-title>
         <input type="password" id="inviteInput" placeholder="Invite">
         <input type="text" id="createUsernameInput" placeholder="Username">
         <input type="password" id="newPasswordInput" placeholder="New Password" onkeypress="setPasswordInputCallback(event)">
         <button-container>
-            <button onclick="setPassword()">Submit</button>
+            <button id="localization-CreateSubmitButton" onclick="setPassword()">Submit</button>
             <button onclick="loginPage()" id="goToLogin">Go to Login</button>
         </button-container>
     </password-set-form>
@@ -52,7 +51,9 @@
     <copyright-container>
         <copyright>© Anime no Sekai</copyright>
         <copyright>© Japan Terebi — 2021</copyright>
-        <externalLink><a href="https://github.com/Animenosekai/japan_terebi">GitHub</a></externalLink>
+        <!--
+            <externalLink><a href="https://github.com/Animenosekai/japan_terebi">GitHub</a></externalLink>
+        -->
     </copyright-container>
     <div class="loading-wrapper" id="loadingWrapper">
         <div class="loading-container" id="loadingContainer">
@@ -63,5 +64,10 @@
             </div>
         </div>
     </div>
+    <select name="language" id="language">
+        <option value="en">English</option>
+        <option value="ja">日本語</option>
+        <option value="fr">Français</option>
+    </select>
 </body>
 </html>

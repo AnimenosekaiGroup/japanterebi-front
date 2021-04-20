@@ -1,6 +1,6 @@
 [[redirects]]
   from = "/status"
-  to = "https://stats.uptimerobot.com/lMVyrUoqYq/785548897"
+  to = "https://stats.uptimerobot.com/lMVyrUoqYq"
   status = 301
   force = true
 
@@ -9,14 +9,14 @@
 
 [build.processing.css]
   bundle = true
-  minify = true
+  minify = false
 
 [build.processing.js]
   bundle = true
-  minify = true
+  minify = false
 
 [build.processing.html]
   pretty_urls = true
-
+  
 [build.processing.images]
   compress = true

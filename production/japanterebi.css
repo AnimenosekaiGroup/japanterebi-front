@@ -1,3 +1,49 @@
+/* Japan Terebi — Styling */
+
+
+/** Styling Keyframes
+ *
+ * © Anime no Sekai — 2021
+ */
+
+
+@keyframes loading-rotate {
+    to {
+        transform: rotate(1turn);
+    }
+}
+
+@keyframes loading-stroke {
+    0% {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -35px;
+    }
+    to {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -124px;
+    }
+}
+
+
+@keyframes pulse {
+    0% {
+        opacity:0.5
+    }
+
+    70% {
+        opacity: 0;
+        transform:scale(2.5)
+    }
+
+    100% {
+        opacity:0
+    }
+}
+
 /** Main Styling
  *
  * © Anime no Sekai — 2021
@@ -1317,4 +1363,279 @@ epg-button:hover {
 
 .dot.is-grey:after {
     display:none
+}
+
+/** Styling to make the website responsive
+ *
+ * © Anime no Sekai — 2021
+ */
+
+
+.responsive-information {
+    display: none;
+    overflow: auto;
+    flex-direction: column;
+    z-index: 15;
+    background: #0e0f11;
+}
+
+.responive-information-container {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: auto;
+}
+
+.responsive-media {
+    height: auto;
+    width: auto;
+    opacity: 1;
+    transition: all 500ms ease;
+}
+
+.responsive-logo {
+    position: relative;
+    margin: 15px;
+    height: 100px;
+    width: 100px;
+    border-radius: 100px;
+    object-fit: contain;
+    transition: all 500ms ease;
+    background: rgba(255, 255, 255, 1);
+}
+
+.information-text {
+    color: white;
+    margin: 25px;
+    height: auto;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.responsive-channel {
+    font-size: x-large;
+}
+
+.responsive-description {
+    color: rgb(224, 224, 224);
+    width: 80%;
+    left: 50%;
+    position: relative;
+    transform: translateX(-50%);
+    margin-top: 30px;
+    height: auto;
+}
+
+.responsive-epg {
+    position: relative;
+}
+
+.responsive-epg-button {
+    padding: 10px;
+    font-size: large;
+    border-radius: 5px;
+    width: 90%;
+    color: black;
+    border: none;
+    margin-top: 30px;
+    opacity: 1;
+    background: rgba(10, 247, 126, 1);
+    transition: transform 250ms ease, opacity 150ms ease;
+    cursor: pointer;
+    left: 50%;
+    position: relative;
+    transform: translateX(-50%) scale(1);
+}
+
+.responsiveReturnBackButton {
+    display: none;
+    z-index: 100;
+    position: sticky;
+    top: 0;
+    padding: 10px;
+    font-size: large;
+    width: 100vw;
+    color: black;
+    border: none;
+    opacity: 1;
+    background: rgba(10, 247, 126, 1);
+    transition: all 250ms ease;
+    transform: scale(1);
+    text-align: center;
+    cursor: pointer;
+}
+
+.responsive-epg-button:active {
+    transform: translateX(-50%) scale(.95);
+}
+
+.responsiveReturnBackButton:active {
+    transform: scale(1);
+}
+
+.responsive-epg-button:hover {
+    opacity: 0.9;
+}
+.responsiveReturnBackButton:hover {
+    opacity: 0.9;
+}
+
+.responsive-program-list {
+    height: 100%;
+    position: relative;
+    margin-bottom: 50px;
+}
+
+@media (orientation: portrait) {
+    .header-container {
+        display: none;
+    }
+    .home-container {
+        display: none;
+    }
+    #reloadBtn {
+        display: none;
+    }
+    .information {
+        display: none;
+    }
+    .tvplayer {
+        height: 100vw;
+        max-height: 40vh;
+    }
+    .responsive-information {
+        display: flex;
+    }
+    .home-tile-container {
+        margin-bottom: 0;
+        margin-left: 0;
+    }
+    .icons {
+        padding: 10px;
+    }
+    .svg-icon {
+        width: 22px;
+        height: 22px;
+    }
+    .watching-counter {
+        font-size: small;
+        padding: 3px;
+    }
+    .watching-tooltip {
+        font-size: 0.8em;
+    }
+    .responsiveReturnBackButton {
+        display: block;
+    }
+    .responsiveReturnBackButton.unload {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 960px) {
+    .account {
+        height: 450px;
+    }
+
+    .account-container {
+        flex-direction: column;
+    }
+
+    .account-picture {
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .epg-channels {
+        width: 150px;
+    }
+
+    .epg-channel {
+        width: 150px;
+        height: 90px;
+    }
+
+    .epg-channel-img {
+        height: 70px;
+    }
+
+    .epg-row {
+        height: 90px;
+    }
+
+    .epg-program-title {
+        font-size: .8em;
+    }
+
+    .epg-program-description {
+        font-size: .6em;
+    }
+}
+
+@media screen and (min-width: 480px) {
+    .loading-container {
+        bottom: 40px;
+        right: 40px;
+        width: 50px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .responsive-logo {
+        height: 70px;
+        width: 70px;
+    }
+    .responsive-media {
+        height: 70px;
+        width: 70px;
+    }
+}
+
+@media screen and (max-height: 650px) and (orientation: landscape) {
+    .home-tile-container {
+        margin-bottom: 5vh;
+    }
+}
+
+@media screen and (max-height: 550px) and (orientation: landscape) {
+    .home-tile-container {
+        margin-bottom: 0vh;
+    }
+    .home-program-description {
+        display: none;
+    }
+    .home-program-channel {
+        display: none;
+    }
+    .home-program-title {
+        font-size: 2em;
+    }
+    .home-tile {
+        width: 200px;
+        height: 112px;
+    }
+    .home-tile-img {
+        width: 200px;
+        height: 112px;
+    }
+}
+
+@media screen and (max-width: 800px) and (orientation: landscape) {
+    .home-program {
+        margin-left: -80px;
+    }   
+}
+
+@media screen and (max-width: 785px) {
+    .footer {
+        flex-direction: column;
+    }
+    .server-status {
+        margin-top: 5px;
+    }
 }

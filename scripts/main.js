@@ -18,13 +18,6 @@
  *      Filename: scripts/upscale.js
  */
 
-/** TODO
- * Cleanup
- * Localization
- * Account Management
- * Multiple Fixes
- */
-
 // ONLOAD: initializing the page
 window.onload = function() {
     const urlParams = new URLSearchParams(window.location.search);

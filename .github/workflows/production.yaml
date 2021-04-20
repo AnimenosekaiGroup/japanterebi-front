@@ -49,7 +49,7 @@ jobs:
           run: npm install --save-dev postcss postcss-cli autoprefixer cssnano postcss-preset-env google-closure-compiler
 
         - name: PostCSS
-          run: npx postcss production/japanterebi.css > production/japanterebi.css
+          run: npx postcss production/japanterebi.css -u autoprefixer -u postcss-preset-env -u cssnano-preset-default -o production/japanterebi.css
 
         - name: Compiling JS
           run: npx google-closure-compiler --js='scripts/**.js' --js='!scripts/login.js' --js_output_file 'production/japanterebi.js'
@@ -64,6 +64,18 @@ jobs:
             rm index.html
             rm login.html
             rm postcss.config.js
+        
+        - name: Reorganizing Repo
+          run: |
+            mkdir styles
+            mkdir scripts
+            mv production/index.html index.html
+            mv production/login.html login.html
+            mv production/japanterebi.css styles/japanterebi.css
+            mv production/login.css styles/login.css
+            mv production/japanterebi.js scripts/japanterebi.js
+            mv production/login.js scripts/login.js
+            rm -r production
 
         - name: Pusing the results
           run: |

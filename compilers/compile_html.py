@@ -27,7 +27,7 @@ print("[step] Processing index.html — Adding new script tags")
 hls = soup.new_tag('script')
 hls["src"] = "https://cdn.jsdelivr.net/npm/hls.js@latest"
 main = soup.new_tag('script')
-main["src"] = "/japanterebi.js"
+main["src"] = "scripts/japanterebi.js"
 
 soup.find("head").append(hls)
 soup.find("head").append(main)
@@ -40,7 +40,7 @@ for link in soup.find_all("link"):
 print("[step] Processing index.html — Adding new links to css tags")
 main = soup.new_tag('link')
 main["rel"] = "stylesheet"
-main["href"] = "/japanterebi.css"
+main["href"] = "styles/japanterebi.css"
 
 soup.find("head").append(main)
 
@@ -68,7 +68,7 @@ for script in soup.find_all("script"):
 
 print("[step] Processing login.html — Adding new script tags")
 main = soup.new_tag('script')
-main["src"] = "/login.js"
+main["src"] = "scripts/login.js"
 
 soup.find("head").append(main)
 
@@ -80,7 +80,7 @@ for link in soup.find_all("link"):
 print("[step] Processing login.html — Adding new links to css tags")
 main = soup.new_tag('link')
 main["rel"] = "stylesheet"
-main["href"] = "/login.css"
+main["href"] = "styles/login.css"
 font_awesome = soup.new_tag('link')
 font_awesome["rel"] = "stylesheet"
 font_awesome["href"] = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"

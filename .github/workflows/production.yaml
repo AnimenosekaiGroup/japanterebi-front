@@ -74,12 +74,11 @@ jobs:
           run: |
             mkdir styles
             mkdir scripts
-            mv production/index.html .
-            mv production/login.html .
-            mv production/japanterebi.css styles
-            mv production/login.css styles
-            mv production/japanterebi.js scripts
-            mv production/login.js scripts
+            cd production
+            cp index.html login.html ..
+            cp japanterebi.css login.css ../styles
+            cp japanterebi.js login.js ../scripts
+            cd ..
             rm -r production
 
         - name: Pusing the results

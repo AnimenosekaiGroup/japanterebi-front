@@ -53,11 +53,14 @@ jobs:
 
         - name: PostCSS
           run: npx postcss production/main.css -o production/main.css
+          run: npx postcss production/login.css -o production/login.css
+          run: npx postcss production/admin.css -o production/admin.css
 
         - name: Compiling JS
           run: |
-            npx google-closure-compiler --js='scripts/**.js' --js='!scripts/login.js' --js_output_file 'production/main.js'
+            npx google-closure-compiler --js='scripts/**.js' --js='!scripts/login.js' --js='!scripts/admin.js' --js_output_file 'production/main.js'
             npx google-closure-compiler --js='scripts/login.js' --js_output_file 'production/login.js'
+            npx google-closure-compiler --js='scripts/admin.js' --js_output_file 'production/admin.js'
 
         - name: Deleting unnecessary files
           run: |
@@ -67,6 +70,7 @@ jobs:
             rm .gitignore
             rm index.html
             rm login.html
+            rm admin.html
             rm postcss.config.js
         
         - name: Reorganizing Repo
@@ -75,6 +79,7 @@ jobs:
             mkdir scripts
             mv production/index.html .
             mv production/login.html .
+            mv production/admin.html .
             python compilers/copy_files.py
             rm -r compilers
             rm -r production

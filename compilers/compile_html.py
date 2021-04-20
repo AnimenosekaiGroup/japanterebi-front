@@ -94,3 +94,46 @@ HTML = minify(str(soup), remove_comments=True, remove_empty_space=True)
 print("[step] Outputting result")
 with open("production/login.html", "w") as login:
     login.write(str(HTML))
+
+#### ADMIN PAGE
+
+print("[step] Processing admin.html")
+with open("admin.html") as admin:
+    HTML = admin.read()
+
+
+print("[step] Processing admin.html")
+soup = BeautifulSoup(HTML, "html.parser")
+
+print("[step] Processing admin.html — Removing script tags")
+for script in soup.find_all("script"):
+    script.decompose()
+
+print("[step] Processing admin.html — Adding new script tags")
+main = soup.new_tag('script')
+main["src"] = "scripts/admin.js"
+
+soup.find("head").append(main)
+
+print("[step] Processing admin.html — Removing link:css tags")
+for link in soup.find_all("link"):
+    if "stylesheet" in link["rel"]:
+        link.decompose()
+
+print("[step] Processing admin.html — Adding new links to css tags")
+main = soup.new_tag('link')
+main["rel"] = "stylesheet"
+main["href"] = "styles/admin.css"
+font_awesome = soup.new_tag('link')
+font_awesome["rel"] = "stylesheet"
+font_awesome["href"] = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+
+soup.find("head").append(main)
+soup.find("head").append(font_awesome)
+
+print("[step] Processing admin.html — Minifying")
+HTML = minify(str(soup), remove_comments=True, remove_empty_space=True)
+
+print("[step] Outputting result")
+with open("production/admin.html", "w") as admin:
+    admin.write(str(HTML))

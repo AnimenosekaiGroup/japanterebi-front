@@ -1,0 +1,228 @@
+/** Admin Page Styling
+ *
+ * © Anime no Sekai — 2021
+ */
+
+
+body {
+    font-family: SF Pro Display, Inter, Helvetica, Arial;
+}
+
+.info, .success, .warning, .error {
+	border: 1px solid;
+    border-radius: 10px;
+    margin: 10px 0px;
+    padding: 20px;
+    position: fixed;
+    width: 90vw;
+    text-align: center;
+    margin-left: 5vw;
+    bottom: 0;
+    opacity: 0;
+    transform: translateY(10vh);
+	transition: all 500ms cubic-bezier(0.42, 0.01, 0.86, 0.1);
+	z-index: 9999;
+}
+
+.show {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 1s cubic-bezier(0, 0.43, 0.1, 0.97);
+}
+
+
+.info:before, .success:before, .warning:before, .error:before {
+	display: inline-block;
+	font-family: FontAwesome;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 400;
+	line-height: 1em;
+	margin-left: .2em;
+	margin-right: .2em;
+	-moz-osx-font-smoothing: grayscale;
+	speak: none;
+	text-align: center;
+	text-decoration: inherit;
+	text-transform: none;
+	-webkit-font-smoothing: antialiased;
+	width: 1em;
+}
+
+
+.info {
+	background: #bde5f8;
+	color: #00529b;
+}
+
+.info:before {
+	content: '\f05a';
+}
+
+.success {
+	background: #dff2bf;
+	color: #4f8a10;
+}
+
+.success:before {
+	content: '\f00c';
+}
+
+.error {
+	background: #ffd2d2;
+	color: #d8000c;
+}
+
+.error:before {
+	content: '\f057';
+}
+
+.invitesContainer {
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 244, 208, 0.4);
+    padding: 30px;
+    border-radius: 10px;
+    position: absolute;
+    top: 50%;
+    width: 40vw;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+admin-title {
+    font-size: 1.5em;
+    font-weight: 600;
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+
+button-container {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    bottom: 0;
+    margin-bottom: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+
+button {
+    background: transparent;
+    border: none;
+    width: auto;
+    font-size: 1.2em;
+    cursor: pointer;
+    opacity: 1;
+    margin: 0px 5px;
+    transition: opacity 300ms ease;
+}
+
+button:hover {
+    opacity: 0.5;
+}
+
+.hidden {
+    display: none;
+}
+
+.loading-wrapper {
+    position: fixed;
+    display: block;
+    height: 100vh;
+    width: 100vw;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: all 500ms ease;
+    touch-action: none;
+    pointer-events: none;
+    z-index: 100;
+}
+
+.loading-wrapper-visible {
+    touch-action: all;
+    pointer-events: all;
+    opacity: 1;
+}
+
+svg:not(:root) {
+    overflow: hidden;
+}
+::-webkit-input-placeholder {
+    color: inherit;
+    opacity: 0.54;
+}
+
+.loading {
+    position: relative;
+    width: 100%;
+}
+.loading:before {
+    content: "";
+    display: block;
+    padding-top: 100%;
+}
+.loading-svg {
+    animation: loading-rotate 2s linear infinite;
+    bottom: 0;
+    height: 100%;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform-origin: center center;
+    width: 100%;
+}
+.loading-circle {
+    animation: loading-stroke 1.5s ease-in-out infinite;
+    stroke: #fff;
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -35px;
+    stroke-linecap: round;
+}
+.loading-container {
+    bottom: 80px;
+    position: absolute;
+    right: 20px;
+    width: 24px;
+    z-index: 5;
+}
+@media screen and (min-width: 480px) {
+    .loading-container {
+        bottom: 40px;
+        right: 40px;
+        width: 50px;
+    }
+}
+@keyframes loading-rotate {
+    to {
+        transform: rotate(1turn);
+    }
+}
+@keyframes loading-stroke {
+    0% {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -35px;
+    }
+    to {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -124px;
+    }
+}
+
+invites {
+    display: flex;
+    flex-direction: column;
+}
+
+invite {
+    margin: 5px 0px;
+}

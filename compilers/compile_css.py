@@ -32,3 +32,12 @@ with open("styles/login.css") as login:
 print("[step] Outputting result")
 with open("production/login.css", "w") as output:
     output.write(CSS)
+
+print("[step] Processing Admin CSS")
+CSS = "/* Japan Terebi — Styling */\n\n\n"
+with open("styles/admin.css") as admin:
+    CSS += admin.read()
+
+print("[step] Outputting result")
+with open("production/admin.css", "w") as output:
+    output.write(CSS)

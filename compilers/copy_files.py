@@ -10,6 +10,11 @@ with open("production/login.css") as file:
 with open("styles/login.css", "w") as output:
     output.write(data)
 
+with open("production/admin.css") as file:
+    data = file.read()
+with open("styles/admin.css", "w") as output:
+    output.write(data)
+
 data = """/** COPYRIGHT © ANIME NO SEKAI, 2021
  * Author: Anime no Sekai
  * Author Github: https://github.com/Animenosekai
@@ -30,4 +35,9 @@ with open("scripts/main.js", "w") as output:
 with open("production/login.js") as file:
     data = file.read()
 with open("scripts/login.js", "w") as output:
+    output.write(data)
+
+with open("production/admin.js") as file:
+    data = file.read()
+with open("scripts/admin.js", "w") as output:
     output.write(data)

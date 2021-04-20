@@ -25,7 +25,6 @@ data = """/** COPYRIGHT © ANIME NO SEKAI, 2021
 with open("production/main.js") as file:
     data += file.read()
 with open("scripts/main.js", "w") as output:
-    print(data)
     output.write(data)
 
 with open("production/login.js") as file:

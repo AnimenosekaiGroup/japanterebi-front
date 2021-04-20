@@ -27,7 +27,7 @@ print("[step] Processing index.html — Adding new script tags")
 hls = soup.new_tag('script')
 hls["src"] = "https://cdn.jsdelivr.net/npm/hls.js@latest"
 main = soup.new_tag('script')
-main["src"] = "scripts/japanterebi.js"
+main["src"] = "scripts/main.js"
 
 soup.find("head").append(hls)
 soup.find("head").append(main)
@@ -40,7 +40,7 @@ for link in soup.find_all("link"):
 print("[step] Processing index.html — Adding new links to css tags")
 main = soup.new_tag('link')
 main["rel"] = "stylesheet"
-main["href"] = "styles/japanterebi.css"
+main["href"] = "styles/main.css"
 
 soup.find("head").append(main)
 

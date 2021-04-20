@@ -1,8 +1,8 @@
 data = ""
 
-with open("production/japanterebi.css") as file:
+with open("production/main.css") as file:
     data = file.read()
-with open("styles/japanterebi.css", "w") as output:
+with open("styles/main.css", "w") as output:
     output.write(data)
 
 with open("production/login.css") as file:
@@ -19,21 +19,12 @@ data = """/** COPYRIGHT © ANIME NO SEKAI, 2021
  * Version: v2.0
  * Experimental Version: v2.0 (α) (Upscale)
  * Project: Japan Terebi v4
- * External Credit (Used for the experimental version):
- *  Upscale:
- *      Author: bloc97 and NeuroWhAI
- *      URL: https://github.com/NeuroWhAI/Anime4K/tree/feat-web
- *      Filename: scripts/upscale.js
- *  requestAnimationFrame (polyfill):
- *      Author: Erik Möller (+ 6 others)
- *      URL: https://gist.github.com/jalbam/5fe05443270fa6d8136238ec72accbc0
- *      Filename: scripts/upscale.js
  */
 
 """
-with open("production/japanterebi.js") as file:
+with open("production/main.js") as file:
     data += file.read()
-with open("scripts/japanterebi.js", "w") as output:
+with open("scripts/main.js", "w") as output:
     print(data)
     output.write(data)
 

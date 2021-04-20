@@ -52,11 +52,11 @@ jobs:
           run: npm install --save-dev postcss postcss-cli autoprefixer cssnano postcss-preset-env google-closure-compiler
 
         - name: PostCSS
-          run: npx postcss production/japanterebi.css -u autoprefixer -u postcss-preset-env -u cssnano-preset-default -o production/japanterebi.css
+          run: npx postcss production/main.css -u autoprefixer -u postcss-preset-env -u cssnano-preset-default -o production/main.css
 
         - name: Compiling JS
           run: |
-            npx google-closure-compiler --js='scripts/**.js' --js='!scripts/login.js' --js_output_file 'production/japanterebi.js'
+            npx google-closure-compiler --js='scripts/**.js' --js='!scripts/login.js' --js_output_file 'production/main.js'
             npx google-closure-compiler --js='scripts/login.js' --js_output_file 'production/login.js'
 
         - name: Deleting unnecessary files

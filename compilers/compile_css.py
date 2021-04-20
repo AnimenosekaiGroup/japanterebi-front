@@ -20,7 +20,7 @@ with open("styles/responsive.css") as responsive:
 
 
 print("[step] Outputting result")
-with open("production/japanterebi.css", "w") as output:
+with open("production/main.css", "w") as output:
     output.write(CSS)
 
 

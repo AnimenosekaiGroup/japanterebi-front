@@ -8,7 +8,7 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/704ba16e-4ab4-4685-a0c8-46f5961fff4b/deploy-status)](https://app.netlify.com/sites/japanterebi-nightly/deploys)
 [![GitHub - License](https://img.shields.io/github/license/AnimenosekaiGroup/japanterebi-front)](https://github.com/AnimenosekaiGroup/japanterebi-front/blob/master/LICENSE)
 [![GitHub top language](https://img.shields.io/github/languages/top/AnimenosekaiGroup/japanterebi-front)](https://github.com/AnimenosekaiGroup/japanterebi-front)
-[![CodeQL Checks Badge](https://github.com/AnimenosekaiGroup/japanterebi-front/workflows/CodeQL%20Analysis/badge.svg)](https://github.com/AnimenosekaiGroup/japanterebi-front/actions?query=workflow%3ACodeQL)
+[![CodeQL Analysis](https://github.com/AnimenosekaiGroup/japanterebi-front/actions/workflows/codeql-analysis.yaml/badge.svg)](https://github.com/AnimenosekaiGroup/japanterebi-front/actions/workflows/codeql-analysis.yaml)
 [![Production Build](https://github.com/AnimenosekaiGroup/japanterebi-front/actions/workflows/production.yaml/badge.svg)](https://github.com/AnimenosekaiGroup/japanterebi-front/actions/workflows/production.yaml)
 ![Code Size](https://img.shields.io/github/languages/code-size/AnimenosekaiGroup/japanterebi-front)
 ![Repo Size](https://img.shields.io/github/repo-size/AnimenosekaiGroup/japanterebi-front)

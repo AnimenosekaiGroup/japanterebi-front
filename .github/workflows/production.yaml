@@ -52,9 +52,10 @@ jobs:
           run: npm install --save-dev postcss postcss-cli autoprefixer cssnano postcss-preset-env google-closure-compiler
 
         - name: PostCSS
-          run: npx postcss production/main.css -o production/main.css
-          run: npx postcss production/login.css -o production/login.css
-          run: npx postcss production/admin.css -o production/admin.css
+          run: |
+            npx postcss production/main.css -o production/main.css
+            npx postcss production/login.css -o production/login.css
+            npx postcss production/admin.css -o production/admin.css
 
         - name: Compiling JS
           run: |

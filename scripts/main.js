@@ -264,6 +264,10 @@ async function goToHome() {
         queryParams.set("page", "home");
         history.replaceState(null, null, "?" + queryParams.toString());
     } catch {  }
+
+    if (window.matchMedia("(orientation: portrait)").matches) {
+        goToWatch()
+    }
 }
 
 async function goToWatch() {

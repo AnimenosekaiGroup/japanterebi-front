@@ -34,6 +34,9 @@ jobs:
         - name: Installing dependencies
           run: pip install beautifulsoup4 htmlmin
 
+        - name: Making temp production dir
+          run: mkdir production
+
         - name: Compiling HTML
           run: python compilers/compile_html.py
 

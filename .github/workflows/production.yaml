@@ -52,7 +52,7 @@ jobs:
           run: npm install --save-dev postcss postcss-cli autoprefixer cssnano postcss-preset-env google-closure-compiler
 
         - name: PostCSS
-          run: npx postcss production/main.css -u autoprefixer -u postcss-preset-env -u cssnano-preset-default -o production/main.css
+          run: npx postcss production/main.css -o production/main.css
 
         - name: Compiling JS
           run: |

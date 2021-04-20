@@ -52,7 +52,7 @@ jobs:
           run: npx postcss production/japanterebi.css > production/japanterebi.css
 
         - name: Compiling JS
-          run: google-closure-compiler --js='scripts/**.js' --js='!login.js' --js_output_file 'production/japanterebi.js' --warning_level VERBOSE
+          run: npx google-closure-compiler --js='scripts/**.js' --js='!login.js' --js_output_file 'production/japanterebi.js' --warning_level VERBOSE
 
         - name: Deleting unnecessary files
           run: |

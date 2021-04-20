@@ -6,57 +6,61 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Installing Node 14.16
-      uses: actions/setup-node@v1
-      with:
-        node-version: '14.16'
-    
-    - name: Installing dependencies
-    - run: npm install --save-dev postcss postcss-cli autoprefixer cssnano postcss-preset-env google-closure-compiler
+        - name: Create new branch
+            uses: actions/checkout@v2
+            run: |
+                git branch -D production
+                git checkout main
+                git branch production
+                git checkout production
+                
+        - name: Installing Python 3.9
+            uses: actions/setup-python@v2
+            with:
+                python-version: '3.9'
 
-    - name: Installing Python 3.9
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.9'
+        - name: Display Python version
+            run: python -c "import sys; print(sys.version)"
 
-    - name: Display Python version
-      run: python -c "import sys; print(sys.version)"
+        - name: Installing dependencies
+            run: pip install beautifulsoup4 htmlmin
 
-    - name: Installing dependencies
-      run: pip install beautifulsoup4 htmlmin
+        - name: Compiling HTML
+            uses: actions/checkout@v2
+            run: python compilers/compile_html.py
 
-    - name: Create new branch
-      run: |
-        git branch -D production
-        git checkout main
-        git branch production
-        git checkout production
+        - name: Compiling CSS
+            uses: actions/checkout@v2
+            run: python compilers/compile_css.py
 
-    - name: Compiling HTML
-      run: python compilers/compile_html.py
+        - name: Installing Node 14.16
+            uses: actions/setup-node@v1
+            with:
+                node-version: '14.16'
+        
+        - name: Installing dependencies
+            run: npm install --save-dev postcss postcss-cli autoprefixer cssnano postcss-preset-env google-closure-compiler
 
-    - name: Compiling CSS
-      run: python compilers/compile_css.py
+        - name: PostCSS
+            run: postcss production/japanterebi.css > production/japanterebi.css
 
-    - name: PostCSS
-      run: postcss production/japanterebi.css > production/japanterebi.css
+        - name: Compiling JS
+            run: google-closure-compiler --js='scripts/**.js' --js='!login.js' --js_output_file 'production/japanterebi.js' --warning_level VERBOSE
 
-    - name: Compiling JS
-      run: google-closure-compiler --js='scripts/**.js' --js='!login.js' --js_output_file 'production/japanterebi.js' --warning_level VERBOSE
+        - name: Deleting unnecessary files
+            uses: actions/checkout@v2
+            run: rm -r compilers
+            run: rm -r experimental
+            run: rm -r scripts
+            run: rm -r styles
+            run: rm .gitignore
+            run: rm index.html
+            run: rm postcss.config.js
 
-    - name: Deleting unnecessary files
-      run: rm -r compilers
-      run: rm -r experimental
-      run: rm -r scripts
-      run: rm -r styles
-      run: rm .gitignore
-      run: rm index.html
-      run: rm postcss.config.js
-
-    - name: Pusing the results
-      run: |
-        git config --global user.name 'Animenosekai'
-        git config --global user.email '40539549+Animenosekai@users.noreply.github.com'
-        git commit -am "[new] Production Build"
-        git push
+        - name: Pusing the results
+            uses: actions/checkout@v2
+            run: |
+                git config --global user.name 'Animenosekai'
+                git config --global user.email '40539549+Animenosekai@users.noreply.github.com'
+                git commit -am "[new] Production Build"
+                git push

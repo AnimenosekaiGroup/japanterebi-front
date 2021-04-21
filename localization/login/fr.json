@@ -20,7 +20,8 @@
                 "placeholders": {
                     "invite": "Invitation",
                     "username": "Nom d'utilisateur",
-                    "password": "Mot de passe"
+                    "password": "Mot de passe",
+                    "confirmation": "Confirmer le mot de passe"
                 },
                 "buttons": {
                     "submit": "Soumettre",
@@ -29,7 +30,8 @@
             }
         },
         "announce": {
-            "sessionExpired": "Votre session a expiré pour garantir la sécurité de votre compte.\nReconnectez vous pour continuer à regarder Japan Terebi!"
+            "sessionExpired": "Votre session a expiré pour garantir la sécurité de votre compte.\nReconnectez vous pour continuer à regarder Japan Terebi!",
+            "passwordMismatch": "Les mots de passe ne correspondent pas"
         }
     },
     "Requests": {

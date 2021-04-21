@@ -20,7 +20,8 @@
                 "placeholders": {
                     "invite": "招待キー",
                     "username": "ユーザー名",
-                    "password": "新しいパスワード"
+                    "password": "新しいパスワード",
+                    "confirmation": "パスワードの確認"
                 },
                 "buttons": {
                     "submit": "アカウントを作る",
@@ -29,7 +30,8 @@
             }
         },
         "announce": {
-            "sessionExpired": "アカウントの安全を守るため、お客様のセッション有効期限が切れました。\nもう一度Japan Terebiにログインして番組の続きを観よう!"
+            "sessionExpired": "アカウントの安全を守るため、お客様のセッション有効期限が切れました。\nもう一度Japan Terebiにログインして番組の続きを観よう!",
+            "passwordMismatch": "パスワードが一致しません"
         }
     },
     "Requests": {

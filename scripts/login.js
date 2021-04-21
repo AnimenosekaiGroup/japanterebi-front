@@ -2,6 +2,8 @@ let language = "en"
 const HOST = "https://japanterebi.vercel.app/japanterebi"
 const localization = {
     "en": {
+        "language": "english",
+        "version": "2.0",
         "UI": {
             "title": "Japan Terebi — Login",
             "static": {
@@ -22,6 +24,7 @@ const localization = {
                         "invite": "Invite",
                         "username": "Username",
                         "password": "New Password",
+                        "confirmation": "Confirm Password",
                     },
                     "buttons": {
                         "submit": "Submit",
@@ -30,7 +33,8 @@ const localization = {
                 }
             },
             "announce": {
-                "sessionExpired": "Your session expired.\nLog in once again to continue watching Japan Terebi!"
+                "sessionExpired": "Your session expired.\nLog in once again to continue watching Japan Terebi!",
+                "passwordMismatch": "The passwords don't match!"
             }
         },
         "Requests": {
@@ -77,7 +81,8 @@ const localization = {
                     "placeholders": {
                         "invite": "Invitation",
                         "username": "Nom d'utilisateur",
-                        "password": "Mot de passe"
+                        "password": "Mot de passe",
+                        "confirmation": "Confirmer le mot de passe"
                     },
                     "buttons": {
                         "submit": "Soumettre",
@@ -86,7 +91,8 @@ const localization = {
                 }
             },
             "announce": {
-                "sessionExpired": "Votre session a expiré pour garantir la sécurité de votre compte.\nReconnectez vous pour continuer à regarder Japan Terebi!"
+                "sessionExpired": "Votre session a expiré pour garantir la sécurité de votre compte.\nReconnectez vous pour continuer à regarder Japan Terebi!",
+                "passwordMismatch": "Les mots de passe ne correspondent pas"
             }
         },
         "Requests": {
@@ -133,7 +139,8 @@ const localization = {
                     "placeholders": {
                         "invite": "招待キー",
                         "username": "ユーザー名",
-                        "password": "新しいパスワード"
+                        "password": "新しいパスワード",
+                        "confirmation": "パスワードの確認"
                     },
                     "buttons": {
                         "submit": "アカウントを作る",
@@ -142,7 +149,8 @@ const localization = {
                 }
             },
             "announce": {
-                "sessionExpired": "アカウントの安全を守るため、お客様のセッション有効期限が切れました。\nもう一度Japan Terebiにログインして番組の続きを観よう!"
+                "sessionExpired": "アカウントの安全を守るため、お客様のセッション有効期限が切れました。\nもう一度Japan Terebiにログインして番組の続きを観よう!",
+                "passwordMismatch": "パスワードが一致しません"
             }
         },
         "Requests": {
@@ -189,6 +197,7 @@ async function loadLanguage() {
     document.getElementById("inviteInput").setAttribute("placeholder", localization[language].UI.static.create.placeholders.invite)
     document.getElementById("createUsernameInput").setAttribute("placeholder", localization[language].UI.static.create.placeholders.username)
     document.getElementById("newPasswordInput").setAttribute("placeholder", localization[language].UI.static.create.placeholders.password)
+    document.getElementById("passwordConfirmation").setAttribute("placeholder", localization[language].UI.static.create.placeholders.confirmation)
     document.getElementById("localization-CreateSubmitButton").innerText = localization[language].UI.static.create.buttons.submit
     document.getElementById("goToLogin").innerText = localization[language].UI.static.create.buttons.login
     
@@ -204,8 +213,8 @@ window.onload = function() {
     }
 
     document.getElementById("language").value = language
-    document.getElementById("language").addEventListener("change", () => {loadLanguage(document.getElementById("language").value)}, false)
-    loadLanguage(language)
+    document.getElementById("language").addEventListener("change", () => {language = document.getElementById("language").value; loadLanguage()}, false)
+    loadLanguage()
     
     const invite = urlParams.get("invite");
     const session_expired = urlParams.get("session_expired");
@@ -221,18 +230,14 @@ window.onload = function() {
 }
 
 async function loginInputCallback(event) {
-    if (event.key == "Enter" && String(document.getElementById("passwordInput").value).replace(" ", "") != "") {
+    if (event.key == "Enter") {
         login()
     }
 }
 
 async function setPasswordInputCallback(event) {
-    if (event.key == "Enter" && String(document.getElementById("newPasswordInput").value).replace(" ", "") != "") {
-        if (String(document.getElementById("inviteInput").value).replace(" ", "") != "") {
-            setPassword()
-        } else {
-            document.getElementById("inviteInput").focus()
-        }
+    if (event.key == "Enter") {
+        setPassword()
     }
 }
 
@@ -249,6 +254,10 @@ async function loginPage() {
 
 async function login() {
     try {
+        if (String(document.getElementById("passwordInput").value).replace(" ", "") == "") {
+            document.getElementById("passwordInput").focus()
+            return
+        }
         document.getElementById("usernameInput").blur()
         document.getElementById("passwordInput").blur()
         var formData = new FormData();
@@ -293,9 +302,27 @@ async function login() {
 
 async function setPassword() {
     try {
+        if (String(document.getElementById("inviteInput").value).replace(" ", "") == "") {
+            document.getElementById("inviteInput").focus()
+            return
+        } else if (String(document.getElementById("passwordConfirmation").value).replace(" ", "") == ""){
+            document.getElementById("passwordConfirmation").focus()
+            return
+        } else if (String(document.getElementById("createUsernameInput").value).replace(" ", "") == ""){
+            document.getElementById("createUsernameInput").focus()
+            return
+        } else if (String(document.getElementById("newPasswordInput").value).replace(" ", "") == "") {
+            document.getElementById("newPasswordInput").focus()
+            return
+        } else if (String(document.getElementById("newPasswordInput").value) != String(document.getElementById("passwordConfirmation").value)) {
+            document.getElementById("passwordConfirmation").focus()
+            newInfo(localization[language].UI.announce.passwordMismatch)
+            return
+        }
         document.getElementById("inviteInput").blur()
         document.getElementById("createUsernameInput").blur()
         document.getElementById("newPasswordInput").blur()
+        document.getElementById("passwordConfirmation").blur()
 
         var formData = new FormData();
         formData.append("username", document.getElementById("createUsernameInput").value)

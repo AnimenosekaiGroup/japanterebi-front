@@ -30,7 +30,7 @@
 <body>
     <login-form class="loginForm hidden" id="loginPage">
         <login-title id="localization-loginTitle">Login to Japan Terebi</login-title>
-        <input type="text" id="usernameInput" placeholder="Username">
+        <input type="text" id="usernameInput" placeholder="Username" onkeypress="loginInputCallback(event)">
         <input type="password" id="passwordInput" placeholder="Password" onkeypress="loginInputCallback(event)" >
         <button-container>
             <button id="localization-LoginButton" onclick="login()">Login</button>
@@ -39,9 +39,10 @@
     </login-form>
     <password-set-form class="loginForm hidden" id="setPage">
         <login-title id="localization-createTitle">Create your account for Japan Terebi</login-title>
-        <input type="password" id="inviteInput" placeholder="Invite">
-        <input type="text" id="createUsernameInput" placeholder="Username">
+        <input type="password" id="inviteInput" placeholder="Invite" onkeypress="setPasswordInputCallback(event)">
+        <input type="text" id="createUsernameInput" placeholder="Username" onkeypress="setPasswordInputCallback(event)">
         <input type="password" id="newPasswordInput" placeholder="New Password" onkeypress="setPasswordInputCallback(event)">
+        <input type="password" id="passwordConfirmation" placeholder="Confirm Password" onkeypress="setPasswordInputCallback(event)">
         <button-container>
             <button id="localization-CreateSubmitButton" onclick="setPassword()">Submit</button>
             <button onclick="loginPage()" id="goToLogin">Go to Login</button>

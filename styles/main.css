@@ -486,12 +486,6 @@ svg:not(:root) {
   overflow-x: scroll;
   overflow-y: visible;
   width: 100%;
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
-}
-
-.home-tile-row::-webkit-scrollbar {
-    display: none;
 }
 
 .home-tile-row-inner {

@@ -235,7 +235,7 @@ const localization = {
                     },
                     "controls": {
                         "watching": {
-                            "tooltip": "ただいまこの番組を観ている視聴者数"
+                            "tooltip": "現在この番組を観ている視聴者数"
                         }
                     }
                 },
@@ -243,7 +243,7 @@ const localization = {
                     "returnButton": "テレビに戻る",
                     "account": {
                         "title": "アカウント",
-                        "submit": "オッケー",
+                        "submit": "Ok",
                         "username": {
                             "title": "名前: ",
                             "placeholder": "名"
@@ -252,7 +252,7 @@ const localization = {
                             "title": "招待キー: "
                         },
                         "passwordChange": {
-                            "button": "パスワードを変化する",
+                            "button": "パスワードを変更する",
                             "currentPasswordPlaceholder": "現在お使いのパスーワード",
                             "newPasswordPlaceholder": "新しいパスワード"
                         },
@@ -262,7 +262,7 @@ const localization = {
                     },
                     "guide": {
                         "title": "番組表",
-                        "returnToCurrentTime": "現在の時間帯に戻る",
+                        "returnToCurrentTime": "今観れる番組に戻る",
                         "timestamps": ["00<span style=\"font-size: 15px;\">時</span>00", "01<span style=\"font-size: 15px;\">時</span>00", "02<span style=\"font-size: 15px;\">時</span>00", "03<span style=\"font-size: 15px;\">時</span>00", "04<span style=\"font-size: 15px;\">時</span>00", "05<span style=\"font-size: 15px;\">時</span>00", "06<span style=\"font-size: 15px;\">時</span>00", "07<span style=\"font-size: 15px;\">時</span>00", "08<span style=\"font-size: 15px;\">時</span>00", "09<span style=\"font-size: 15px;\">時</span>00", "10<span style=\"font-size: 15px;\">時</span>00", "11<span style=\"font-size: 15px;\">時</span>00", "12<span style=\"font-size: 15px;\">時</span>00", "13<span style=\"font-size: 15px;\">時</span>00", "14<span style=\"font-size: 15px;\">時</span>00", "15<span style=\"font-size: 15px;\">時</span>00", "16<span style=\"font-size: 15px;\">時</span>00", "17<span style=\"font-size: 15px;\">時</span>00", "18<span style=\"font-size: 15px;\">時</span>00", "19<span style=\"font-size: 15px;\">時</span>00", "20<span style=\"font-size: 15px;\">時</span>00", "21<span style=\"font-size: 15px;\">時</span>00", "22<span style=\"font-size: 15px;\">時</span>00", "23<span style=\"font-size: 15px;\">時</span>00"],
                         "currentTimeDefault": "時間なし"
                     }
@@ -271,7 +271,7 @@ const localization = {
             "dynamic": {
                 "home": {
                     "noprogram": {
-                        "title": "現在の番組情報がありません",
+                        "title": "番組情報がありません",
                         "description": "申し訳ございませんが、現在このチャンネルの番組情報が見つかりませんでした",
                         "tileTitle": "番組情報なし"
                     },
@@ -281,7 +281,7 @@ const localization = {
                     "information": {
                         "channel": "{channel} で放送",
                         "timestamp": "{startTime}から{endTime}まで",
-                        "url": "番組のホームページ"
+                        "url": "番組の詳細"
                     },
                     "status": {
                         "mainStatusTitle": "メインサーバーの状態:",
@@ -291,44 +291,44 @@ const localization = {
                         "up": "問題なし",
                         "seemsDown": "問題が発生しているよう",
                         "down": "停止",
-                        "unknown": "不明",
+                        "unknown": "不明"
                     }
                 }
             },
             "announce": {
-                "browserNotCompatible": "申し訳ございませんが、お使いのブラウザは互換性がありません",
-                "unknownChannel": "不明なチャンネル",
-                "nextChannelSwitch": "次のチャンネルを観るには、もう一回押してください",
-                "previousChannelSwitch": "前のチャンネルを観るには、もう一回押してください",
+                "browserNotCompatible": "申し訳ございませんが、お使いのブラウザではご利用いただけません",
+                "unknownChannel": "お探しのチャンネルは見つかりませんでした",
+                "nextChannelSwitch": "次のチャンネルをご覧になるには、もう一度押してください",
+                "previousChannelSwitch": "前のチャンネルをご覧になるには、もう一度押してください",
                 "noInformationForSelectedProgram": "ご選択の番組の情報が見つかりませんでした",
-                "channelLoadUnknownError": "チャンネルの読み込み中に不明なエラーが発生しました",
+                "channelLoadUnknownError": "チャンネルの読み込み中にエラーが発生しました",
                 "online": "インターネット接続が戻りました!",
                 "offline": "インターネット接続が切られています",
-                "unknownPlayerError": "プレイヤーに不明なエラーが発生しました。何かの問題が起きたら、更新してください。",
-                "noAvailableChannels": "観れるチャンネルのリストを見つかりませんでした"
+                "unknownPlayerError": "プレイヤーに不明なエラーが発生しました。更新してみてください。",
+                "noAvailableChannels": "観れるチャンネルは現在ありません"
             }
         },
         "Requests": {
             "errors": {
-                "SECTOR_NOT_FOUND": "リクエスト中に何かの問題が起こりました",
+                "SECTOR_NOT_FOUND": "リクエスト中に問題が発生しました",
                 "AUTH_ERROR": "申し訳ございませんが、お客様のアカウントの安全を守るため、もう一度ログインしてください。",
-                "SERVER_ERROR": "申し訳ございませんが、サーバー上で何かしらの問題が起こりました",
-                "UNKNOWN_ERROR": "申し訳ございませんが、サーバー上で不明の問題が起こりました",
+                "SERVER_ERROR": "申し訳ございませんが、サーバー上で何らかの問題が発生しました",
+                "UNKNOWN_ERROR": "申し訳ございませんが、サーバー上で不明な問題が発生しました",
                 "NO_TOKEN": "申し訳ございませんが、お客様のアカウント情報の確認が出来ませんでした",
                 "ACCOUNT_NOT_FOUND": "アカウントが見つかりません",
-                "MISSING_ARG": "申し訳ございませんが、リクエストの送信中に何かしらの問題が起こりました",
-                "WRONG_TOKEN": "申し訳ございませんが、セッションキーが間違えてます",
+                "MISSING_ARG": "申し訳ございませんが、リクエストの送信中に問題が発生しました",
+                "WRONG_TOKEN": "申し訳ございませんが、セッションキーが間違っています",
                 "NOT_FOUND": "申し訳ございませんが、何かがサーバー上で見つかりませんでした",
-                "WRONG_PASSWORD": "パスワードが間違えているようです",
+                "WRONG_PASSWORD": "パスワードに間違えがあるようです",
                 "USERNAME_ALREADY_IN_USE": "このユーザー名は現在別のアカウントで使われています",
                 "NO_IMAGE": "画像がありません",
                 "INVITE_ALREADY_IN_USE": "この招待キーは既に別のアカウントで使われています",
-                "INVITE_NOT_FOUND": "この招待キーが見つかりません",
-                "CHANNEL_NOT_FOUND": "要求したチャンネルが見つかりません",
-                "other": "リクエストの処理中に何かしらの問題が起こりました",
+                "INVITE_NOT_FOUND": "この招待キーが見つかりませんでした",
+                "CHANNEL_NOT_FOUND": "お探しのチャンネルは見つかりません",
+                "other": "リクエストの処理中に不明な問題が発生しました",
                 "account": {
                     "picture": {
-                        "new": "プロファイル画像の変更に何かの問題が起こりました"
+                        "new": "プロファイル画像の変更に何か問題が発生しました"
                     }
                 },
                 "channels": {
@@ -367,7 +367,7 @@ const localization = {
                     },
                     "controls": {
                         "watching": {
-                            "tooltip": "Le nombre de personnes qui sont actuellement entrain de regarder cette chaîne"
+                            "tooltip": "Nombre de personnes regardant actuellement cette chaîne"
                         }
                     }
                 },
@@ -394,7 +394,7 @@ const localization = {
                     },
                     "guide": {
                         "title": "Programme TV",
-                        "returnToCurrentTime": "Retourner au présent",
+                        "returnToCurrentTime": "Voir les programmes en ce moment",
                         "timestamps": ["00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"],
                         "currentTimeDefault": "Pas de temps"
                     }
@@ -404,7 +404,7 @@ const localization = {
                 "home": {
                     "noprogram": {
                         "title": "Sans information",
-                        "description": "Nous sommes désolé mais nous n'avons pas pu trouver d'information concernant le programme actuellement sur cette chaîne",
+                        "description": "Nous sommes désoléss mais nous n'avons pas réussi à trouver d'information sur le programme actuellement en diffusion sur cette chaîne",
                         "tileTitle": "Sans information"
                     },
                     "currentlyAiring": "Actuellement sur: {channel}"
@@ -423,16 +423,16 @@ const localization = {
                         "up": "Operationnel",
                         "seemsDown": "Semble rencontrer des problèmes",
                         "down": "Hors Service",
-                        "unknown": "Inconnu",
+                        "unknown": "Inconnu"
                     }
                 }
             },
             "announce": {
                 "browserNotCompatible": "Votre navigateur ne semble pas compatible",
                 "unknownChannel": "Nous ne connaissons pas cette chaîne",
-                "nextChannelSwitch": "Appuyez encore une fois pour aller à la chaîne suivante",
-                "previousChannelSwitch": "Appuyez encore une fois pour aller à la chaîne précédente",
-                "noInformationForSelectedProgram": "Nous n'avons pas pu trouver d'informations sur le programme sélectionné",
+                "nextChannelSwitch": "Apréussiyez encore une fois pour aller à la chaîne suivante",
+                "previousChannelSwitch": "Apréussiyez encore une fois pour revenir à la chaîne précédente",
+                "noInformationForSelectedProgram": "Nous n'avons pas réussi trouver d'informations sur le programme sélectionné",
                 "channelLoadUnknownError": "Un erreur est survenue lors du chargement de la chaîne",
                 "online": "Vous êtes de nouveau en ligne!",
                 "offline": "Vous semblez être déconnecté",
@@ -442,21 +442,21 @@ const localization = {
         },
         "Requests": {
             "errors": {
-                "SECTOR_NOT_FOUND": "Une erreur est survenue lors de la demande d'une information",
-                "AUTH_ERROR": "Nous sommes désolé mais pour garantir la sécurité de votre compte, votre session a expiré",
-                "SERVER_ERROR": "Nous sommes désolé mais une erreur est survenue au niveau du serveur",
-                "UNKNOWN_ERROR": "Nous sommes désolé mais une erreur inconnue est survenue",
-                "NO_TOKEN": "Nous sommes désolé mais nous n'avons pas pu vérifier votre clé de session",
-                "ACCOUNT_NOT_FOUND": "Nous n'avons pas pu trouver votre compte",
-                "MISSING_ARG": "Nous sommes désolé mais une erreur est survenue lors de la requête",
-                "WRONG_TOKEN": "Nous sommes désolé mais vous semblez avoir la mauvaise clé de session",
-                "NOT_FOUND": "Nous sommes désolé mais nous n'avons pu trouver ce qui a été demandé sur le serveur",
+                "SECTOR_NOT_FOUND": "Une erreur est survenue lors de la recherche d'information",
+                "AUTH_ERROR": "Nous sommes désolés mais pour garantir la sécurité de votre compte, votre session a expiré",
+                "SERVER_ERROR": "Nous sommes désolés mais une erreur est survenue au niveau du serveur",
+                "UNKNOWN_ERROR": "Nous sommes désolés mais une erreur inconnue est survenue",
+                "NO_TOKEN": "Nous sommes désolés mais nous n'avons pas réussi à vérifier votre clé de session",
+                "ACCOUNT_NOT_FOUND": "Nous n'avons pas réussi à trouver votre compte",
+                "MISSING_ARG": "Nous sommes désolés mais une erreur est survenue lors de la requête",
+                "WRONG_TOKEN": "Nous sommes désolés mais vous semblez avoir la mauvaise clé de session",
+                "NOT_FOUND": "Nous sommes désolés mais nous n'avons pas réussi à trouver ce qui a été demandé sur le serveur",
                 "WRONG_PASSWORD": "Mot de passe incorrect",
                 "USERNAME_ALREADY_IN_USE": "Ce nom d'utilisateur est déjà enregistré",
                 "NO_IMAGE": "Il n'y a pas d'image",
                 "INVITE_ALREADY_IN_USE": "Cette clé d'invitation est déjà utilisée sur un autre compte",
-                "INVITE_NOT_FOUND": "Nous ne connaissons pas cette clé d'invitation",
-                "CHANNEL_NOT_FOUND": "Nous n'avons pas pu trouver la chaîne que vous avez demandée",
+                "INVITE_NOT_FOUND": "Nous ne reconnaissons pas cette clé d'invitation",
+                "CHANNEL_NOT_FOUND": "Nous n'avons pas réussi à trouver la chaîne que vous avez demandée",
                 "other": "Une erreur inconnue est survenue lors de la requête",
                 "account": {
                     "picture": {

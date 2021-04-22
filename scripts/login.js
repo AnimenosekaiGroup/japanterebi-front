@@ -97,19 +97,19 @@ const localization = {
         },
         "Requests": {
             "errors": {
-                "SECTOR_NOT_FOUND": "Une erreur est survenue lors de la demande d'une information",
-                "AUTH_ERROR": "Nous sommes désolé mais pour garantir la sécurité de votre compte, votre session a expiré",
-                "SERVER_ERROR": "Nous sommes désolé mais une erreur est survenue au niveau du serveur",
-                "UNKNOWN_ERROR": "Nous sommes désolé mais une erreur inconnue est survenue",
-                "NO_TOKEN": "Nous sommes désolé mais nous n'avons pas pu vérifier votre clé de session",
-                "ACCOUNT_NOT_FOUND": "Nous n'avons pas pu trouver votre compte",
-                "MISSING_ARG": "Nous sommes désolé mais une erreur est survenue lors de la requête",
-                "WRONG_TOKEN": "Nous sommes désolé mais vous semblez avoir la mauvaise clé de session",
-                "NOT_FOUND": "Nous sommes désolé mais nous n'avons pu trouver ce qui a été demandé sur le serveur",
+                "SECTOR_NOT_FOUND": "Une erreur est survenue lors de la recherche d'information",
+                "AUTH_ERROR": "Nous sommes désolés mais pour garantir la sécurité de votre compte, votre session a expiré",
+                "SERVER_ERROR": "Nous sommes désolés mais une erreur est survenue au niveau du serveur",
+                "UNKNOWN_ERROR": "Nous sommes désolés mais une erreur inconnue est survenue",
+                "NO_TOKEN": "Nous sommes désolés mais nous n'avons pas réussi à vérifier votre clé de session",
+                "ACCOUNT_NOT_FOUND": "Nous n'avons pas réussi à trouver votre compte",
+                "MISSING_ARG": "Nous sommes désolés mais une erreur est survenue lors de la requête",
+                "WRONG_TOKEN": "Nous sommes désolés mais vous semblez avoir la mauvaise clé de session",
+                "NOT_FOUND": "Nous sommes désolés mais nous n'avons pas réussi à trouver ce qui a été demandé sur le serveur",
                 "WRONG_PASSWORD": "Mot de passe incorrect",
                 "USERNAME_ALREADY_IN_USE": "Ce nom d'utilisateur est déjà enregistré",
                 "INVITE_ALREADY_IN_USE": "Cette clé d'invitation est déjà utilisée sur un autre compte",
-                "INVITE_NOT_FOUND": "Nous ne connaissons pas cette clé d'invitation",
+                "INVITE_NOT_FOUND": "Nous ne reconnaissons pas cette clé d'invitation",
                 "other": "Une erreur inconnue est survenue lors de la requête"
             },
             "success": {
@@ -130,12 +130,12 @@ const localization = {
                         "password": "パスワード"
                     },
                     "buttons": {
-                        "login": "ログインする",
-                        "create": "アカウント構成へ行く"
+                        "login": "ログイン",
+                        "create": "アカウントの作成"
                     }
                 },
                 "create": {
-                    "title": "Japan Terebiでアカウントを作る",
+                    "title": "Japan Terebiでアカウントを作成する",
                     "placeholders": {
                         "invite": "招待キー",
                         "username": "ユーザー名",
@@ -143,32 +143,32 @@ const localization = {
                         "confirmation": "パスワードの確認"
                     },
                     "buttons": {
-                        "submit": "アカウントを作る",
-                        "login": "ログインする"
+                        "submit": "アカウントを作成",
+                        "login": "ログイン"
                     }
                 }
             },
             "announce": {
-                "sessionExpired": "アカウントの安全を守るため、お客様のセッション有効期限が切れました。\nもう一度Japan Terebiにログインして番組の続きを観よう!",
+                "sessionExpired": "アカウントの安全を守るため、お客様のセッション有効期限が切れました。\nもう一度Japan Terebiにログインして番組の続きを観てください",
                 "passwordMismatch": "パスワードが一致しません"
             }
         },
         "Requests": {
             "errors": {
-                "SECTOR_NOT_FOUND": "リクエスト中に何かの問題が起こりました",
+                "SECTOR_NOT_FOUND": "リクエスト中に問題が発生しました",
                 "AUTH_ERROR": "申し訳ございませんが、お客様のアカウントの安全を守るため、もう一度ログインしてください。",
-                "SERVER_ERROR": "申し訳ございませんが、サーバー上で何かしらの問題が起こりました",
-                "UNKNOWN_ERROR": "申し訳ございませんが、サーバー上で不明の問題が起こりました",
+                "SERVER_ERROR": "申し訳ございませんが、サーバー上で何らかの問題が発生しました",
+                "UNKNOWN_ERROR": "申し訳ございませんが、サーバー上で不明な問題が発生しました",
                 "NO_TOKEN": "申し訳ございませんが、お客様のアカウント情報の確認が出来ませんでした",
                 "ACCOUNT_NOT_FOUND": "アカウントが見つかりません",
-                "MISSING_ARG": "申し訳ございませんが、リクエストの送信中に何かしらの問題が起こりました",
-                "WRONG_TOKEN": "申し訳ございませんが、セッションキーが間違えてます",
+                "MISSING_ARG": "申し訳ございませんが、リクエストの送信中に問題が発生しました",
+                "WRONG_TOKEN": "申し訳ございませんが、セッションキーが間違っています",
                 "NOT_FOUND": "申し訳ございませんが、何かがサーバー上で見つかりませんでした",
-                "WRONG_PASSWORD": "パスワードが間違えているようです",
+                "WRONG_PASSWORD": "パスワードに間違えがあるようです",
                 "USERNAME_ALREADY_IN_USE": "このユーザー名は現在別のアカウントで使われています",
                 "INVITE_ALREADY_IN_USE": "この招待キーは既に別のアカウントで使われています",
-                "INVITE_NOT_FOUND": "この招待キーが見つかりません",
-                "other": "リクエストの処理中に何かしらの問題が起こりました"
+                "INVITE_NOT_FOUND": "この招待キーが見つかりませんでした",
+                "other": "リクエストの処理中に不明な問題が発生しました"
             },
             "success": {
                 "loggedIn": "ログインに成功しました!"

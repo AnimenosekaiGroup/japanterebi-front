@@ -12,21 +12,27 @@ let caches = {
     "/channels/available": null,
 }
 
-async function refreshCache() {
+async function refreshActiveCache() {
     /**
-     * Refreshing the request cache &
+     * Refreshing the request cache for active requests (which change regularly) &
      * Updating some information containers
+     * Refreshed every 5 minutes
      */
-    request("/channels")
-    .then((data) => {
-        caches["/channels"] = data
-    })
     request("/channels/available")
     .then((data) => {
         caches["/channels/available"] = data
         addHome()
         addEPG()
     })
-    //request("/chan")
-    // refreshEPG
+}
+
+async function refreshCache() {
+    /**
+     * Refreshing the request cache
+     * Refreshed every 15 minutes
+     */
+    request("/channels")
+    .then((data) => {
+        caches["/channels"] = data
+    })
 }

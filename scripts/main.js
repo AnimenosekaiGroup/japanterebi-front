@@ -49,6 +49,7 @@ window.onload = function() {
         }
     })
     setInterval(refreshCache, 900000) // refresh the cache every 15 minutes
+    setInterval(refreshActiveCache, 300000) // refresh the cache every 5 minutes
     setInterval(checkBuffering, 100) // do not use values lower than 50ms as the offset will not suffice
     setInterval(checkStatus, 30000) // check the api status
 }
@@ -74,6 +75,7 @@ async function watch(channel) {
                     }
                     states.currentChannel = channel
                     watching(channel)
+                    playVideo()
                     try {
                         var queryParams = new URLSearchParams(window.location.search);
                         queryParams.set("channel", channel);

@@ -404,7 +404,7 @@ const localization = {
                 "home": {
                     "noprogram": {
                         "title": "Sans information",
-                        "description": "Nous sommes désoléss mais nous n'avons pas réussi à trouver d'information sur le programme actuellement en diffusion sur cette chaîne",
+                        "description": "Nous sommes désolés mais nous n'avons pas réussi à trouver d'information sur le programme actuellement en diffusion sur cette chaîne",
                         "tileTitle": "Sans information"
                     },
                     "currentlyAiring": "Actuellement sur: {channel}"

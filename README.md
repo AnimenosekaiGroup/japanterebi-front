@@ -5,7 +5,7 @@
 
 [![Main API Status](https://img.shields.io/uptimerobot/ratio/m787817878-b8981da3cd50ccafba042058?label=Main%20API%20Uptime)](https://stats.uptimerobot.com/lMVyrUoqYq/787817878)
 [![Channels API Status](https://img.shields.io/uptimerobot/ratio/m787903761-eee8bc3c1af299a23226af9f?label=Channels%20API%20Uptime)](https://stats.uptimerobot.com/lMVyrUoqYq/787903761)
-[![Netlify Status](https://api.netlify.com/api/v1/badges/704ba16e-4ab4-4685-a0c8-46f5961fff4b/deploy-status)](https://app.netlify.com/sites/japanterebi-nightly/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/f6db9880-e462-4fb8-8b3b-125eb6c84e3c/deploy-status)](https://app.netlify.com/sites/japanterebi/deploys)
 [![GitHub - License](https://img.shields.io/github/license/AnimenosekaiGroup/japanterebi-front)](https://github.com/AnimenosekaiGroup/japanterebi-front/blob/master/LICENSE)
 [![GitHub top language](https://img.shields.io/github/languages/top/AnimenosekaiGroup/japanterebi-front)](https://github.com/AnimenosekaiGroup/japanterebi-front)
 [![CodeQL Analysis](https://github.com/AnimenosekaiGroup/japanterebi-front/actions/workflows/codeql-analysis.yaml/badge.svg)](https://github.com/AnimenosekaiGroup/japanterebi-front/actions/workflows/codeql-analysis.yaml)

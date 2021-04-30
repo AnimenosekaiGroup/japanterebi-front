@@ -55,7 +55,7 @@ window.onload = function() {
             if (localStorage.getItem("announcement") == hashValue && !data.persistent) {
                 console.info("Announcement already announced")
             } else {
-                if (states.language in data) {
+                if (states.language in data && data[states.language]) {
                     newInfo(data[states.language])
                 } else if (data.message) {
                     newInfo(data.message)

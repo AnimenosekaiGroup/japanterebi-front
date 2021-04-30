@@ -53,7 +53,7 @@ html {
     width: 100vw;
     height: 100vh;
     background: black;
-    z-index: 100000000000;
+    z-index: 10000000;
     position: absolute;
     opacity: 1;
     transition: all 500ms ease;
@@ -113,7 +113,7 @@ SVG Icons - svgicons.sparkk.fr
     border-radius: 6px;
     padding: 10px;
     position: fixed;
-    z-index: 100000000;
+    z-index: 100000000; /* stays on top of page load */
     bottom: 0;
     margin-bottom: 25px;
     left: 50%;
@@ -547,7 +547,6 @@ svg:not(:root) {
   position: absolute;
   top: 50%;
   left: 50%;
-  display: #000;
 }
 
 .home-tile-details:after {

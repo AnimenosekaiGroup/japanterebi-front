@@ -48,6 +48,22 @@ window.onload = function() {
             newInfo(localization[states.language].Requests.errors.channels.available)
         }
     })
+    request("/announcement")
+    .then((data) => {
+        if (data && data.message) {
+            let hashValue = md5(String(data))
+            if (localStorage.getItem("announcement") == hashValue && !data.persistent) {
+                console.info("Announcement already announced")
+            } else {
+                if (states.language in data) {
+                    newInfo(data[states.language])
+                } else if (data.message) {
+                    newInfo(data.message)
+                }
+            }
+            localStorage.setItem("announcement", hashValue)
+        }
+    })
     setInterval(refreshCache, 900000) // refresh the cache every 15 minutes
     setInterval(refreshActiveCache, 300000) // refresh the cache every 5 minutes
     setInterval(checkBuffering, 100) // do not use values lower than 50ms as the offset will not suffice

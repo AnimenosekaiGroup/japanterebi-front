@@ -8,6 +8,7 @@ async function appendInvite(invite) {
 
 window.onload = () => {
     reload()
+    reloadAnnouncement()
 }
 
 async function reload() {
@@ -40,6 +41,85 @@ async function add() {
             }
             for (index in response.data) {
                 appendInvite(response.data[index])
+            }
+        } else if (response.error == "AUTH_ERROR") {
+            newError("You don't seem to be correctly logged in")
+        } else {
+            newError("An error occured")
+        }
+    })
+}
+
+async function submitAnnouncement() {
+    let params = ""
+    if (document.getElementById("currentAnnouncement").value != "") {
+        params += "&message=" + encodeURIComponent(document.getElementById("currentAnnouncement").value)
+    }
+    if (document.getElementById("enAnnouncement").value != "") {
+        params += "&en=" + encodeURIComponent(document.getElementById("enAnnouncement").value)
+    }
+    if (document.getElementById("frAnnouncement").value != "") {
+        params += "&fr=" + encodeURIComponent(document.getElementById("frAnnouncement").value)
+    }
+    if (document.getElementById("jaAnnouncement").value != "") {
+        params += "&ja=" + encodeURIComponent(document.getElementById("jaAnnouncement").value)
+    }
+    if (document.getElementById("persistentAnnouncement").value != "") {
+        params += "&persistent=" + encodeURIComponent(document.getElementById("persistentAnnouncement").value)
+    }
+    fetch(HOST + "/announcement/new?token=" + localStorage.getItem("__japanterebi_auth") + params)
+    .then((response) => response.json())
+    .then((response) => {
+        if (response.success) {
+            newSuccess("Successfully added a new announcement")
+        } else if (response.error == "AUTH_ERROR") {
+            newError("You don't seem to be correctly logged in")
+        } else {
+            newError("An error occured")
+        }
+    })
+}
+
+async function resetAnnouncement() {
+    fetch(HOST + "/announcement/reset?token=" + localStorage.getItem("__japanterebi_auth"))
+    .then((response) => response.json())
+    .then((response) => {
+        if (response.success) {
+            newSuccess("Successfully reset the announcement")
+            document.getElementById("currentAnnouncement").value = ""
+            document.getElementById("enAnnouncement").value = ""
+            document.getElementById("frAnnouncement").value = ""
+            document.getElementById("jaAnnouncement").value = ""
+            document.getElementById("persistentAnnouncement").value = ""
+        } else if (response.error == "AUTH_ERROR") {
+            newError("You don't seem to be correctly logged in")
+        } else {
+            newError("An error occured")
+        }
+    })
+}
+
+async function reloadAnnouncement() {
+    fetch(HOST + "/announcement?token=" + localStorage.getItem("__japanterebi_auth"))
+    .then((response) => response.json())
+    .then((response) => {
+        if (response.success) {
+            if (response.data.message) {
+                document.getElementById("currentAnnouncement").value = response.data.message
+            }
+            if (response.data.en) {
+                document.getElementById("enAnnouncement").value = response.data.en
+            }
+            if (response.data.ja) {
+                document.getElementById("jaAnnouncement").value = response.data.ja
+            }
+            if (response.data.fr) {
+                document.getElementById("frAnnouncement").value = response.data.fr
+            }
+            if (response.data.persistent) {
+                document.getElementById("persistentAnnouncement").value = "true"
+            } else {
+                document.getElementById("persistentAnnouncement").value = "false"
             }
         } else if (response.error == "AUTH_ERROR") {
             newError("You don't seem to be correctly logged in")

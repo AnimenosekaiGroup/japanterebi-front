@@ -17,7 +17,7 @@ async function watchWithHLSJS(stream) {
     try {
         states.videoBinding.destroy();
     } catch { } // avoiding the if-else statement as the condition should only be met once
-    states.videoBinding = new Hls({debug: true});
+    states.videoBinding = new Hls({debug: false});
     states.videoBinding.attachMedia(document.getElementById("videoPlayer"));
     states.videoBinding.on(Hls.Events.MEDIA_ATTACHED, () => {
         // load the channel

@@ -255,7 +255,9 @@ async function shortcutHandler(event) {
 // PAGES //
 
 async function goToHome() {
-    states.lastAudioVolume = document.getElementById("videoPlayer").volume
+    if (states.currentPage == "watch") {
+        states.lastAudioVolume = document.getElementById("videoPlayer").volume
+    }
     states.currentPage = "home"
     
     const currentPageElem = document.getElementById("currentPage")
@@ -317,7 +319,9 @@ async function goToWatch() {
 }
 
 async function goToGuide() {
-    states.lastAudioVolume = document.getElementById("videoPlayer").volume
+    if (states.currentPage == "watch") {
+        states.lastAudioVolume = document.getElementById("videoPlayer").volume
+    }
     states.currentPage = "guide"
 
     const currentPageElem = document.getElementById("currentPage")

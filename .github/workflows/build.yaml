@@ -26,12 +26,12 @@ jobs:
         run: npm install -g nativefier
       - name: Build
         run: |
-          nativefier --platform "darwin" --name "Japan Terebi" --arch "arm64" --app-copyright "© Anime no Sekai — 2021" --app-version "v4.0" --build-version $GITHUB_SHA --darwin-dark-mode-support --title-bar-style "hiddenInset" --icon "assets/japanterebi-icon.icns" --inject "assets/inject.css" https://japanterebi.netlify.app .
-          nativefier --platform "darwin" --name "Japan Terebi" --arch "x64" --app-copyright "© Anime no Sekai — 2021" --app-version "v4.0" --build-version $GITHUB_SHA --darwin-dark-mode-support --title-bar-style "hiddenInset" --icon "assets/japanterebi-icon.icns" --inject "assets/inject.css" https://japanterebi.netlify.app .
-          nativefier --platform "windows" --name "Japan Terebi" --arch "arm64" --app-copyright "© Anime no Sekai — 2021" --app-version "v4.0" --build-version $GITHUB_SHA --darwin-dark-mode-support --title-bar-style "hiddenInset" --icon "assets/japanterebi-icon.ico" --inject "assets/inject.css" https://japanterebi.netlify.app .
-          nativefier --platform "windows" --name "Japan Terebi" --arch "x64" --app-copyright "© Anime no Sekai — 2021" --app-version "v4.0" --build-version $GITHUB_SHA --darwin-dark-mode-support --title-bar-style "hiddenInset" --icon "assets/japanterebi-icon.ico" --inject "assets/inject.css" https://japanterebi.netlify.app .
-          nativefier --platform "linux" --name "japanterebi" --arch "arm64" --app-copyright "© Anime no Sekai — 2021" --app-version "v4.0" --build-version $GITHUB_SHA --darwin-dark-mode-support --title-bar-style "hiddenInset" --icon "assets/japanterebi-icon.png" --inject "assets/inject.css" https://japanterebi.netlify.app .
-          nativefier --platform "linux" --name "japanterebi" --arch "x64" --app-copyright "© Anime no Sekai — 2021" --app-version "v4.0" --build-version $GITHUB_SHA --darwin-dark-mode-support --title-bar-style "hiddenInset" --icon "assets/japanterebi-icon.png" --inject "assets/inject.css" https://japanterebi.netlify.app .
+          nativefier --platform "darwin" --name "Japan Terebi" --arch "arm64" --app-copyright "© Anime no Sekai — 2021" --app-version "v4.0" --darwin-dark-mode-support --title-bar-style "hiddenInset" --icon "assets/japanterebi-icon.icns" --inject "assets/inject.css" https://japanterebi.netlify.app .
+          nativefier --platform "darwin" --name "Japan Terebi" --arch "x64" --app-copyright "© Anime no Sekai — 2021" --app-version "v4.0" --darwin-dark-mode-support --title-bar-style "hiddenInset" --icon "assets/japanterebi-icon.icns" --inject "assets/inject.css" https://japanterebi.netlify.app .
+          nativefier --platform "windows" --name "Japan Terebi" --arch "arm64" --app-copyright "© Anime no Sekai — 2021" --app-version "v4.0" --darwin-dark-mode-support --title-bar-style "hiddenInset" --icon "assets/japanterebi-icon.ico" --inject "assets/inject.css" https://japanterebi.netlify.app .
+          nativefier --platform "windows" --name "Japan Terebi" --arch "x64" --app-copyright "© Anime no Sekai — 2021" --app-version "v4.0" --darwin-dark-mode-support --title-bar-style "hiddenInset" --icon "assets/japanterebi-icon.ico" --inject "assets/inject.css" https://japanterebi.netlify.app .
+          nativefier --platform "linux" --name "japanterebi" --arch "arm64" --app-copyright "© Anime no Sekai — 2021" --app-version "v4.0" --darwin-dark-mode-support --title-bar-style "hiddenInset" --icon "assets/japanterebi-icon.png" --inject "assets/inject.css" https://japanterebi.netlify.app .
+          nativefier --platform "linux" --name "japanterebi" --arch "x64" --app-copyright "© Anime no Sekai — 2021" --app-version "v4.0" --darwin-dark-mode-support --title-bar-style "hiddenInset" --icon "assets/japanterebi-icon.png" --inject "assets/inject.css" https://japanterebi.netlify.app .
       - name: Directory Listing
         run: ls
       - name: Zipping
@@ -55,7 +55,7 @@ jobs:
             japanterebi-linux-arm64.zip
             japanterebi-linux-x64.zip
           body: "### Japan Terebi — Native Desktop Build"
-          name: "v4-desktop"
+          name: ${{ env.GITHUB_SHA }}
           tag_name: "v4-desktop"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

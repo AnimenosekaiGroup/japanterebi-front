@@ -19,9 +19,9 @@ jobs:
           sudo apt-add-repository "deb https://dl.winehq.org/wine-builds/ubuntu $(lsb_release -cs) main"
           sudo apt install --install-recommends winehq-stable
       - name: Installing Node 14.16
-          uses: actions/setup-node@v1
-          with:
-            node-version: '14.16'
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.16'
       - name: Installing dependencies
         run: npm install -g nativefier
       - name: Build

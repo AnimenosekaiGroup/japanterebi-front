@@ -54,5 +54,8 @@ jobs:
             japanterebi-windows-x64.zip
             japanterebi-linux-arm64.zip
             japanterebi-linux-x64.zip
+          body: "### Japan Terebi — Native Desktop Build"
+          name: "v4-desktop"
+          tag_name: "v4-desktop"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

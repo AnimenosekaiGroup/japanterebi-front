@@ -1,0 +1,59 @@
+name: Native Building
+
+on:
+  repository_dispatch:
+  schedule:
+    - cron: '5 12 * * 0'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Installing wine
+        run: |
+          sudo dpkg --add-architecture i386
+          wget -qO - https://dl.winehq.org/wine-builds/winehq.key | sudo apt-key add -
+          sudo add-apt-repository ppa:cybermax-dexter/sdl2-backport
+          sudo apt-add-repository "deb https://dl.winehq.org/wine-builds/ubuntu $(lsb_release -cs) main"
+          sudo apt install --install-recommends winehq-stable
+      - name: Installing Node 14.16
+          uses: actions/setup-node@v1
+          with:
+            node-version: '14.16'
+      - name: Installing dependencies
+        run: npm install -g nativefier
+      - name: Build
+        run: |
+          nativefier --platform "darwin" --name "Japan Terebi" --arch "arm64" --app-copyright "© Anime no Sekai — 2021" --app-version "v4.0" --build-version $GITHUB_SHA --darwin-dark-mode-support --title-bar-style "hiddenInset" --icon "assets/japanterebi-icon.png" --inject "assets/inject.css" https://japanterebi.netlify.app .
+          nativefier --platform "darwin" --name "Japan Terebi" --arch "x64" --app-copyright "© Anime no Sekai — 2021" --app-version "v4.0" --build-version $GITHUB_SHA --darwin-dark-mode-support --title-bar-style "hiddenInset" --icon "assets/japanterebi-icon.png" --inject "assets/inject.css" https://japanterebi.netlify.app .
+          nativefier --platform "windows" --name "Japan Terebi" --arch "arm64" --app-copyright "© Anime no Sekai — 2021" --app-version "v4.0" --build-version $GITHUB_SHA --darwin-dark-mode-support --title-bar-style "hiddenInset" --icon "assets/japanterebi-icon.ico" --inject "assets/inject.css" https://japanterebi.netlify.app .
+          nativefier --platform "windows" --name "Japan Terebi" --arch "x64" --app-copyright "© Anime no Sekai — 2021" --app-version "v4.0" --build-version $GITHUB_SHA --darwin-dark-mode-support --title-bar-style "hiddenInset" --icon "assets/japanterebi-icon.ico" --inject "assets/inject.css" https://japanterebi.netlify.app .
+          nativefier --platform "linux" --name "japanterebi" --arch "arm64" --app-copyright "© Anime no Sekai — 2021" --app-version "v4.0" --build-version $GITHUB_SHA --darwin-dark-mode-support --title-bar-style "hiddenInset" --icon "assets/japanterebi-icon.png" --inject "assets/inject.css" https://japanterebi.netlify.app .
+          nativefier --platform "linux" --name "japanterebi" --arch "x64" --app-copyright "© Anime no Sekai — 2021" --app-version "v4.0" --build-version $GITHUB_SHA --darwin-dark-mode-support --title-bar-style "hiddenInset" --icon "assets/japanterebi-icon.png" --inject "assets/inject.css" https://japanterebi.netlify.app .
+      - name: Directory Listing
+        run: ls
+      - name: Zipping
+        run: |
+          zip -r japanterebi-mac-arm64.zip "Japan Terebi-darwin-arm64"
+          zip -r japanterebi-mac-x64.zip "Japan Terebi-darwin-x64"
+          zip -r japanterebi-windows-arm64.zip "Japan Terebi-win32-arm64"
+          zip -r japanterebi-windows-x64.zip "Japan Terebi-win32-x64"
+          zip -r japanterebi-linux-arm64.zip "japanterebi-linux-arm64"
+          zip -r japanterebi-linux-x64.zip "japanterebi-linux-x64"
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            README.md
+            LICENSE
+            japanterebi-mac-arm64.zip
+            japanterebi-mac-x64.zip
+            japanterebi-windows-arm64.zip
+            japanterebi-windows-x64.zip
+            japanterebi-linux-arm64.zip
+            japanterebi-linux-x64.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

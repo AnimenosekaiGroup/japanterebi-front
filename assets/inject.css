@@ -1,0 +1,21 @@
+body {
+    -webkit-app-region: drag;
+}
+
+a,
+input,
+controls,
+svg,
+img,
+.home-program-title,
+.home-program-description,
+.home-program-channel,
+more-title,
+select,
+button {
+    -webkit-app-region: no-drag;
+}
+
+.information {
+    cursor: default;
+}

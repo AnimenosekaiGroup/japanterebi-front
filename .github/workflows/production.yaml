@@ -98,4 +98,7 @@ jobs:
         - name: Netlify Build
           env:
             NETLIFY_HOOK: ${{ secrets.NETLIFY_HOOK }}
-          run: python compilers/netlify_build.py
+          run: |
+            cd compilers
+            ls
+            python compilers/netlify_build.py

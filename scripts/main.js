@@ -72,7 +72,7 @@ async function checkVersion() {
         if (constants.version.commit) { // can be null
             let text = "© {author} — {year} ".format({"author": constants.credits.author, "year": constants.credits.year.toString()})
             text += constants.version.display.format({"version": constants.version.version, "commit": '<a href="' + constants.credits.repo + '" target="_blank">' + constants.version.commit.substring(0, 7) + "</a>"})
-            document.getElementById("credits").innerText = text
+            document.getElementById("credits").innerHTML = text
             request("/version")
             .then((data) => {
                 if (data && data.commit && (data.commit != constants.version.commit)) {

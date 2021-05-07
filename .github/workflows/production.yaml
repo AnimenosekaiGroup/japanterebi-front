@@ -32,7 +32,7 @@ jobs:
           run: python -c "import sys; print(sys.version)"
 
         - name: Installing dependencies
-          run: pip install beautifulsoup4 htmlmin
+          run: pip install beautifulsoup4 htmlmin requests
 
         - name: Making temp production dir
           run: mkdir production
@@ -94,3 +94,8 @@ jobs:
             git config --global user.email '40539549+Animenosekai@users.noreply.github.com'
             git commit -am "[build] Production Build"
             git push
+
+        - name: Netlify Build
+          env:
+            NETLIFY_HOOK: ${{ secrets.NETLIFY_HOOK }}
+          run: python compilers/netlify_build.py

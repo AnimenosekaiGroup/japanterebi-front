@@ -12,6 +12,18 @@
  * © Anime no Sekai
  * © bloc97 (GLSL shaders)
  * © NeuroWhAI (WebGL API Port)
+ * 
+ * 
+ * 
+ *  * External Credit (Used for the experimental version):
+ *  Upscale:
+ *      Author: bloc97 and NeuroWhAI
+ *      URL: https://github.com/NeuroWhAI/Anime4K/tree/feat-web
+ *      Filename: scripts/upscale.js
+ *  requestAnimationFrame (polyfill):
+ *      Author: Erik Möller (+ 6 others)
+ *      URL: https://gist.github.com/jalbam/5fe05443270fa6d8136238ec72accbc0
+ *      Filename: scripts/upscale.js
  */
 
 /** KNOWN ISSUES

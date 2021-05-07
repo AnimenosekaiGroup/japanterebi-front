@@ -7,15 +7,6 @@
  * Version: v2.0
  * Experimental Version: v2.0 (α) (Upscale)
  * Project: Japan Terebi v4
- * External Credit (Used for the experimental version):
- *  Upscale:
- *      Author: bloc97 and NeuroWhAI
- *      URL: https://github.com/NeuroWhAI/Anime4K/tree/feat-web
- *      Filename: scripts/upscale.js
- *  requestAnimationFrame (polyfill):
- *      Author: Erik Möller (+ 6 others)
- *      URL: https://gist.github.com/jalbam/5fe05443270fa6d8136238ec72accbc0
- *      Filename: scripts/upscale.js
  */
 
 // ONLOAD: initializing the page
@@ -64,12 +55,38 @@ window.onload = function() {
             localStorage.setItem("announcement", hashValue)
         }
     })
+    checkVersion()
     setInterval(refreshCache, 900000) // refresh the cache every 15 minutes
     setInterval(refreshActiveCache, 300000) // refresh the cache every 5 minutes
     setInterval(checkBuffering, 100) // do not use values lower than 50ms as the offset will not suffice
     setInterval(checkStatus, 30000) // check the api status
+    setInterval(checkVersion, 900000) // checks for the front version every 15 minutes
 }
 
+async function checkVersion() {
+    try {
+        if (!constants.version.commit) {
+            constants.version.commit = commit // created during compilation
+        }
+
+        if (constants.version.commit) { // can be null
+            let text = "© {author} — {year} ".format({"author": constants.credits.author, "year": constants.credits.year.toString()})
+            text += constants.version.display.format({"version": constants.version.version, "commit": '<a href="' + constants.credits.repo + '" target="_blank">' + constants.version.commit.substring(0, 7) + "</a>"})
+            document.getElementById("credits").innerText = text
+            request("/version")
+            .then((data) => {
+                if (data && data.commit && (data.commit != constants.version.commit)) {
+                    let message = localization[states.language].UI.announce.newVersionAvailable
+                    newInfo(message)
+                    text += " ({message})".format({"message": message})
+                    document.getElementById("credits").innerHTML = text
+                }
+            })
+        } else {
+
+        }
+    } catch { console.warn("Could not verify the current version") }
+}
 
 async function watch(channel) {
     if (channel != states.currentChannel) {

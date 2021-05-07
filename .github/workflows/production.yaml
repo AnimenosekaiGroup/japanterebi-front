@@ -43,6 +43,9 @@ jobs:
         - name: Compiling CSS
           run: python compilers/compile_css.py
 
+        - name: Outputting Commit
+          run: python compilers/compile_js.py
+
         - name: Installing Node 14.16
           uses: actions/setup-node@v1
           with:

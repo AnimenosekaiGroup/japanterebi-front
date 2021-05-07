@@ -87,7 +87,8 @@
             "online": "You are back online!",
             "offline": "You seem to be disconnected",
             "unknownPlayerError": "An unknown error occured with the player, please restart the webpage if it doesn't work",
-            "noAvailableChannels": "I couldn't get the available channels"
+            "noAvailableChannels": "I couldn't get the available channels",
+            "newVersionAvailable": "A new version is available"
         }
     },
     "Requests": {

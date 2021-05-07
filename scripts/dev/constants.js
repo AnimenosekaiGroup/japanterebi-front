@@ -13,4 +13,18 @@ const constants = {
     "MAIN_HOST": "https://japanterebi.vercel.app/japanterebi",
     "STREAM_HOST": "https://japanterebi.herokuapp.com/japanterebi/channels/stream/{channel}?token={token}",
     "LOGO_HOST": "/assets/channels/logo/{channel}.png",
+    "version": {
+        "version": "v4",
+        "commit": null,
+        "display": "({version}@{commit})"
+    },
+    "credits": {
+        "author": "Anime no Sekai",
+        "author_url": "https://github.com/Animenosekai",
+        "repo": "https://github.com/AnimenosekaiGroup/japanterebi-front",
+        "year": 2021,
+        "last_update": "7th May 2021",
+        "project": "Japan Terebi v4",
+        "native_build": "https://github.com/AnimenosekaiGroup/japanterebi-front/releases"
+    }
 }

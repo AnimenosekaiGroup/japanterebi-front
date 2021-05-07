@@ -87,7 +87,8 @@
             "online": "Vous êtes de nouveau en ligne!",
             "offline": "Vous semblez être déconnecté",
             "unknownPlayerError": "Une erreur est survenue avec le player, merci de rafraîchir la page si vous rencontrez un problème",
-            "noAvailableChannels": "Une erreur est survenue lors de l'obtention des chaînes disponibles"
+            "noAvailableChannels": "Une erreur est survenue lors de l'obtention des chaînes disponibles",
+            "newVersionAvailable": "Une nouvelle version est disponible"
         }
     },
     "Requests": {

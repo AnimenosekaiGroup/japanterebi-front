@@ -49,6 +49,18 @@ html {
     -webkit-appearance: none;
 }
 
+a {
+    color: white;
+    text-decoration: none;
+    opacity: 1;
+    cursor: pointer;
+    transition: opacity 250ms ease;
+}
+
+a:hover {
+    opacity: 0.8;
+}
+
 .page-load {
     width: 100vw;
     height: 100vh;
@@ -1170,7 +1182,7 @@ epg-button:hover {
     border-radius: 15px;
     padding: 25px;
     z-index: 95;
-    right: -250px;
+    right: -270px;
     top: 50%;
     max-height: 80vh;
     overflow-y: scroll;

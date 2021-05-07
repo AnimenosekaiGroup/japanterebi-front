@@ -159,7 +159,7 @@ const localization = {
                         "up": "Operational",
                         "seemsDown": "Seems Down",
                         "down": "Down",
-                        "unknown": "Unknown",
+                        "unknown": "Unknown"
                     }
                 }
             },
@@ -173,7 +173,8 @@ const localization = {
                 "online": "You are back online!",
                 "offline": "You seem to be disconnected",
                 "unknownPlayerError": "An unknown error occured with the player, please restart the webpage if it doesn't work",
-                "noAvailableChannels": "I couldn't get the available channels"
+                "noAvailableChannels": "I couldn't get the available channels",
+                "newVersionAvailable": "A new version is available"
             }
         },
         "Requests": {
@@ -305,7 +306,8 @@ const localization = {
                 "online": "インターネット接続が戻りました!",
                 "offline": "インターネット接続が切られています",
                 "unknownPlayerError": "プレイヤーに不明なエラーが発生しました。更新してみてください。",
-                "noAvailableChannels": "観れるチャンネルは現在ありません"
+                "noAvailableChannels": "観れるチャンネルは現在ありません",
+                "newVersionAvailable": "新しいバージョンがあります"
             }
         },
         "Requests": {
@@ -437,7 +439,8 @@ const localization = {
                 "online": "Vous êtes de nouveau en ligne!",
                 "offline": "Vous semblez être déconnecté",
                 "unknownPlayerError": "Une erreur est survenue avec le player, merci de rafraîchir la page si vous rencontrez un problème",
-                "noAvailableChannels": "Une erreur est survenue lors de l'obtention des chaînes disponibles"
+                "noAvailableChannels": "Une erreur est survenue lors de l'obtention des chaînes disponibles",
+                "newVersionAvailable": "Une nouvelle version est disponible"
             }
         },
         "Requests": {

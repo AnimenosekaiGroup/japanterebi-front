@@ -42,9 +42,13 @@ jobs:
           zip -r japanterebi-windows-x64.zip "Japan Terebi-win32-x64"
           zip -r japanterebi-linux-arm64.zip "japanterebi-linux-arm64"
           zip -r japanterebi-linux-x64.zip "japanterebi-linux-x64"
+      
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: "marvinpinto/action-automatic-releases@latest"
         with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          title: "Native Release"
           files: |
             README.md
             LICENSE
@@ -54,8 +58,3 @@ jobs:
             japanterebi-windows-x64.zip
             japanterebi-linux-arm64.zip
             japanterebi-linux-x64.zip
-          body: "### Japan Terebi — Native Desktop Build"
-          name: ${{ env.GITHUB_RUN_ID }}
-          tag_name: "v4-desktop"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

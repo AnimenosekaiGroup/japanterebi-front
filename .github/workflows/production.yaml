@@ -92,7 +92,7 @@ jobs:
           run: |
             git config --global user.name 'Animenosekai'
             git config --global user.email '40539549+Animenosekai@users.noreply.github.com'
-            git commit -am "[build] Production Build"
+            git commit -am "[build] [skip netlify] Production Build"
             git push
 
         - name: Netlify Build

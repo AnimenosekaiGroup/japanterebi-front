@@ -32,7 +32,7 @@ jobs:
           run: python -c "import sys; print(sys.version)"
 
         - name: Installing dependencies
-          run: pip install beautifulsoup4 htmlmin requests
+          run: pip install beautifulsoup4 htmlmin
 
         - name: Making temp production dir
           run: mkdir production
@@ -98,7 +98,4 @@ jobs:
         - name: Netlify Build
           env:
             NETLIFY_HOOK: ${{ secrets.NETLIFY_HOOK }}
-          run: |
-            cd compilers
-            ls
-            python netlify_build.py
+          run: curl -X POST -d '{}' "https://api.netlify.com/build_hooks/$NETLIFY_HOOK"

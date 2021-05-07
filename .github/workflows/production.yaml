@@ -101,4 +101,4 @@ jobs:
           run: |
             cd compilers
             ls
-            python compilers/netlify_build.py
+            python netlify_build.py

@@ -85,7 +85,8 @@ admin-container {
     border-radius: 10px;
     position: absolute;
     top: 50%;
-    width: 40vw;
+    width: 80vw;
+    max-width: 650px;
     left: 50%;
     transform: translate(-50%, -50%);
 }

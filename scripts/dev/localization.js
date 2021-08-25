@@ -16,6 +16,7 @@ function loadLanguage(language) {
     }
     states.language = language
     window.localStorage.setItem("lang", language)
+    window.localStorage.setItem("lang-edit", Date.now())
 
     let svg = document.getElementById("static-navbar-home").getElementsByTagName("svg")[0]
     document.getElementById("static-navbar-home").innerText = localization[language].UI.static.navbar.home + " "

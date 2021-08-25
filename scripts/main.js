@@ -373,7 +373,7 @@ async function addAuth() {
         if (data) {
             document.getElementById("accountName").value = data.username
             document.getElementById("accountInvite").innerText = data.invite
-            if (window.localStorage.getItem("lang")) {
+            if (window.localStorage.getItem("lang") && window.localStorage.getItem("lang-edit") && Date.now() - parseInt(window.localStorage.getItem("lang-edit")) < 3600000) {
                 loadLanguage(localStorage.getItem("lang"))
                 document.getElementById("accountLanguage").value = localStorage.getItem("lang")
                 try {

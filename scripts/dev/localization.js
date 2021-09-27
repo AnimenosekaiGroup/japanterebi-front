@@ -68,10 +68,10 @@ function loadLanguage(language) {
     //document.getElementById("epgTimeSpan").innerText = localization[language].UI.static.more.guide.currentTimeDefault
     document.getElementById("responsiveEPGButton").innerText = localization[language].UI.static.tvplayer.goToGuide
     document.getElementById("returnBackButton").innerText = localization[language].UI.static.more.returnButton
-    
+
     document.getElementById("mainStatusTitle").innerText = localization[language].UI.dynamic.more.status.mainStatusTitle
     document.getElementById("channelsStatusTitle").innerText = localization[language].UI.dynamic.more.status.channelsStatusTitle
-    
+
     // reload the home and the epg
     addHome()
     addEPG()
@@ -120,7 +120,7 @@ const localization = {
                         "invite": {
                             "title": "Invite: "
                         },
-                        "passwordChange": {
+                        "passwordChange": {
                             "button": "Change password",
                             "currentPasswordPlaceholder": "Current Password",
                             "newPasswordPlaceholder": "New Password"
@@ -253,7 +253,7 @@ const localization = {
                         "invite": {
                             "title": "招待キー: "
                         },
-                        "passwordChange": {
+                        "passwordChange": {
                             "button": "パスワードを変更する",
                             "currentPasswordPlaceholder": "現在お使いのパスーワード",
                             "newPasswordPlaceholder": "新しいパスワード"
@@ -386,7 +386,7 @@ const localization = {
                         "invite": {
                             "title": "Invitation: "
                         },
-                        "passwordChange": {
+                        "passwordChange": {
                             "button": "Changer le mot de passe",
                             "currentPasswordPlaceholder": "Mot de passe actuel",
                             "newPasswordPlaceholder": "Nouveau mot de passe"

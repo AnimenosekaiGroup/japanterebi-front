@@ -19,11 +19,11 @@ async function refreshActiveCache() {
      * Refreshed every 5 minutes
      */
     request("/channels/available")
-    .then((data) => {
-        caches["/channels/available"] = data
-        addHome()
-        addEPG()
-    })
+        .then((data) => {
+            caches["/channels/available"] = data
+            addHome()
+            addEPG()
+        })
 }
 
 async function refreshCache() {
@@ -32,7 +32,7 @@ async function refreshCache() {
      * Refreshed every 15 minutes
      */
     request("/channels")
-    .then((data) => {
-        caches["/channels"] = data
-    })
+        .then((data) => {
+            caches["/channels"] = data
+        })
 }

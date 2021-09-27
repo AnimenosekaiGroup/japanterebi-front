@@ -33,7 +33,7 @@
                     "invite": {
                         "title": "Invitation: "
                     },
-                    "passwordChange": {
+                    "passwordChange": {
                         "button": "Changer le mot de passe",
                         "currentPasswordPlaceholder": "Mot de passe actuel",
                         "newPasswordPlaceholder": "Nouveau mot de passe"

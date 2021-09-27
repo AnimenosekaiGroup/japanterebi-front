@@ -33,7 +33,7 @@
                     "invite": {
                         "title": "招待キー: "
                     },
-                    "passwordChange": {
+                    "passwordChange": {
                         "button": "パスワードを変更する",
                         "currentPasswordPlaceholder": "現在お使いのパスーワード",
                         "newPasswordPlaceholder": "新しいパスワード"

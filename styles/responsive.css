@@ -113,6 +113,7 @@
 .responsive-epg-button:hover {
     opacity: 0.9;
 }
+
 .responsiveReturnBackButton:hover {
     opacity: 0.9;
 }
@@ -127,43 +128,55 @@
     .header-container {
         display: none;
     }
+
     .home-container {
         display: none;
     }
+
     #reloadBtn {
         display: none;
     }
+
     .information {
         display: none;
     }
+
     .tvplayer {
         height: 100vw;
         max-height: 40vh;
     }
+
     .responsive-information {
         display: flex;
     }
+
     .home-tile-container {
         margin-bottom: 0;
         margin-left: 0;
     }
+
     .icons {
         padding: 10px;
     }
+
     .svg-icon {
         width: 22px;
         height: 22px;
     }
+
     .watching-counter {
         font-size: small;
         padding: 3px;
     }
+
     .watching-tooltip {
         font-size: 0.8em;
     }
+
     .responsiveReturnBackButton {
         display: block;
     }
+
     .responsiveReturnBackButton.unload {
         display: none;
     }
@@ -223,6 +236,7 @@
         height: 70px;
         width: 70px;
     }
+
     .responsive-media {
         height: 70px;
         width: 70px;
@@ -239,19 +253,24 @@
     .home-tile-container {
         margin-bottom: 0vh;
     }
+
     .home-program-description {
         display: none;
     }
+
     .home-program-channel {
         display: none;
     }
+
     .home-program-title {
         font-size: 2em;
     }
+
     .home-tile {
         width: 200px;
         height: 112px;
     }
+
     .home-tile-img {
         width: 200px;
         height: 112px;
@@ -261,13 +280,14 @@
 @media screen and (max-width: 800px) and (orientation: landscape) {
     .home-program {
         margin-left: -80px;
-    }   
+    }
 }
 
 @media screen and (max-width: 785px) {
     .footer {
         flex-direction: column;
     }
+
     .server-status {
         margin-top: 5px;
     }

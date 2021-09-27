@@ -63,7 +63,7 @@ async function fullscreenHandler() {
 
 async function fullscreen() {
     /* toggles fullscreen */
-    if((window.fullScreen) || (window.innerWidth == screen.width && window.innerHeight == screen.height)) {
+    if ((window.fullScreen) || (window.innerWidth == screen.width && window.innerHeight == screen.height)) {
         if (document.exitFullscreen) {
             document.exitFullscreen();
         } else if (document.webkitExitFullscreen) { /* Safari */

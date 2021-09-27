@@ -1,3 +1,5 @@
+from htmlmin import minify
+from bs4 import BeautifulSoup
 print("""   Japan Terebi — HTML Production Compiling
 Version: 1.0
 
@@ -7,11 +9,9 @@ Version: 1.0
 """)
 
 print("[step] Importing Dependencies")
-from bs4 import BeautifulSoup
-from htmlmin import minify
 
 
-#### MAIN PAGE
+# MAIN PAGE
 
 with open("index.html", "r") as index:
     HTML = index.read()
@@ -52,7 +52,7 @@ with open("production/index.html", "w") as index:
     index.write(str(HTML))
 
 
-#### LOGIN PAGE
+# LOGIN PAGE
 
 print("[step] Processing login.html")
 with open("login.html") as login:
@@ -95,7 +95,7 @@ print("[step] Outputting result")
 with open("production/login.html", "w") as login:
     login.write(str(HTML))
 
-#### ADMIN PAGE
+# ADMIN PAGE
 
 print("[step] Processing admin.html")
 with open("admin.html") as admin:

@@ -200,11 +200,11 @@ async function loadLanguage() {
     document.getElementById("passwordConfirmation").setAttribute("placeholder", localization[language].UI.static.create.placeholders.confirmation)
     document.getElementById("localization-CreateSubmitButton").innerText = localization[language].UI.static.create.buttons.submit
     document.getElementById("goToLogin").innerText = localization[language].UI.static.create.buttons.login
-    
-    
+
+
 }
 
-window.onload = function() {
+window.onload = function () {
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get("lang")) {
         language = urlParams.get("lang")
@@ -213,9 +213,9 @@ window.onload = function() {
     }
 
     document.getElementById("language").value = language
-    document.getElementById("language").addEventListener("change", () => {language = document.getElementById("language").value; loadLanguage()}, false)
+    document.getElementById("language").addEventListener("change", () => { language = document.getElementById("language").value; loadLanguage() }, false)
     loadLanguage()
-    
+
     const invite = urlParams.get("invite");
     const session_expired = urlParams.get("session_expired");
     if (invite) {
@@ -252,7 +252,7 @@ async function loginPage() {
 }
 
 
-async function login() {
+async function login() {
     try {
         if (String(document.getElementById("passwordInput").value).replace(" ", "") == "") {
             document.getElementById("passwordInput").focus()
@@ -268,32 +268,32 @@ async function login() {
             body: formData,
             method: "POST"
         })
-        .then((resp) => resp.json())
-        .then((response) => {
-            notLoading()
-            if (response.success) {
-                newSuccess(localization[language].Requests.success.loggedIn)
-                window.localStorage.setItem("__japanterebi_auth", response.data.token)
-                window.location.assign("/")
-            } else {
-                if (response.error == "WRONG_PASSWORD") {
-                    document.getElementById("passwordInput").value = ""
-                    document.getElementById("passwordInput").focus()
-                } else if (response.error == "ACCOUNT_NOT_FOUND") {
-                    document.getElementById("usernameInput").value = ""
-                    document.getElementById("usernameInput").focus()
+            .then((resp) => resp.json())
+            .then((response) => {
+                notLoading()
+                if (response.success) {
+                    newSuccess(localization[language].Requests.success.loggedIn)
+                    window.localStorage.setItem("__japanterebi_auth", response.data.token)
+                    window.location.assign("/")
                 } else {
-                    document.getElementById("passwordInput").focus()
+                    if (response.error == "WRONG_PASSWORD") {
+                        document.getElementById("passwordInput").value = ""
+                        document.getElementById("passwordInput").focus()
+                    } else if (response.error == "ACCOUNT_NOT_FOUND") {
+                        document.getElementById("usernameInput").value = ""
+                        document.getElementById("usernameInput").focus()
+                    } else {
+                        document.getElementById("passwordInput").focus()
+                    }
+
+                    if (response.error in localization[language].Requests.errors) {
+                        newError(localization[language].Requests.errors[response.error])
+                    } else {
+                        newError(localization[language].Requests.errors.other)
+                    }
+
                 }
-    
-                if (response.error in localization[language].Requests.errors) {
-                    newError(localization[language].Requests.errors[response.error])
-                } else {
-                    newError(localization[language].Requests.errors.other)
-                }
-    
-            }
-        })
+            })
     } catch {
         notLoading()
         newError(localization[language].Requests.errors.other)
@@ -305,10 +305,10 @@ async function setPassword() {
         if (String(document.getElementById("inviteInput").value).replace(" ", "") == "") {
             document.getElementById("inviteInput").focus()
             return
-        } else if (String(document.getElementById("passwordConfirmation").value).replace(" ", "") == ""){
+        } else if (String(document.getElementById("passwordConfirmation").value).replace(" ", "") == "") {
             document.getElementById("passwordConfirmation").focus()
             return
-        } else if (String(document.getElementById("createUsernameInput").value).replace(" ", "") == ""){
+        } else if (String(document.getElementById("createUsernameInput").value).replace(" ", "") == "") {
             document.getElementById("createUsernameInput").focus()
             return
         } else if (String(document.getElementById("newPasswordInput").value).replace(" ", "") == "") {
@@ -333,30 +333,30 @@ async function setPassword() {
             body: formData,
             method: "POST"
         })
-        .then((resp) => resp.json())
-        .then((response) => {
-            notLoading()
-            if (response.success) {
-                newSuccess(localization[language].Requests.success.loggedIn)
-                window.localStorage.setItem("__japanterebi_auth", response.data.token)
-                window.location.assign("/")
-            } else {
-                if (response.error == "INVITE_NOT_FOUND" || response.error == "INVITE_ALREADY_IN_USE") {
-                    document.getElementById("inviteInput").value = ""
-                    document.getElementById("inviteInput").focus()
-                } else if (response.error == "USERNAME_ALREADY_IN_USE") {
-                    document.getElementById("createUsernameInput").value = ""
-                    document.getElementById("createUsernameInput").focus()
-                }
-    
-                if (response.error in localization[language].Requests.errors) {
-                    newError(localization[language].Requests.errors[response.error])
+            .then((resp) => resp.json())
+            .then((response) => {
+                notLoading()
+                if (response.success) {
+                    newSuccess(localization[language].Requests.success.loggedIn)
+                    window.localStorage.setItem("__japanterebi_auth", response.data.token)
+                    window.location.assign("/")
                 } else {
-                    newError(localization[language].Requests.errors.other)
+                    if (response.error == "INVITE_NOT_FOUND" || response.error == "INVITE_ALREADY_IN_USE") {
+                        document.getElementById("inviteInput").value = ""
+                        document.getElementById("inviteInput").focus()
+                    } else if (response.error == "USERNAME_ALREADY_IN_USE") {
+                        document.getElementById("createUsernameInput").value = ""
+                        document.getElementById("createUsernameInput").focus()
+                    }
+
+                    if (response.error in localization[language].Requests.errors) {
+                        newError(localization[language].Requests.errors[response.error])
+                    } else {
+                        newError(localization[language].Requests.errors.other)
+                    }
+
                 }
-    
-            }
-        })
+            })
     } catch {
         notLoading()
         newError(localization[language].Requests.errors.other)
@@ -384,16 +384,16 @@ async function newInfo(message) {
     console.log(message)
     messagesQueue.push(message)
     let currentLength = messagesQueue.length
-    let intervalID = setInterval(function(){
+    let intervalID = setInterval(function () {
         if (currentIndex == currentLength) {
             var newElement = document.createElement("p")
             newElement.setAttribute("class", "info")
             newElement.innerText = String(message)
             document.getElementsByTagName("body")[0].appendChild(newElement)
-            setTimeout(function() {
+            setTimeout(function () {
                 newElement.classList.add("show")
             }, 100)
-            setTimeout(function (){
+            setTimeout(function () {
                 newElement.classList.remove("show")
                 currentIndex += 1
             }, 5100)
@@ -406,16 +406,16 @@ async function newSuccess(message) {
     console.log(message)
     messagesQueue.push(message)
     let currentLength = messagesQueue.length
-    let intervalID = setInterval(function(){
+    let intervalID = setInterval(function () {
         if (currentIndex == currentLength) {
             var newElement = document.createElement("p")
             newElement.setAttribute("class", "success")
             newElement.innerText = String(message)
             document.getElementsByTagName("body")[0].appendChild(newElement)
-            setTimeout(function() {
+            setTimeout(function () {
                 newElement.classList.add("show")
             }, 100)
-            setTimeout(function (){
+            setTimeout(function () {
                 newElement.classList.remove("show")
                 currentIndex += 1
             }, 5100)
@@ -428,16 +428,16 @@ async function newError(message) {
     console.error(message)
     messagesQueue.push(message)
     let currentLength = messagesQueue.length
-    let intervalID = setInterval(function(){
+    let intervalID = setInterval(function () {
         if (currentIndex == currentLength) {
             var newElement = document.createElement("p")
             newElement.setAttribute("class", "error")
             newElement.innerText = String(message)
             document.getElementsByTagName("body")[0].appendChild(newElement)
-            setTimeout(function() {
+            setTimeout(function () {
                 newElement.classList.add("show")
             }, 100)
-            setTimeout(function (){
+            setTimeout(function () {
                 newElement.classList.remove("show")
                 currentIndex += 1
             }, 5100)

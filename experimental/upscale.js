@@ -35,34 +35,33 @@
  * - requestAnimationFrame is used while Chrome can use requestVideoFrameCallback()
  */
 
- 'use strict';
+'use strict';
 
- // requestAnimationFrame polyfill by Erik Möller.
- // Fixes from Paul Irish, Tino Zijdel, Andrew Mao, Klemen Slavic, Darius Bacon and Joan Alba Maldonado.
- // Adapted from https://gist.github.com/paulirish/1579671 which derived from
- // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
- // http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
- // Added high resolution timing. This window.performance.now() polyfill can be used: https://gist.github.com/jalbam/cc805ac3cfe14004ecdf323159ecf40e
- // MIT license
- // Gist: https://gist.github.com/jalbam/5fe05443270fa6d8136238ec72accbc0
- (function() {
-     var vendors = ['webkit', 'moz', 'ms', 'o'], vp = null;
-     for (var x = 0; x < vendors.length && !window.requestAnimationFrame && !window.cancelAnimationFrame; x++) {
-         vp = vendors[x];
-         window.requestAnimationFrame = window.requestAnimationFrame || window[vp + 'RequestAnimationFrame'];
-         window.cancelAnimationFrame = window.cancelAnimationFrame || window[vp + 'CancelAnimationFrame'] || window[vp + 'CancelRequestAnimationFrame'];
-     }
-     if (/iP(ad|hone|od).*OS 6/.test(window.navigator.userAgent) || !window.requestAnimationFrame || !window.cancelAnimationFrame) { //iOS6 is buggy.
-         var lastTime = 0;
-         window.requestAnimationFrame = function(callback, element)
-         {
-             var now = window.performance.now();
-             var nextTime = Math.max(lastTime + 16, now); //First time will execute it immediately but barely noticeable and performance is gained.
-             return setTimeout(function() { callback(lastTime = nextTime); }, nextTime - now);
-         };
-         window.cancelAnimationFrame = clearTimeout;
-     }
- }());
+// requestAnimationFrame polyfill by Erik Möller.
+// Fixes from Paul Irish, Tino Zijdel, Andrew Mao, Klemen Slavic, Darius Bacon and Joan Alba Maldonado.
+// Adapted from https://gist.github.com/paulirish/1579671 which derived from
+// http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+// http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
+// Added high resolution timing. This window.performance.now() polyfill can be used: https://gist.github.com/jalbam/cc805ac3cfe14004ecdf323159ecf40e
+// MIT license
+// Gist: https://gist.github.com/jalbam/5fe05443270fa6d8136238ec72accbc0
+(function () {
+    var vendors = ['webkit', 'moz', 'ms', 'o'], vp = null;
+    for (var x = 0; x < vendors.length && !window.requestAnimationFrame && !window.cancelAnimationFrame; x++) {
+        vp = vendors[x];
+        window.requestAnimationFrame = window.requestAnimationFrame || window[vp + 'RequestAnimationFrame'];
+        window.cancelAnimationFrame = window.cancelAnimationFrame || window[vp + 'CancelAnimationFrame'] || window[vp + 'CancelRequestAnimationFrame'];
+    }
+    if (/iP(ad|hone|od).*OS 6/.test(window.navigator.userAgent) || !window.requestAnimationFrame || !window.cancelAnimationFrame) { //iOS6 is buggy.
+        var lastTime = 0;
+        window.requestAnimationFrame = function (callback, element) {
+            var now = window.performance.now();
+            var nextTime = Math.max(lastTime + 16, now); //First time will execute it immediately but barely noticeable and performance is gained.
+            return setTimeout(function () { callback(lastTime = nextTime); }, nextTime - now);
+        };
+        window.cancelAnimationFrame = clearTimeout;
+    }
+}());
 
 
 
@@ -92,7 +91,7 @@ function createProgram(gl, vertexSource, fragmentSource) {
         throw new Error(gl.getProgramInfoLog(program));
     }
 
-    var wrapper = {program: program};
+    var wrapper = { program: program };
 
     var numAttributes = gl.getProgramParameter(program, gl.ACTIVE_ATTRIBUTES);
     for (var i = 0; i < numAttributes; i++) {
@@ -527,14 +526,14 @@ function Scaler(gl) {
 
     this.quadBuffer = createBuffer(gl, new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]));
     this.framebuffer = gl.createFramebuffer();
-    
+
     this.scaleProgram = createProgram(gl, quadVert, scaleFrag);
     this.lumProgram = createProgram(gl, quadVert, lumFrag);
     this.pushProgram = createProgram(gl, quadVert, pushFrag);
     this.gradProgram = createProgram(gl, quadVert, gradFrag);
     this.finalProgram = createProgram(gl, quadVert, finalFrag);
     this.drawProgram = createProgram(gl, quadVert, drawFrag);
-    
+
     this.tempTexture = null;
     this.tempTexture2 = null;
     this.tempTexture3 = null;
@@ -543,7 +542,7 @@ function Scaler(gl) {
     this.blur = 2.0;
 }
 
-Scaler.prototype.inputImage = function(img) {
+Scaler.prototype.inputImage = function (img) {
     const gl = this.gl;
 
     this.inputWidth = img.width;
@@ -553,7 +552,7 @@ Scaler.prototype.inputImage = function(img) {
     this.inputMov = null;
 }
 
-Scaler.prototype.inputVideo = function(mov) {
+Scaler.prototype.inputVideo = function (mov) {
     const gl = this.gl;
 
     const width = mov.videoWidth;
@@ -567,7 +566,7 @@ Scaler.prototype.inputVideo = function(mov) {
     this.inputMov = mov;
 }
 
-Scaler.prototype.resize = function(scale) {
+Scaler.prototype.resize = function (scale) {
     const gl = this.gl;
 
     const width = Math.round(this.inputWidth * scale);
@@ -583,7 +582,7 @@ Scaler.prototype.resize = function(scale) {
     this.tempTexture3 = createTexture(gl, gl.LINEAR, emptyPixels, width, height);
 }
 
-Scaler.prototype.render = function() {
+Scaler.prototype.render = function () {
     if (!this.inputTex) {
         return;
     }
@@ -733,11 +732,11 @@ const blurFactor = 0.0001; // 0.0001 to 8 (default: 2)
  */
 
 
-window.addEventListener("load", function() {
+window.addEventListener("load", function () {
     const board = document.getElementById('upscaleOutput');
     const gl = board.getContext('webgl');
 
-    videoPlayer.addEventListener('loadedmetadata', function() {
+    videoPlayer.addEventListener('loadedmetadata', function () {
         scaler = new Scaler(gl);
         scaler.bold = boldFactor;
         scaler.blur = blurFactor;

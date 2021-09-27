@@ -10,7 +10,7 @@
  */
 
 // ONLOAD: initializing the page
-window.onload = function() {
+window.onload = function () {
     const urlParams = new URLSearchParams(window.location.search);
     const channel = urlParams.get("channel");
     const page = urlParams.get("page");
@@ -28,33 +28,33 @@ window.onload = function() {
         goToHome() // defaults to home
     }
     request("/channels/available")
-    .then((data) => {
-        if (data && (data.length > 0)) {
-            if (channel && (data.includes(channel)))  {
-                watch(channel)
-            } else {
-                watch(data[0]) // defaults to the first channel available
-            }
-        } else {
-            newInfo(localization[states.language].Requests.errors.channels.available)
-        }
-    })
-    request("/announcement")
-    .then((data) => {
-        if (data && data.message) {
-            let hashValue = md5(String(data))
-            if (localStorage.getItem("announcement") == hashValue && !data.persistent) {
-                console.info("Announcement already announced")
-            } else {
-                if (states.language in data && data[states.language]) {
-                    newInfo(data[states.language])
-                } else if (data.message) {
-                    newInfo(data.message)
+        .then((data) => {
+            if (data && (data.length > 0)) {
+                if (channel && (data.includes(channel))) {
+                    watch(channel)
+                } else {
+                    watch(data[0]) // defaults to the first channel available
                 }
+            } else {
+                newInfo(localization[states.language].Requests.errors.channels.available)
             }
-            localStorage.setItem("announcement", hashValue)
-        }
-    })
+        })
+    request("/announcement")
+        .then((data) => {
+            if (data && data.message) {
+                let hashValue = md5(String(data))
+                if (localStorage.getItem("announcement") == hashValue && !data.persistent) {
+                    console.info("Announcement already announced")
+                } else {
+                    if (states.language in data && data[states.language]) {
+                        newInfo(data[states.language])
+                    } else if (data.message) {
+                        newInfo(data.message)
+                    }
+                }
+                localStorage.setItem("announcement", hashValue)
+            }
+        })
     checkVersion()
     setInterval(refreshCache, 900000) // refresh the cache every 15 minutes
     setInterval(refreshActiveCache, 300000) // refresh the cache every 5 minutes
@@ -70,18 +70,18 @@ async function checkVersion() {
         }
 
         if (constants.version.commit) { // can be null
-            let text = "© {author} — {year} ".format({"author": constants.credits.author, "year": constants.credits.year.toString()})
-            text += constants.version.display.format({"version": constants.version.version, "commit": '<a href="' + constants.credits.repo + '" target="_blank">' + constants.version.commit.substring(0, 7) + "</a>"})
+            let text = "© {author} — {year} ".format({ "author": constants.credits.author, "year": constants.credits.year.toString() })
+            text += constants.version.display.format({ "version": constants.version.version, "commit": '<a href="' + constants.credits.repo + '" target="_blank">' + constants.version.commit.substring(0, 7) + "</a>" })
             document.getElementById("credits").innerHTML = text
             request("/version")
-            .then((data) => {
-                if (data && data.commit && (data.commit != constants.version.commit)) {
-                    let message = localization[states.language].UI.announce.newVersionAvailable
-                    newInfo(message)
-                    text += " ({message})".format({"message": message})
-                    document.getElementById("credits").innerHTML = text
-                }
-            })
+                .then((data) => {
+                    if (data && data.commit && (data.commit != constants.version.commit)) {
+                        let message = localization[states.language].UI.announce.newVersionAvailable
+                        newInfo(message)
+                        text += " ({message})".format({ "message": message })
+                        document.getElementById("credits").innerHTML = text
+                    }
+                })
         } else {
 
         }
@@ -95,79 +95,79 @@ async function watch(channel) {
             switchHomeProgram(channel)
         } catch { console.warn("[non critical] Error while switching home") }
         request("/channels")
-        .then((channelsData) => {
-            if (channelsData) {
-                if (channel in channelsData) {
-                    if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')){ // fallback for safari and browsers supporting HLS natively
-                        watchWithNative(constants.STREAM_HOST.format({channel: channel, token: window.localStorage.getItem("__japanterebi_auth")}))
-                    } else if (Hls.isSupported()) { // hls.js
-                        watchWithHLSJS(constants.STREAM_HOST.format({channel: channel, token: window.localStorage.getItem("__japanterebi_auth")}))
-                    } else { // if nothing is available
-                        newInfo(localization[states.language].UI.announce.browserNotCompatible)
-                        return
-                    }
-                    states.currentChannel = channel
-                    watching(channel)
-                    playVideo()
-                    try {
-                        var queryParams = new URLSearchParams(window.location.search);
-                        queryParams.set("channel", channel);
-                        history.replaceState(null, null, "?" + queryParams.toString());
-                        request("/channels")
-                        .then((channelsData) => {
-                            if (channelsData) {
-                                document.getElementById("siteTitle").innerText = "{channel} — Japan Terebi".format({
-                                    channel: channelsData[channel].name[localization[states.language].channelNameLanguage]
-                                })
-                            }
-                        })
-                    } catch {  }
-                    document.getElementById("channelName").innerText = channelsData[channel].name.stylized
-                    document.getElementById("responsiveChannel").innerText = channelsData[channel].name.stylized
-                    document.getElementById("responsiveLogo").src = constants.LOGO_HOST.format({channel: channel})
-                    document.getElementById("repsonsiveProgram").innerText = localization[states.language].UI.dynamic.home.currentlyAiring.format({channel: channelsData[channel].name[localization[states.language].channelNameLanguage]})
-                    request("/guide/now")
-                    .then((data) => {
-                        if (data) {
-                            let found = false
-                            for (programIndex in data) {
-                                if (data[programIndex].channel == channel) {
-                                    found = true
-                                    let titleLength = data[programIndex].title.length
-                                    let titleFontSize = "x-large"
-                                    if (titleLength > 30) {
-                                        titleFontSize = "medium"
-                                    } else if (titleLength > 20) {
-                                        titleFontSize = "large"
-                                    } else if (titleLength > 10) {
-                                        titleFontSize = "larger"
-                                    }
-                                    document.getElementById("responsiveChannel").innerText = data[programIndex].title
-                                    document.getElementById("responsiveChannel").setAttribute("style", "font-size: {size}".format({size: titleFontSize}))
-                                    let description = data[programIndex].description
-                                    if (localization[states.language].translateDescription) {
-                                    translate(description, localization[states.language].language)
-                                        .then((result) => {
-                                            document.getElementById("responsiveDescription").innerText = result
-                                        })
-                                    } else {
-                                        document.getElementById("responsiveDescription").innerText = description
-                                    }
-                                    break
-                                }
-                            }
-                            if (!found) {
-                                document.getElementById("responsiveDescription").innerText = localization[states.language].UI.dynamic.home.noprogram.description
-                            }
-                        } else {
-                            document.getElementById("responsiveDescription").innerText = localization[states.language].UI.dynamic.home.noprogram.description
+            .then((channelsData) => {
+                if (channelsData) {
+                    if (channel in channelsData) {
+                        if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) { // fallback for safari and browsers supporting HLS natively
+                            watchWithNative(constants.STREAM_HOST.format({ channel: channel, token: window.localStorage.getItem("__japanterebi_auth") }))
+                        } else if (Hls.isSupported()) { // hls.js
+                            watchWithHLSJS(constants.STREAM_HOST.format({ channel: channel, token: window.localStorage.getItem("__japanterebi_auth") }))
+                        } else { // if nothing is available
+                            newInfo(localization[states.language].UI.announce.browserNotCompatible)
+                            return
                         }
-                    })
-                } else {
-                    newInfo(localization[states.language].UI.announce.unknownChannel)
+                        states.currentChannel = channel
+                        watching(channel)
+                        playVideo()
+                        try {
+                            var queryParams = new URLSearchParams(window.location.search);
+                            queryParams.set("channel", channel);
+                            history.replaceState(null, null, "?" + queryParams.toString());
+                            request("/channels")
+                                .then((channelsData) => {
+                                    if (channelsData) {
+                                        document.getElementById("siteTitle").innerText = "{channel} — Japan Terebi".format({
+                                            channel: channelsData[channel].name[localization[states.language].channelNameLanguage]
+                                        })
+                                    }
+                                })
+                        } catch { }
+                        document.getElementById("channelName").innerText = channelsData[channel].name.stylized
+                        document.getElementById("responsiveChannel").innerText = channelsData[channel].name.stylized
+                        document.getElementById("responsiveLogo").src = constants.LOGO_HOST.format({ channel: channel })
+                        document.getElementById("repsonsiveProgram").innerText = localization[states.language].UI.dynamic.home.currentlyAiring.format({ channel: channelsData[channel].name[localization[states.language].channelNameLanguage] })
+                        request("/guide/now")
+                            .then((data) => {
+                                if (data) {
+                                    let found = false
+                                    for (programIndex in data) {
+                                        if (data[programIndex].channel == channel) {
+                                            found = true
+                                            let titleLength = data[programIndex].title.length
+                                            let titleFontSize = "x-large"
+                                            if (titleLength > 30) {
+                                                titleFontSize = "medium"
+                                            } else if (titleLength > 20) {
+                                                titleFontSize = "large"
+                                            } else if (titleLength > 10) {
+                                                titleFontSize = "larger"
+                                            }
+                                            document.getElementById("responsiveChannel").innerText = data[programIndex].title
+                                            document.getElementById("responsiveChannel").setAttribute("style", "font-size: {size}".format({ size: titleFontSize }))
+                                            let description = data[programIndex].description
+                                            if (localization[states.language].translateDescription) {
+                                                translate(description, localization[states.language].language)
+                                                    .then((result) => {
+                                                        document.getElementById("responsiveDescription").innerText = result
+                                                    })
+                                            } else {
+                                                document.getElementById("responsiveDescription").innerText = description
+                                            }
+                                            break
+                                        }
+                                    }
+                                    if (!found) {
+                                        document.getElementById("responsiveDescription").innerText = localization[states.language].UI.dynamic.home.noprogram.description
+                                    }
+                                } else {
+                                    document.getElementById("responsiveDescription").innerText = localization[states.language].UI.dynamic.home.noprogram.description
+                                }
+                            })
+                    } else {
+                        newInfo(localization[states.language].UI.announce.unknownChannel)
+                    }
                 }
-            }
-        })
+            })
     }
 }
 
@@ -276,12 +276,12 @@ async function goToHome() {
         states.lastAudioVolume = document.getElementById("videoPlayer").volume
     }
     states.currentPage = "home"
-    
+
     const currentPageElem = document.getElementById("currentPage")
     currentPageElem.classList.remove("current-page-watch")
     currentPageElem.classList.remove("current-page-guide")
     currentPageElem.classList.add("current-page-home")
-    
+
     document.getElementById("videoPlayer").volume = constants.NON_FOCUS_VOLUME
 
     document.getElementById("more").classList.add("hidden-more")
@@ -291,7 +291,7 @@ async function goToHome() {
     document.getElementById("previousChannel").classList.add("hidden-channel-arrows")
 
     document.getElementById("tvplayer").style.pointerEvents = "none"
-    
+
     document.getElementById("returnBackButton").style.transform = "scale(1)"
 
     document.getElementById("epgProgramInformation").style.display = "none"
@@ -300,7 +300,7 @@ async function goToHome() {
         var queryParams = new URLSearchParams(window.location.search);
         queryParams.set("page", "home");
         history.replaceState(null, null, "?" + queryParams.toString());
-    } catch {  }
+    } catch { }
 
     if (window.matchMedia("(orientation: portrait)").matches) {
         goToWatch()
@@ -317,22 +317,22 @@ async function goToWatch() {
     currentPageElem.classList.add("current-page-watch")
     document.getElementById("nextChannel").classList.remove("hidden-channel-arrows")
     document.getElementById("previousChannel").classList.remove("hidden-channel-arrows")
-    
-    
+
+
     document.getElementById("homeContainer").classList.add("home-hidden")
     document.getElementById("more").classList.add("hidden-more")
     mouseMoved()
     document.getElementById("tvplayer").style.pointerEvents = "all"
 
     document.getElementById("returnBackButton").style.transform = "scale(1)"
-    
+
     document.getElementById("epgProgramInformation").style.display = "none"
 
     try {
         var queryParams = new URLSearchParams(window.location.search);
         queryParams.set("page", "watch");
         history.replaceState(null, null, "?" + queryParams.toString());
-    } catch {  }
+    } catch { }
 }
 
 async function goToGuide() {
@@ -345,17 +345,17 @@ async function goToGuide() {
     currentPageElem.classList.remove("current-page-home")
     currentPageElem.classList.remove("current-page-watch")
     currentPageElem.classList.add("current-page-guide")
-    
+
     document.getElementById("videoPlayer").volume = constants.NON_FOCUS_VOLUME
-    
+
     document.getElementById("homeContainer").classList.add("home-hidden")
     document.getElementById("header").classList.remove("hidden-header")
     document.getElementById("more").classList.remove("hidden-more")
     document.getElementById("nextChannel").classList.add("hidden-channel-arrows")
     document.getElementById("previousChannel").classList.add("hidden-channel-arrows")
-    
+
     document.getElementById("tvplayer").style.pointerEvents = "none"
-    
+
     document.getElementById("returnBackButton").style.transform = "scale(1.05)"
 
     document.getElementById("epgProgramInformation").style.display = "flex"
@@ -364,34 +364,34 @@ async function goToGuide() {
         var queryParams = new URLSearchParams(window.location.search);
         queryParams.set("page", "guide");
         history.replaceState(null, null, "?" + queryParams.toString());
-    } catch {  }
+    } catch { }
 }
 
 async function addAuth() {
     request("/account")
-    .then((data) => {
-        if (data) {
-            document.getElementById("accountName").value = data.username
-            document.getElementById("accountInvite").innerText = data.invite
-            if (window.localStorage.getItem("lang") && window.localStorage.getItem("lang-edit") && Date.now() - parseInt(window.localStorage.getItem("lang-edit")) < 3600000) {
-                loadLanguage(localStorage.getItem("lang"))
-                document.getElementById("accountLanguage").value = localStorage.getItem("lang")
-                try {
-                    document.getElementById("accountLanguage").querySelector("option[value=\"{value}\"]".format({value: localStorage.getItem("lang")})).setAttribute("selected", "")
-                } catch { console.warn("No such language option") }
-            } else {
-                loadLanguage(data.language)
-                document.getElementById("accountLanguage").value = data.language
-                try {
-                    document.getElementById("accountLanguage").querySelector("option[value=\"{value}\"]".format({value: data.language})).setAttribute("selected", "")
-                } catch { console.warn("No such language option") }
+        .then((data) => {
+            if (data) {
+                document.getElementById("accountName").value = data.username
+                document.getElementById("accountInvite").innerText = data.invite
+                if (window.localStorage.getItem("lang") && window.localStorage.getItem("lang-edit") && Date.now() - parseInt(window.localStorage.getItem("lang-edit")) < 3600000) {
+                    loadLanguage(localStorage.getItem("lang"))
+                    document.getElementById("accountLanguage").value = localStorage.getItem("lang")
+                    try {
+                        document.getElementById("accountLanguage").querySelector("option[value=\"{value}\"]".format({ value: localStorage.getItem("lang") })).setAttribute("selected", "")
+                    } catch { console.warn("No such language option") }
+                } else {
+                    loadLanguage(data.language)
+                    document.getElementById("accountLanguage").value = data.language
+                    try {
+                        document.getElementById("accountLanguage").querySelector("option[value=\"{value}\"]".format({ value: data.language })).setAttribute("selected", "")
+                    } catch { console.warn("No such language option") }
+                }
             }
-        }
-    })
+        })
     request("/account/picture", document.getElementById("accountPicture"))
 }
 
-async function showCurrentPasswordInput() {
+async function showCurrentPasswordInput() {
     document.getElementById("changePasswordRequest").classList.add("hidden-password-request")
     setTimeout(() => {
         document.getElementById("changePasswordRequest").classList.add("unload-password-input")
@@ -438,32 +438,32 @@ async function changePassword() {
         currentPassword: document.getElementById("currentPassword").value,
         newPassword: document.getElementById("newPassword").value
     }), null, "POST")
-    .then((data) => {
-        document.getElementById("currentPassword").value = ""
-        document.getElementById("newPassword").value = ""
-        if (data) {
-            newInfo(localization[states.language].Requests.success.account.change.password)
-        }
-    })
+        .then((data) => {
+            document.getElementById("currentPassword").value = ""
+            document.getElementById("newPassword").value = ""
+            if (data) {
+                newInfo(localization[states.language].Requests.success.account.change.password)
+            }
+        })
 }
 
 async function changeUsername() {
     request("/account/change/username?username={username}".format({
         username: document.getElementById("accountName").value
     }), null, "POST")
-    .then((data) => {
-        if (data) {
-            newInfo(localization[states.language].Requests.success.account.change.username)
-            window.localStorage.setItem("__japanterebi_auth", data.token)
-        } else {
-            addAuth()
-        }
-    })
+        .then((data) => {
+            if (data) {
+                newInfo(localization[states.language].Requests.success.account.change.username)
+                window.localStorage.setItem("__japanterebi_auth", data.token)
+            } else {
+                addAuth()
+            }
+        })
 }
 
 async function changeLanguage() {
     loadLanguage(this.value)
-    request("/account/change/language?language={lang}".format({lang: this.value}), null, "POST")
+    request("/account/change/language?language={lang}".format({ lang: this.value }), null, "POST")
 }
 
 async function addProfilePicture() {
@@ -478,19 +478,19 @@ async function addProfilePicture() {
             method: "POST",
             body: requestBody
         })
-        .then((response) => response.json())
-        .then((response) => {
-            if (response.success) {
-                newInfo(localization[states.language].Requests.success.account.picture.new)
-                request("/account/picture", document.getElementById("accountPicture"))
-            } else {
-                newInfo(localization[states.language].Requests.errors.account.picture.new)
-            }
-            newFileInput.remove()
-        })
-        .catch((error) => {
-            newFileInput.remove()
-        })
+            .then((response) => response.json())
+            .then((response) => {
+                if (response.success) {
+                    newInfo(localization[states.language].Requests.success.account.picture.new)
+                    request("/account/picture", document.getElementById("accountPicture"))
+                } else {
+                    newInfo(localization[states.language].Requests.errors.account.picture.new)
+                }
+                newFileInput.remove()
+            })
+            .catch((error) => {
+                newFileInput.remove()
+            })
     }, false)
     newFileInput.click()
 }

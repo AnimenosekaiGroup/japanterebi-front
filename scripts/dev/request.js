@@ -5,7 +5,7 @@
  * © Anime no Sekai — 2021
  */
 
-async function request(endpoint, image=null, method="GET", nocache=false) {
+async function request(endpoint, image = null, method = "GET", nocache = false) {
     /* makes a request to the api and returns its result */
     if (!nocache && endpoint in caches && caches[endpoint]) {
         return JSON.parse(JSON.stringify(caches[endpoint]))
@@ -21,7 +21,7 @@ async function request(endpoint, image=null, method="GET", nocache=false) {
         endpoint: endpoint,
         token: window.localStorage.getItem("__japanterebi_auth"),
         params: params
-    }), {method: method})
+    }), { method: method })
     try {
         if (image) {
             let contentType = response.headers.get("Content-Type")

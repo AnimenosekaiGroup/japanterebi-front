@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <!--metadata-->
     <meta charset="UTF-8">
@@ -23,10 +24,10 @@
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="msapplication-config" content="/favicons/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
-    
+
     <!--scripts-->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    
+
     <script src="/scripts/dev/md5.js"></script>
     <script src="/scripts/dev/utils.js"></script>
     <script src="/scripts/dev/constants.js"></script>
@@ -41,7 +42,7 @@
     <script src="/scripts/dev/player.js"></script>
     <script src="/scripts/dev/watch.js"></script>
     <script src="/scripts/dev/status.js"></script>
-    
+
     <script src="/scripts/main.js"></script>
     <script src="/scripts/dev/responsive.js"></script>
 
@@ -50,12 +51,14 @@
     <link rel="stylesheet" href="/styles/main.css">
     <link rel="stylesheet" href="/styles/responsive.css">
 </head>
+
 <body>
     <page-load class="page-load" id="pageLoad">
         <div class="whole-page-load">
             <div class="loading" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
                 <svg class="loading-svg" viewBox="25 25 50 50">
-                    <circle class="loading-circle" cx="50" cy="50" r="20" fill="none" stroke-width="5" stroke-miterlimit="10"></circle>
+                    <circle class="loading-circle" cx="50" cy="50" r="20" fill="none" stroke-width="5"
+                        stroke-miterlimit="10"></circle>
                 </svg>
             </div>
         </div>
@@ -65,21 +68,32 @@
             <li id="homeBtn" class="link-container">
                 <a class="header-link header-home" href="#" id="static-navbar-home">Home
                     <svg class="svg-icon header-svg" viewBox="0 0 20 20">
-                        <path d="M18.121,9.88l-7.832-7.836c-0.155-0.158-0.428-0.155-0.584,0L1.842,9.913c-0.262,0.263-0.073,0.705,0.292,0.705h2.069v7.042c0,0.227,0.187,0.414,0.414,0.414h3.725c0.228,0,0.414-0.188,0.414-0.414v-3.313h2.483v3.313c0,0.227,0.187,0.414,0.413,0.414h3.726c0.229,0,0.414-0.188,0.414-0.414v-7.042h2.068h0.004C18.331,10.617,18.389,10.146,18.121,9.88 M14.963,17.245h-2.896v-3.313c0-0.229-0.186-0.415-0.414-0.415H8.342c-0.228,0-0.414,0.187-0.414,0.415v3.313H5.032v-6.628h9.931V17.245z M3.133,9.79l6.864-6.868l6.867,6.868H3.133z"></path>
+                        <path
+                            d="M18.121,9.88l-7.832-7.836c-0.155-0.158-0.428-0.155-0.584,0L1.842,9.913c-0.262,0.263-0.073,0.705,0.292,0.705h2.069v7.042c0,0.227,0.187,0.414,0.414,0.414h3.725c0.228,0,0.414-0.188,0.414-0.414v-3.313h2.483v3.313c0,0.227,0.187,0.414,0.413,0.414h3.726c0.229,0,0.414-0.188,0.414-0.414v-7.042h2.068h0.004C18.331,10.617,18.389,10.146,18.121,9.88 M14.963,17.245h-2.896v-3.313c0-0.229-0.186-0.415-0.414-0.415H8.342c-0.228,0-0.414,0.187-0.414,0.415v3.313H5.032v-6.628h9.931V17.245z M3.133,9.79l6.864-6.868l6.867,6.868H3.133z">
+                        </path>
                     </svg>
                 </a>
             </li>
             <li id="watchBtn" class="link-container">
                 <a class="header-link header-watch" href="#" id="static-navbar-watch">Watch
                     <svg class="svg-icon header-svg" x="0px" y="0px" viewBox="0 0 1000 1000">
-                        <path d="M867,86.5H133c-67.8,0-123,55.2-123,123v489.4c0,67.8,55.2,123,123,123h734c67.8,0,123-55.2,123-123V209.4C990,141.6,934.8,86.5,867,86.5z M927.6,698.8c0,33.4-27.2,60.5-60.5,60.5H133c-33.4,0-60.5-27.2-60.5-60.5V209.4c0-33.4,27.1-60.5,60.5-60.5h734c33.4,0,60.5,27.2,60.5,60.5L927.6,698.8L927.6,698.8z"/><path d="M775.3,851.1H224.7c-17.2,0-31.2,14-31.2,31.2c0,17.2,14,31.2,31.2,31.2h550.5c17.2,0,31.2-14,31.2-31.2C806.5,865.1,792.5,851.1,775.3,851.1z"/><path d="M438.8,361.7H255.3c-17.2,0-31.2,14-31.2,31.2s14,31.2,31.2,31.2h60.5v152.3c0,17.2,14,31.2,31.2,31.2c17.2,0,31.2-14,31.2-31.2V424.2h60.5c17.2,0,31.2-14,31.2-31.2S456.1,361.7,438.8,361.7z"/><path d="M738.6,365.2c-15.3-7.8-34.1-1.8-42,13.5L630,508.2l-66.5-129.5c-7.9-15.4-26.7-21.4-42-13.5c-15.3,7.9-21.4,26.7-13.5,42l94.3,183.5c5.3,10.4,16.1,17,27.8,17s22.4-6.5,27.8-17l94.3-183.5C759.9,391.9,753.9,373.1,738.6,365.2z"/>
+                        <path
+                            d="M867,86.5H133c-67.8,0-123,55.2-123,123v489.4c0,67.8,55.2,123,123,123h734c67.8,0,123-55.2,123-123V209.4C990,141.6,934.8,86.5,867,86.5z M927.6,698.8c0,33.4-27.2,60.5-60.5,60.5H133c-33.4,0-60.5-27.2-60.5-60.5V209.4c0-33.4,27.1-60.5,60.5-60.5h734c33.4,0,60.5,27.2,60.5,60.5L927.6,698.8L927.6,698.8z" />
+                        <path
+                            d="M775.3,851.1H224.7c-17.2,0-31.2,14-31.2,31.2c0,17.2,14,31.2,31.2,31.2h550.5c17.2,0,31.2-14,31.2-31.2C806.5,865.1,792.5,851.1,775.3,851.1z" />
+                        <path
+                            d="M438.8,361.7H255.3c-17.2,0-31.2,14-31.2,31.2s14,31.2,31.2,31.2h60.5v152.3c0,17.2,14,31.2,31.2,31.2c17.2,0,31.2-14,31.2-31.2V424.2h60.5c17.2,0,31.2-14,31.2-31.2S456.1,361.7,438.8,361.7z" />
+                        <path
+                            d="M738.6,365.2c-15.3-7.8-34.1-1.8-42,13.5L630,508.2l-66.5-129.5c-7.9-15.4-26.7-21.4-42-13.5c-15.3,7.9-21.4,26.7-13.5,42l94.3,183.5c5.3,10.4,16.1,17,27.8,17s22.4-6.5,27.8-17l94.3-183.5C759.9,391.9,753.9,373.1,738.6,365.2z" />
                     </svg>
                 </a>
             </li>
             <li id="guideBtn" class="link-container">
                 <a class="header-link header-guide" href="#" id="static-navbar-guide">TV Guide
                     <svg class="svg-icon header-svg" viewBox="0 0 20 20">
-                        <path d="M8.627,7.885C8.499,8.388,7.873,8.101,8.13,8.177L4.12,7.143c-0.218-0.057-0.351-0.28-0.293-0.498c0.057-0.218,0.279-0.351,0.497-0.294l4.011,1.037C8.552,7.444,8.685,7.667,8.627,7.885 M8.334,10.123L4.323,9.086C4.105,9.031,3.883,9.162,3.826,9.38C3.769,9.598,3.901,9.82,4.12,9.877l4.01,1.037c-0.262-0.062,0.373,0.192,0.497-0.294C8.685,10.401,8.552,10.18,8.334,10.123 M7.131,12.507L4.323,11.78c-0.218-0.057-0.44,0.076-0.497,0.295c-0.057,0.218,0.075,0.439,0.293,0.495l2.809,0.726c-0.265-0.062,0.37,0.193,0.495-0.293C7.48,12.784,7.35,12.562,7.131,12.507M18.159,3.677v10.701c0,0.186-0.126,0.348-0.306,0.393l-7.755,1.948c-0.07,0.016-0.134,0.016-0.204,0l-7.748-1.948c-0.179-0.045-0.306-0.207-0.306-0.393V3.677c0-0.267,0.249-0.461,0.509-0.396l7.646,1.921l7.654-1.921C17.91,3.216,18.159,3.41,18.159,3.677 M9.589,5.939L2.656,4.203v9.857l6.933,1.737V5.939z M17.344,4.203l-6.939,1.736v9.859l6.939-1.737V4.203z M16.168,6.645c-0.058-0.218-0.279-0.351-0.498-0.294l-4.011,1.037c-0.218,0.057-0.351,0.28-0.293,0.498c0.128,0.503,0.755,0.216,0.498,0.292l4.009-1.034C16.092,7.085,16.225,6.863,16.168,6.645 M16.168,9.38c-0.058-0.218-0.279-0.349-0.498-0.294l-4.011,1.036c-0.218,0.057-0.351,0.279-0.293,0.498c0.124,0.486,0.759,0.232,0.498,0.294l4.009-1.037C16.092,9.82,16.225,9.598,16.168,9.38 M14.963,12.385c-0.055-0.219-0.276-0.35-0.495-0.294l-2.809,0.726c-0.218,0.056-0.351,0.279-0.293,0.496c0.127,0.506,0.755,0.218,0.498,0.293l2.807-0.723C14.89,12.825,15.021,12.603,14.963,12.385"></path>
+                        <path
+                            d="M8.627,7.885C8.499,8.388,7.873,8.101,8.13,8.177L4.12,7.143c-0.218-0.057-0.351-0.28-0.293-0.498c0.057-0.218,0.279-0.351,0.497-0.294l4.011,1.037C8.552,7.444,8.685,7.667,8.627,7.885 M8.334,10.123L4.323,9.086C4.105,9.031,3.883,9.162,3.826,9.38C3.769,9.598,3.901,9.82,4.12,9.877l4.01,1.037c-0.262-0.062,0.373,0.192,0.497-0.294C8.685,10.401,8.552,10.18,8.334,10.123 M7.131,12.507L4.323,11.78c-0.218-0.057-0.44,0.076-0.497,0.295c-0.057,0.218,0.075,0.439,0.293,0.495l2.809,0.726c-0.265-0.062,0.37,0.193,0.495-0.293C7.48,12.784,7.35,12.562,7.131,12.507M18.159,3.677v10.701c0,0.186-0.126,0.348-0.306,0.393l-7.755,1.948c-0.07,0.016-0.134,0.016-0.204,0l-7.748-1.948c-0.179-0.045-0.306-0.207-0.306-0.393V3.677c0-0.267,0.249-0.461,0.509-0.396l7.646,1.921l7.654-1.921C17.91,3.216,18.159,3.41,18.159,3.677 M9.589,5.939L2.656,4.203v9.857l6.933,1.737V5.939z M17.344,4.203l-6.939,1.736v9.859l6.939-1.737V4.203z M16.168,6.645c-0.058-0.218-0.279-0.351-0.498-0.294l-4.011,1.037c-0.218,0.057-0.351,0.28-0.293,0.498c0.128,0.503,0.755,0.216,0.498,0.292l4.009-1.034C16.092,7.085,16.225,6.863,16.168,6.645 M16.168,9.38c-0.058-0.218-0.279-0.349-0.498-0.294l-4.011,1.036c-0.218,0.057-0.351,0.279-0.293,0.498c0.124,0.486,0.759,0.232,0.498,0.294l4.009-1.037C16.092,9.82,16.225,9.598,16.168,9.38 M14.963,12.385c-0.055-0.219-0.276-0.35-0.495-0.294l-2.809,0.726c-0.218,0.056-0.351,0.279-0.293,0.496c0.127,0.506,0.755,0.218,0.498,0.293l2.807-0.723C14.89,12.825,15.021,12.603,14.963,12.385">
+                        </path>
                     </svg>
                 </a>
             </li>
@@ -90,7 +104,7 @@
     <home-container class="home-container" id="homeContainer">
         <home id="home" class="home">
             <program-details id="programDetails" class="home-program-details"></program-details>
-    
+
             <tiles class="home-tile-container" id="homeTiles">
                 <tiles-row class="home-tile-row">
                     <tiles-expand></tiles-expand>
@@ -110,12 +124,16 @@
         </information>
         <previous-channel id="previousChannel" class="channel-arrow channel-previous">
             <svg class="svg-icon" viewBox="0 0 20 20">
-                <path fill="none" d="M8.388,10.049l4.76-4.873c0.303-0.31,0.297-0.804-0.012-1.105c-0.309-0.304-0.803-0.293-1.105,0.012L6.726,9.516c-0.303,0.31-0.296,0.805,0.012,1.105l5.433,5.307c0.152,0.148,0.35,0.223,0.547,0.223c0.203,0,0.406-0.08,0.559-0.236c0.303-0.309,0.295-0.803-0.012-1.104L8.388,10.049z"></path>
+                <path fill="none"
+                    d="M8.388,10.049l4.76-4.873c0.303-0.31,0.297-0.804-0.012-1.105c-0.309-0.304-0.803-0.293-1.105,0.012L6.726,9.516c-0.303,0.31-0.296,0.805,0.012,1.105l5.433,5.307c0.152,0.148,0.35,0.223,0.547,0.223c0.203,0,0.406-0.08,0.559-0.236c0.303-0.309,0.295-0.803-0.012-1.104L8.388,10.049z">
+                </path>
             </svg>
         </previous-channel>
         <next-channel id="nextChannel" class="channel-arrow channel-next">
             <svg class="svg-icon" viewBox="0 0 20 20">
-                <path fill="none" d="M11.611,10.049l-4.76-4.873c-0.303-0.31-0.297-0.804,0.012-1.105c0.309-0.304,0.803-0.293,1.105,0.012l5.306,5.433c0.304,0.31,0.296,0.805-0.012,1.105L7.83,15.928c-0.152,0.148-0.35,0.223-0.547,0.223c-0.203,0-0.406-0.08-0.559-0.236c-0.303-0.309-0.295-0.803,0.012-1.104L11.611,10.049z"></path>
+                <path fill="none"
+                    d="M11.611,10.049l-4.76-4.873c-0.303-0.31-0.297-0.804,0.012-1.105c0.309-0.304,0.803-0.293,1.105,0.012l5.306,5.433c0.304,0.31,0.296,0.805-0.012,1.105L7.83,15.928c-0.152,0.148-0.35,0.223-0.547,0.223c-0.203,0-0.406-0.08-0.559-0.236c-0.303-0.309-0.295-0.803,0.012-1.104L11.611,10.049z">
+                </path>
             </svg>
         </next-channel>
         <controls id="controls" class="controls">
@@ -126,79 +144,103 @@
             <play class="icons" id="playBtn">
                 <!--PAUSE-->
                 <svg id="icon-pause" width="45.975" height="45.975" class="svg-icon" viewBox="0 0 45.975 45.975">
-                    <path d="M13.987,0c-2.762,0-5,2.239-5,5v35.975c0,2.763,2.238,5,5,5s5-2.238,5-5V5C18.987,2.238,16.75,0,13.987,0z"/>
-                    <path d="M31.987,0c-2.762,0-5,2.239-5,5v35.975c0,2.762,2.238,5,5,5s5-2.238,5-5V5C36.987,2.239,34.749,0,31.987,0z"/>
+                    <path
+                        d="M13.987,0c-2.762,0-5,2.239-5,5v35.975c0,2.763,2.238,5,5,5s5-2.238,5-5V5C18.987,2.238,16.75,0,13.987,0z" />
+                    <path
+                        d="M31.987,0c-2.762,0-5,2.239-5,5v35.975c0,2.762,2.238,5,5,5s5-2.238,5-5V5C36.987,2.239,34.749,0,31.987,0z" />
                 </svg>
                 <!--PLAY-->
                 <svg id="icon-play" viewBox="0 0 58.752 58.752" class="svg-icon hiddenButton">
-                    <g><path d="M52.524,23.925L12.507,0.824c-1.907-1.1-4.376-1.097-6.276,0C4.293,1.94,3.088,4.025,3.088,6.264v46.205
+                    <g>
+                        <path d="M52.524,23.925L12.507,0.824c-1.907-1.1-4.376-1.097-6.276,0C4.293,1.94,3.088,4.025,3.088,6.264v46.205
                     c0,2.24,1.204,4.325,3.131,5.435c0.953,0.555,2.042,0.848,3.149,0.848c1.104,0,2.192-0.292,3.141-0.843l40.017-23.103
                     c1.936-1.119,3.138-3.203,3.138-5.439C55.663,27.134,54.462,25.05,52.524,23.925z M49.524,29.612L9.504,52.716
                     c-0.082,0.047-0.18,0.052-0.279-0.005c-0.084-0.049-0.137-0.142-0.137-0.242V6.263c0-0.1,0.052-0.192,0.14-0.243
                     c0.042-0.025,0.09-0.038,0.139-0.038c0.051,0,0.099,0.013,0.142,0.038l40.01,23.098c0.089,0.052,0.145,0.147,0.145,0.249
-                    C49.663,29.47,49.611,29.561,49.524,29.612z"/></g>
+                    C49.663,29.47,49.611,29.561,49.524,29.612z" />
+                    </g>
                 </svg>
             </play>
             <volume id="volumeBtn" class="icons">
                 <svg id="icon-volume-muted" class="svg-icon" viewBox="0 0 20 20">
-                    <path d="M18.084,11.639c0.168,0.169,0.168,0.442,0,0.611c-0.084,0.084-0.195,0.127-0.306,0.127c-0.111,0-0.221-0.043-0.306-0.127l-1.639-1.639l-1.639,1.639c-0.084,0.084-0.195,0.127-0.306,0.127c-0.111,0-0.222-0.043-0.307-0.127c-0.168-0.169-0.168-0.442,0-0.611L15.223,10l-1.64-1.639c-0.168-0.168-0.168-0.442,0-0.61c0.17-0.169,0.442-0.169,0.612,0l1.639,1.639l1.639-1.639c0.169-0.169,0.442-0.169,0.611,0c0.168,0.168,0.168,0.442,0,0.61L16.445,10L18.084,11.639z M12.161,2.654v14.691c0,0.175-0.105,0.333-0.267,0.4c-0.054,0.021-0.109,0.032-0.166,0.032c-0.111,0-0.223-0.043-0.305-0.127l-3.979-3.979H2.222c-0.237,0-0.432-0.194-0.432-0.432V6.759c0-0.237,0.195-0.432,0.432-0.432h5.222l3.979-3.978c0.123-0.125,0.309-0.163,0.471-0.095C12.056,2.322,12.161,2.479,12.161,2.654 M7.192,7.192H2.654v5.617h4.538V7.192z M11.296,3.698l-3.24,3.241v6.123l3.24,3.24V3.698z"></path>
+                    <path
+                        d="M18.084,11.639c0.168,0.169,0.168,0.442,0,0.611c-0.084,0.084-0.195,0.127-0.306,0.127c-0.111,0-0.221-0.043-0.306-0.127l-1.639-1.639l-1.639,1.639c-0.084,0.084-0.195,0.127-0.306,0.127c-0.111,0-0.222-0.043-0.307-0.127c-0.168-0.169-0.168-0.442,0-0.611L15.223,10l-1.64-1.639c-0.168-0.168-0.168-0.442,0-0.61c0.17-0.169,0.442-0.169,0.612,0l1.639,1.639l1.639-1.639c0.169-0.169,0.442-0.169,0.611,0c0.168,0.168,0.168,0.442,0,0.61L16.445,10L18.084,11.639z M12.161,2.654v14.691c0,0.175-0.105,0.333-0.267,0.4c-0.054,0.021-0.109,0.032-0.166,0.032c-0.111,0-0.223-0.043-0.305-0.127l-3.979-3.979H2.222c-0.237,0-0.432-0.194-0.432-0.432V6.759c0-0.237,0.195-0.432,0.432-0.432h5.222l3.979-3.978c0.123-0.125,0.309-0.163,0.471-0.095C12.056,2.322,12.161,2.479,12.161,2.654 M7.192,7.192H2.654v5.617h4.538V7.192z M11.296,3.698l-3.24,3.241v6.123l3.24,3.24V3.698z">
+                    </path>
                 </svg>
                 <svg id="icon-volume-unmuted" class="svg-icon hiddenButton" viewBox="0 0 20 20">
-                    <path d="M17.969,10c0,1.707-0.5,3.366-1.446,4.802c-0.076,0.115-0.203,0.179-0.333,0.179c-0.075,0-0.151-0.022-0.219-0.065c-0.184-0.122-0.233-0.369-0.113-0.553c0.86-1.302,1.314-2.812,1.314-4.362s-0.454-3.058-1.314-4.363c-0.12-0.183-0.07-0.43,0.113-0.552c0.186-0.12,0.432-0.07,0.552,0.114C17.469,6.633,17.969,8.293,17.969,10 M15.938,10c0,1.165-0.305,2.319-0.88,3.339c-0.074,0.129-0.21,0.201-0.347,0.201c-0.068,0-0.134-0.016-0.197-0.052c-0.191-0.107-0.259-0.351-0.149-0.542c0.508-0.9,0.776-1.918,0.776-2.946c0-1.028-0.269-2.046-0.776-2.946c-0.109-0.191-0.042-0.434,0.149-0.542c0.193-0.109,0.436-0.042,0.544,0.149C15.634,7.681,15.938,8.834,15.938,10 M13.91,10c0,0.629-0.119,1.237-0.354,1.811c-0.063,0.153-0.211,0.247-0.368,0.247c-0.05,0-0.102-0.01-0.151-0.029c-0.203-0.084-0.301-0.317-0.217-0.521c0.194-0.476,0.294-0.984,0.294-1.508s-0.1-1.032-0.294-1.508c-0.084-0.203,0.014-0.437,0.217-0.52c0.203-0.084,0.437,0.014,0.52,0.217C13.791,8.763,13.91,9.373,13.91,10 M11.594,3.227v13.546c0,0.161-0.098,0.307-0.245,0.368c-0.05,0.021-0.102,0.03-0.153,0.03c-0.104,0-0.205-0.04-0.281-0.117l-3.669-3.668H2.43c-0.219,0-0.398-0.18-0.398-0.398V7.012c0-0.219,0.179-0.398,0.398-0.398h4.815l3.669-3.668c0.114-0.115,0.285-0.149,0.435-0.087C11.496,2.92,11.594,3.065,11.594,3.227 M7.012,7.41H2.828v5.18h4.184V7.41z M10.797,4.189L7.809,7.177v5.646l2.988,2.988V4.189z"></path>
+                    <path
+                        d="M17.969,10c0,1.707-0.5,3.366-1.446,4.802c-0.076,0.115-0.203,0.179-0.333,0.179c-0.075,0-0.151-0.022-0.219-0.065c-0.184-0.122-0.233-0.369-0.113-0.553c0.86-1.302,1.314-2.812,1.314-4.362s-0.454-3.058-1.314-4.363c-0.12-0.183-0.07-0.43,0.113-0.552c0.186-0.12,0.432-0.07,0.552,0.114C17.469,6.633,17.969,8.293,17.969,10 M15.938,10c0,1.165-0.305,2.319-0.88,3.339c-0.074,0.129-0.21,0.201-0.347,0.201c-0.068,0-0.134-0.016-0.197-0.052c-0.191-0.107-0.259-0.351-0.149-0.542c0.508-0.9,0.776-1.918,0.776-2.946c0-1.028-0.269-2.046-0.776-2.946c-0.109-0.191-0.042-0.434,0.149-0.542c0.193-0.109,0.436-0.042,0.544,0.149C15.634,7.681,15.938,8.834,15.938,10 M13.91,10c0,0.629-0.119,1.237-0.354,1.811c-0.063,0.153-0.211,0.247-0.368,0.247c-0.05,0-0.102-0.01-0.151-0.029c-0.203-0.084-0.301-0.317-0.217-0.521c0.194-0.476,0.294-0.984,0.294-1.508s-0.1-1.032-0.294-1.508c-0.084-0.203,0.014-0.437,0.217-0.52c0.203-0.084,0.437,0.014,0.52,0.217C13.791,8.763,13.91,9.373,13.91,10 M11.594,3.227v13.546c0,0.161-0.098,0.307-0.245,0.368c-0.05,0.021-0.102,0.03-0.153,0.03c-0.104,0-0.205-0.04-0.281-0.117l-3.669-3.668H2.43c-0.219,0-0.398-0.18-0.398-0.398V7.012c0-0.219,0.179-0.398,0.398-0.398h4.815l3.669-3.668c0.114-0.115,0.285-0.149,0.435-0.087C11.496,2.92,11.594,3.065,11.594,3.227 M7.012,7.41H2.828v5.18h4.184V7.41z M10.797,4.189L7.809,7.177v5.646l2.988,2.988V4.189z">
+                    </path>
                 </svg>
             </volume>
 
             <reload id="reloadBtn" class="icons">
                 <svg class="svg-icon" viewBox="0 0 20 20">
-                    <path fill="none" d="M3.254,6.572c0.008,0.072,0.048,0.123,0.082,0.187c0.036,0.07,0.06,0.137,0.12,0.187C3.47,6.957,3.47,6.978,3.484,6.988c0.048,0.034,0.108,0.018,0.162,0.035c0.057,0.019,0.1,0.066,0.164,0.066c0.004,0,0.01,0,0.015,0l2.934-0.074c0.317-0.007,0.568-0.271,0.56-0.589C7.311,6.113,7.055,5.865,6.744,5.865c-0.005,0-0.01,0-0.015,0L5.074,5.907c2.146-2.118,5.604-2.634,7.971-1.007c2.775,1.912,3.48,5.726,1.57,8.501c-1.912,2.781-5.729,3.486-8.507,1.572c-0.259-0.18-0.618-0.119-0.799,0.146c-0.18,0.262-0.114,0.621,0.148,0.801c1.254,0.863,2.687,1.279,4.106,1.279c2.313,0,4.591-1.1,6.001-3.146c2.268-3.297,1.432-7.829-1.867-10.101c-2.781-1.913-6.816-1.36-9.351,1.058L4.309,3.567C4.303,3.252,4.036,3.069,3.72,3.007C3.402,3.015,3.151,3.279,3.16,3.597l0.075,2.932C3.234,6.547,3.251,6.556,3.254,6.572z"></path>
+                    <path fill="none"
+                        d="M3.254,6.572c0.008,0.072,0.048,0.123,0.082,0.187c0.036,0.07,0.06,0.137,0.12,0.187C3.47,6.957,3.47,6.978,3.484,6.988c0.048,0.034,0.108,0.018,0.162,0.035c0.057,0.019,0.1,0.066,0.164,0.066c0.004,0,0.01,0,0.015,0l2.934-0.074c0.317-0.007,0.568-0.271,0.56-0.589C7.311,6.113,7.055,5.865,6.744,5.865c-0.005,0-0.01,0-0.015,0L5.074,5.907c2.146-2.118,5.604-2.634,7.971-1.007c2.775,1.912,3.48,5.726,1.57,8.501c-1.912,2.781-5.729,3.486-8.507,1.572c-0.259-0.18-0.618-0.119-0.799,0.146c-0.18,0.262-0.114,0.621,0.148,0.801c1.254,0.863,2.687,1.279,4.106,1.279c2.313,0,4.591-1.1,6.001-3.146c2.268-3.297,1.432-7.829-1.867-10.101c-2.781-1.913-6.816-1.36-9.351,1.058L4.309,3.567C4.303,3.252,4.036,3.069,3.72,3.007C3.402,3.015,3.151,3.279,3.16,3.597l0.075,2.932C3.234,6.547,3.251,6.556,3.254,6.572z">
+                    </path>
                 </svg>
             </reload>
             <views id="views" class="icons watching">
                 <svg class="svg-icon" viewBox="0 0 20 20">
-                    <path d="M10,6.978c-1.666,0-3.022,1.356-3.022,3.022S8.334,13.022,10,13.022s3.022-1.356,3.022-3.022S11.666,6.978,10,6.978M10,12.267c-1.25,0-2.267-1.017-2.267-2.267c0-1.25,1.016-2.267,2.267-2.267c1.251,0,2.267,1.016,2.267,2.267C12.267,11.25,11.251,12.267,10,12.267 M18.391,9.733l-1.624-1.639C14.966,6.279,12.563,5.278,10,5.278S5.034,6.279,3.234,8.094L1.609,9.733c-0.146,0.147-0.146,0.386,0,0.533l1.625,1.639c1.8,1.815,4.203,2.816,6.766,2.816s4.966-1.001,6.767-2.816l1.624-1.639C18.536,10.119,18.536,9.881,18.391,9.733 M16.229,11.373c-1.656,1.672-3.868,2.594-6.229,2.594s-4.573-0.922-6.23-2.594L2.41,10l1.36-1.374C5.427,6.955,7.639,6.033,10,6.033s4.573,0.922,6.229,2.593L17.59,10L16.229,11.373z"></path>
+                    <path
+                        d="M10,6.978c-1.666,0-3.022,1.356-3.022,3.022S8.334,13.022,10,13.022s3.022-1.356,3.022-3.022S11.666,6.978,10,6.978M10,12.267c-1.25,0-2.267-1.017-2.267-2.267c0-1.25,1.016-2.267,2.267-2.267c1.251,0,2.267,1.016,2.267,2.267C12.267,11.25,11.251,12.267,10,12.267 M18.391,9.733l-1.624-1.639C14.966,6.279,12.563,5.278,10,5.278S5.034,6.279,3.234,8.094L1.609,9.733c-0.146,0.147-0.146,0.386,0,0.533l1.625,1.639c1.8,1.815,4.203,2.816,6.766,2.816s4.966-1.001,6.767-2.816l1.624-1.639C18.536,10.119,18.536,9.881,18.391,9.733 M16.229,11.373c-1.656,1.672-3.868,2.594-6.229,2.594s-4.573-0.922-6.23-2.594L2.41,10l1.36-1.374C5.427,6.955,7.639,6.033,10,6.033s4.573,0.922,6.229,2.593L17.59,10L16.229,11.373z">
+                    </path>
                 </svg>
                 <counter id="realtimeCounter" class="watching-counter"></counter>
-                <tooltip class="watching-tooltip" id="static-tvplayer-controls-watching-tooltip">The number of people currently watching the channel</tooltip>
+                <tooltip class="watching-tooltip" id="static-tvplayer-controls-watching-tooltip">The number of people
+                    currently watching the channel</tooltip>
             </views>
 
             <fullscreen id="fullscreenBtn" class="icons">
                 <!--OPEN FULLSCREEN-->
                 <svg id="icon-fullscreen-open" viewBox="0 0 96 96" class="svg-icon">
-                    <path d="M30,0H6A5.9966,5.9966,0,0,0,0,6V30a6,6,0,0,0,12,0V12H30A6,6,0,0,0,30,0Z"/><path d="M90,0H66a6,6,0,0,0,0,12H84V30a6,6,0,0,0,12,0V6A5.9966,5.9966,0,0,0,90,0Z"/><path d="M30,84H12V66A6,6,0,0,0,0,66V90a5.9966,5.9966,0,0,0,6,6H30a6,6,0,0,0,0-12Z"/><path d="M90,60a5.9966,5.9966,0,0,0-6,6V84H66a6,6,0,0,0,0,12H90a5.9966,5.9966,0,0,0,6-6V66A5.9966,5.9966,0,0,0,90,60Z"/>
+                    <path d="M30,0H6A5.9966,5.9966,0,0,0,0,6V30a6,6,0,0,0,12,0V12H30A6,6,0,0,0,30,0Z" />
+                    <path d="M90,0H66a6,6,0,0,0,0,12H84V30a6,6,0,0,0,12,0V6A5.9966,5.9966,0,0,0,90,0Z" />
+                    <path d="M30,84H12V66A6,6,0,0,0,0,66V90a5.9966,5.9966,0,0,0,6,6H30a6,6,0,0,0,0-12Z" />
+                    <path
+                        d="M90,60a5.9966,5.9966,0,0,0-6,6V84H66a6,6,0,0,0,0,12H90a5.9966,5.9966,0,0,0,6-6V66A5.9966,5.9966,0,0,0,90,60Z" />
                 </svg>
-                
+
                 <!--CLOSE FULLSCREEN-->
                 <svg id="icon-fullscreen-close" viewBox="0 0 96 96" class="svg-icon hiddenButton">
-                    <path d="M30,60H6A6,6,0,0,0,6,72H24V90a6,6,0,0,0,12,0V66A5.9966,5.9966,0,0,0,30,60Z"/><path d="M90,60H66a5.9966,5.9966,0,0,0-6,6V90a6,6,0,0,0,12,0V72H90a6,6,0,0,0,0-12Z"/><path d="M66,36H90a6,6,0,0,0,0-12H72V6A6,6,0,0,0,60,6V30A5.9966,5.9966,0,0,0,66,36Z"/><path d="M30,0a5.9966,5.9966,0,0,0-6,6V24H6A6,6,0,0,0,6,36H30a5.9966,5.9966,0,0,0,6-6V6A5.9966,5.9966,0,0,0,30,0Z"/>
+                    <path d="M30,60H6A6,6,0,0,0,6,72H24V90a6,6,0,0,0,12,0V66A5.9966,5.9966,0,0,0,30,60Z" />
+                    <path d="M90,60H66a5.9966,5.9966,0,0,0-6,6V90a6,6,0,0,0,12,0V72H90a6,6,0,0,0,0-12Z" />
+                    <path d="M66,36H90a6,6,0,0,0,0-12H72V6A6,6,0,0,0,60,6V30A5.9966,5.9966,0,0,0,66,36Z" />
+                    <path
+                        d="M30,0a5.9966,5.9966,0,0,0-6,6V24H6A6,6,0,0,0,6,36H30a5.9966,5.9966,0,0,0,6-6V6A5.9966,5.9966,0,0,0,30,0Z" />
                 </svg>
             </fullscreen>
             <airplay-button id="airPlayButton" class="icons" style="display: none; transform: scale(1.2);">
-                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="56pt" height="56pt" viewBox="0 0 56 56" class="svg-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+                    width="56pt" height="56pt" viewBox="0 0 56 56" class="svg-icon">
                     <g enable-background="new">
                         <g id="Layer-1" data-name="Layer 1">
                             <clipPath id="cp0">
-                                <path transform="matrix(1,0,0,-1,0,56)" d="M 15.128 44 C 13.344 44 12.698 43.815 12.046 43.465 C 11.395 43.117 10.883 42.605 10.535 41.954 C 10.185 41.302 10 40.656 10 38.872 L 10 25.128 C 10 23.345 10.185 22.698 10.535 22.046 C 10.883 21.395 11.395 20.883 12.046 20.534 C 12.698 20.185 13.344 20 15.128 20 L 19.228 20 L 20.941 22 L 14.564 22 C 13.673 22 13.349 22.093 13.023 22.268 C 12.697 22.441 12.442 22.697 12.267 23.024 C 12.092 23.349 12 23.673 12 24.564 L 12 39.436 C 12 40.327 12.092 40.651 12.267 40.977 C 12.442 41.303 12.697 41.558 13.023 41.733 C 13.349 41.908 13.673 42 14.564 42 L 41.437 42 C 42.327 42 42.651 41.908 42.977 41.733 C 43.303 41.558 43.558 41.303 43.733 40.977 C 43.907 40.651 44 40.327 44 39.436 L 44 24.564 C 44 23.673 43.907 23.349 43.733 23.024 C 43.558 22.697 43.303 22.441 42.977 22.268 C 42.651 22.093 42.327 22 41.437 22 L 35.059 22 L 36.772 20 L 40.872 20 C 42.656 20 43.302 20.185 43.954 20.534 C 44.606 20.883 45.117 21.395 45.466 22.046 C 45.814 22.698 46 23.345 46 25.128 L 46 38.872 C 46 40.656 45.814 41.302 45.466 41.954 C 45.117 42.605 44.606 43.117 43.954 43.465 C 43.302 43.815 42.656 44 40.872 44 Z M 27.374 25.506 L 16.693 13.209 C 16.286 12.74 16.613 12 17.23 12 L 38.77 12 C 39.387 12 39.715 12.74 39.307 13.209 L 28.625 25.506 C 28.459 25.697 28.229 25.793 28 25.793 C 27.77 25.793 27.54 25.697 27.374 25.506 "/>
+                                <path transform="matrix(1,0,0,-1,0,56)"
+                                    d="M 15.128 44 C 13.344 44 12.698 43.815 12.046 43.465 C 11.395 43.117 10.883 42.605 10.535 41.954 C 10.185 41.302 10 40.656 10 38.872 L 10 25.128 C 10 23.345 10.185 22.698 10.535 22.046 C 10.883 21.395 11.395 20.883 12.046 20.534 C 12.698 20.185 13.344 20 15.128 20 L 19.228 20 L 20.941 22 L 14.564 22 C 13.673 22 13.349 22.093 13.023 22.268 C 12.697 22.441 12.442 22.697 12.267 23.024 C 12.092 23.349 12 23.673 12 24.564 L 12 39.436 C 12 40.327 12.092 40.651 12.267 40.977 C 12.442 41.303 12.697 41.558 13.023 41.733 C 13.349 41.908 13.673 42 14.564 42 L 41.437 42 C 42.327 42 42.651 41.908 42.977 41.733 C 43.303 41.558 43.558 41.303 43.733 40.977 C 43.907 40.651 44 40.327 44 39.436 L 44 24.564 C 44 23.673 43.907 23.349 43.733 23.024 C 43.558 22.697 43.303 22.441 42.977 22.268 C 42.651 22.093 42.327 22 41.437 22 L 35.059 22 L 36.772 20 L 40.872 20 C 42.656 20 43.302 20.185 43.954 20.534 C 44.606 20.883 45.117 21.395 45.466 22.046 C 45.814 22.698 46 23.345 46 25.128 L 46 38.872 C 46 40.656 45.814 41.302 45.466 41.954 C 45.117 42.605 44.606 43.117 43.954 43.465 C 43.302 43.815 42.656 44 40.872 44 Z M 27.374 25.506 L 16.693 13.209 C 16.286 12.74 16.613 12 17.23 12 L 38.77 12 C 39.387 12 39.715 12.74 39.307 13.209 L 28.625 25.506 C 28.459 25.697 28.229 25.793 28 25.793 C 27.77 25.793 27.54 25.697 27.374 25.506 " />
                             </clipPath>
                             <g clip-path="url(#cp0)">
-                                <path transform="matrix(1,0,0,-1,0,56)" d="M 5 7 L 51 7 L 51 49 L 5 49 Z "/>
+                                <path transform="matrix(1,0,0,-1,0,56)" d="M 5 7 L 51 7 L 51 49 L 5 49 Z " />
                             </g>
                         </g>
                     </g>
-                </svg>                    
+                </svg>
             </airplay-button>
         </controls>
 
         <div class="loading-container" id="loadingContainer">
             <div class="loading" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
                 <svg class="loading-svg" viewBox="25 25 50 50">
-                    <circle class="loading-circle" cx="50" cy="50" r="20" fill="none" stroke-width="5" stroke-miterlimit="10"></circle>
+                    <circle class="loading-circle" cx="50" cy="50" r="20" fill="none" stroke-width="5"
+                        stroke-miterlimit="10"></circle>
                 </svg>
             </div>
         </div>
         <!-- HEART STYLE
             <loading class="heart"></loading>
         -->
-            <video class="video-player" id="videoPlayer" muted autoplay playsinline preload="auto"></video>
+        <video class="video-player" id="videoPlayer" muted autoplay playsinline preload="auto"></video>
     </tvplayer>
     <responsive-information class="responsive-information" id="responsiveContainer">
         <information class="responive-information-container" id="responsiveInformationContainer">
@@ -212,7 +254,8 @@
                 </information-program>
             </information-text>
         </information>
-        <responsive-program-description class="responsive-description" id="responsiveDescription"></responsive-program-description>
+        <responsive-program-description class="responsive-description" id="responsiveDescription">
+        </responsive-program-description>
         <more-button class="responsive-epg" style="height: 300px;">
             <button id="responsiveEPGButton" class="responsive-epg-button">Go to the EPG</button>
         </more-button>
@@ -221,15 +264,23 @@
         </program-list>
     </responsive-information>
     <more id="more" class="more hidden-more">
-            <return-back-button id="returnBackButton" class="responsiveReturnBackButton">
-                Go back to TV
-            </return-back-button>
+        <return-back-button id="returnBackButton" class="responsiveReturnBackButton">
+            Go back to TV
+        </return-back-button>
         <program-information-container class="epg-program-information-container" id="epgProgramInformation">
-            <program-information-close-button class="epg-program-information-close" id="epgProgramInformationCloseButton"></program-information-close-button>
-            <program-information-channel class="epg-program-information-channel" id="epgProgramInformationChannel">Airing on NTV</program-information-channel>
-            <program-information-timestamp class="epg-program-information-timestamp" id="epgProgramInformationTimestamp">From 00:00 to 23:59</program-information-timestamp>
-            <program-information-title  class="epg-program-information-title" id="epgProgramInformationTitle">A very cool but could be very long title which is very annoying when it's long so i'm makin it long</program-information-title>
-            <program-information-description class="epg-program-information-description" id="epgProgramInformationDescription">If we talk about long titles we gotta talk about long descriptions because they can be long as heck what am i even doing is it gonna work? who knows? no one knows?</program-information-description>
+            <program-information-close-button class="epg-program-information-close"
+                id="epgProgramInformationCloseButton"></program-information-close-button>
+            <program-information-channel class="epg-program-information-channel" id="epgProgramInformationChannel">
+                Airing on NTV</program-information-channel>
+            <program-information-timestamp class="epg-program-information-timestamp"
+                id="epgProgramInformationTimestamp">From 00:00 to 23:59</program-information-timestamp>
+            <program-information-title class="epg-program-information-title" id="epgProgramInformationTitle">A very cool
+                but could be very long title which is very annoying when it's long so i'm makin it long
+            </program-information-title>
+            <program-information-description class="epg-program-information-description"
+                id="epgProgramInformationDescription">If we talk about long titles we gotta talk about long descriptions
+                because they can be long as heck what am i even doing is it gonna work? who knows? no one knows?
+            </program-information-description>
             <a target="_blank" class="epg-program-information-url" id="epgProgramInformationURL">Link to the program</a>
         </program-information-container>
         <more-inner>
@@ -241,19 +292,24 @@
                         <edit-text id="static-more-account-picture-edit" class="pictureEditText">Edit</edit-text>
                     </account-picture>
                     <account-info class="account-info" id="accountInfo">
-                        <input-container id="static-more-account-username-title" before-content="Username: " class="username-input-container password-input password-input-shown">
-                            <input class="account-name" id="accountName" placeholder="Username" type="text" autocomplete="off">
+                        <input-container id="static-more-account-username-title" before-content="Username: "
+                            class="username-input-container password-input password-input-shown">
+                            <input class="account-name" id="accountName" placeholder="Username" type="text"
+                                autocomplete="off">
                             <button class="submit-button" id="usernameSubmitButton">Submit</button>
                         </input-container>
-                        <account-invite before-content="Invite: " class="account-invite" id="accountInvite"></account-invite>
+                        <account-invite before-content="Invite: " class="account-invite" id="accountInvite">
+                        </account-invite>
                         <account-password class="account-password">
                             <button class="change-password-request" id="changePasswordRequest">Change password</button>
                             <input-container class="password-input-container">
-                                <input class="current-password password-input unload-password-input" type="password" id="currentPassword" placeholder="Current Password">
+                                <input class="current-password password-input unload-password-input" type="password"
+                                    id="currentPassword" placeholder="Current Password">
                                 <button class="submit-button" id="currentPasswordSubmitButton">Submit</button>
                             </input-container>
                             <input-container class="password-input-container">
-                                <input class="new-password password-input unload-password-input" type="password" id="newPassword" placeholder="New Password">
+                                <input class="new-password password-input unload-password-input" type="password"
+                                    id="newPassword" placeholder="New Password">
                                 <button class="submit-button" id="newPasswordSubmitButton">Submit</button>
                             </input-container>
                         </account-password>
@@ -267,20 +323,31 @@
                     </account-info>
                 </account-container>
             </account>
-            <more-title id="static-more-guide-title">TV Guide <epg-button id="returnToCurrentTime">Return to current time</epg-button></more-title>
+            <more-title id="static-more-guide-title">TV Guide <epg-button id="returnToCurrentTime">Return to current
+                    time</epg-button>
+            </more-title>
             <tv-guide class="tv-guide" id="tvGuide">
                 <epg-channels id="epgChannels" class="epg-channels"></epg-channels>
-                    <epg-content id="epgContent" class="epg-content">
-                        <epg-times id="epgTimes" class="epg-times"></epg-times>
+                <epg-content id="epgContent" class="epg-content">
+                    <epg-times id="epgTimes" class="epg-times"></epg-times>
                     <epg-rows id="epgRows" class="epg-rows"></epg-rows>
                 </epg-content>
             </tv-guide>
             <footer class="footer">
                 <credits id="credits" class="credits">© Anime no Sekai — 2021</credits>
-                <status class="server-status"><status-title id="mainStatusTitle">Main API Status: </status-title><span class="dot" id="mainStatusDot"></span><status-text id="mainStatusText">Unknown</status-text></status>
-                <status class="server-status"><status-title id="channelsStatusTitle">Channels Status: </status-title><span class="dot" id="channelsStatusDot"></span><status-text id="channelsStatusText">Unknown</status-text></status>
+                <status class="server-status">
+                    <status-title id="mainStatusTitle">Main API Status: </status-title><span class="dot"
+                        id="mainStatusDot"></span>
+                    <status-text id="mainStatusText">Unknown</status-text>
+                </status>
+                <status class="server-status">
+                    <status-title id="channelsStatusTitle">Channels Status: </status-title><span class="dot"
+                        id="channelsStatusDot"></span>
+                    <status-text id="channelsStatusText">Unknown</status-text>
+                </status>
             </footer>
         </more-inner>
     </more>
 </body>
+
 </html>

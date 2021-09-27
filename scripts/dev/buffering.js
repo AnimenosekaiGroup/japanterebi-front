@@ -11,11 +11,11 @@ function checkBuffering() {
     let videoPlayer = document.getElementById("videoPlayer")
     /* This function is called in an interval of a short duration to determine if the current livestream is buffering or not */
     states.buffering.currentPlayPosition = videoPlayer.currentTime
-    if ( !states.buffering.bufferingDetected && states.buffering.currentPlayPosition < (states.buffering.lastPlayPosition + constants.BUFFERING_OFFSET) && !videoPlayer.paused ) {
+    if (!states.buffering.bufferingDetected && states.buffering.currentPlayPosition < (states.buffering.lastPlayPosition + constants.BUFFERING_OFFSET) && !videoPlayer.paused) {
         buffering()
         states.buffering.bufferingDetected = true
     }
-    if ( states.buffering.bufferingDetected && states.buffering.currentPlayPosition > (states.buffering.lastPlayPosition + constants.BUFFERING_OFFSET) && !videoPlayer.paused ) { // check if the player has advanced, meaning that it is not buffering
+    if (states.buffering.bufferingDetected && states.buffering.currentPlayPosition > (states.buffering.lastPlayPosition + constants.BUFFERING_OFFSET) && !videoPlayer.paused) { // check if the player has advanced, meaning that it is not buffering
         stopBuffering()
         states.buffering.bufferingDetected = false
     }

@@ -6,7 +6,7 @@
  * © Anime no Sekai — 2021
  */
 
-async function checkOrientation(mediaQuery) {
+async function checkOrientation(mediaQuery) {
     if (mediaQuery.matches) { loadPortrait() } else { loadLandscape() }
 }
 

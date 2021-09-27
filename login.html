@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -27,11 +28,12 @@
     <link rel="stylesheet" href="/styles/login.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
+
 <body>
     <login-form class="loginForm hidden" id="loginPage">
         <login-title id="localization-loginTitle">Login to Japan Terebi</login-title>
         <input type="text" id="usernameInput" placeholder="Username" onkeypress="loginInputCallback(event)">
-        <input type="password" id="passwordInput" placeholder="Password" onkeypress="loginInputCallback(event)" >
+        <input type="password" id="passwordInput" placeholder="Password" onkeypress="loginInputCallback(event)">
         <button-container>
             <button id="localization-LoginButton" onclick="login()">Login</button>
             <button onclick="setPage()" id="goToSet">Create Account</button>
@@ -41,8 +43,10 @@
         <login-title id="localization-createTitle">Create your account for Japan Terebi</login-title>
         <input type="password" id="inviteInput" placeholder="Invite" onkeypress="setPasswordInputCallback(event)">
         <input type="text" id="createUsernameInput" placeholder="Username" onkeypress="setPasswordInputCallback(event)">
-        <input type="password" id="newPasswordInput" placeholder="New Password" onkeypress="setPasswordInputCallback(event)">
-        <input type="password" id="passwordConfirmation" placeholder="Confirm Password" onkeypress="setPasswordInputCallback(event)">
+        <input type="password" id="newPasswordInput" placeholder="New Password"
+            onkeypress="setPasswordInputCallback(event)">
+        <input type="password" id="passwordConfirmation" placeholder="Confirm Password"
+            onkeypress="setPasswordInputCallback(event)">
         <button-container>
             <button id="localization-CreateSubmitButton" onclick="setPassword()">Submit</button>
             <button onclick="loginPage()" id="goToLogin">Go to Login</button>
@@ -58,7 +62,8 @@
         <div class="loading-container" id="loadingContainer">
             <div class="loading" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
                 <svg class="loading-svg" viewBox="25 25 50 50">
-                    <circle class="loading-circle" cx="50" cy="50" r="20" fill="none" stroke-width="5" stroke-miterlimit="10"></circle>
+                    <circle class="loading-circle" cx="50" cy="50" r="20" fill="none" stroke-width="5"
+                        stroke-miterlimit="10"></circle>
                 </svg>
             </div>
         </div>
@@ -69,4 +74,5 @@
         <option value="fr">Français</option>
     </select>
 </body>
+
 </html>

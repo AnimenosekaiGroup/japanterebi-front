@@ -45,7 +45,7 @@ function correctMinute(minute) {
 function nextElement(array, value) {
     /* Lets you find the next element in the array */
     let index = array.indexOf(value)
-    if (index == array.length - 1 || index == -1) {
+    if (index == array.length - 1 || index == -1) {
         return 0
     } else {
         return index + 1
@@ -55,7 +55,7 @@ function nextElement(array, value) {
 function previousElement(array, value) {
     /* Lets you find the previous element in the array */
     let index = array.indexOf(value)
-    if (index == 0 || index == -1) {
+    if (index == 0 || index == -1) {
         return array.length - 1
     } else {
         return index - 1
@@ -69,11 +69,11 @@ async function newInfo(message) {
     newElement.setAttribute("class", "info-box")
     newElement.innerText = String(message)
     document.getElementById("tvplayer").appendChild(newElement)
-    setTimeout(function() {
+    setTimeout(function () {
         newElement.classList.add("visibleInfo")
-        setTimeout(function() {
+        setTimeout(function () {
             newElement.classList.remove("visibleInfo")
-            setTimeout(function() {
+            setTimeout(function () {
                 newElement.remove()
             }, 1000)
         }, 5000)
@@ -94,7 +94,7 @@ async function translate(text, destination) {
     } catch { return text }
 }
 
-function isElementInView(element, fullyInView=true) {
+function isElementInView(element, fullyInView = true) {
     var pageTop = document.body.scrollTop;
     var pageBottom = pageTop + parseFloat(getComputedStyle(document.body, null).height.replace("px", ""));
     var elementTop = element.getBoundingClientRect().top + document.body.scrollTop;
@@ -111,19 +111,19 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function createRandomID(length, checkingArray=null) {
+function createRandomID(length, checkingArray = null) {
     let result = [];
     let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let charactersLength = characters.length;
     for (let i = 0; i < length; i++) {
-      result.push(characters.charAt(Math.floor(Math.random() * 
- charactersLength)));
-   }
-   let resultString = result.join('');
-   if (checkingArray) {
-       if (checkingArray.includes(resultString)) {
-        resultString = createRandomID(length, checkingArray)
-       }
-   }
-   return resultString
+        result.push(characters.charAt(Math.floor(Math.random() *
+            charactersLength)));
+    }
+    let resultString = result.join('');
+    if (checkingArray) {
+        if (checkingArray.includes(resultString)) {
+            resultString = createRandomID(length, checkingArray)
+        }
+    }
+    return resultString
 }

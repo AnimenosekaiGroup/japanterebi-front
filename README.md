@@ -1,6 +1,7 @@
 # `japanterebi-front`
 
 ### The front end for Japan Terebi!  
+
 ***Because watching TV shouldn't be a burden***
 
 [![Main API Status](https://img.shields.io/uptimerobot/ratio/m787817878-b8981da3cd50ccafba042058?label=Main%20API%20Uptime)](https://stats.uptimerobot.com/lMVyrUoqYq/787817878)
@@ -13,7 +14,6 @@
 ![Code Size](https://img.shields.io/github/languages/code-size/AnimenosekaiGroup/japanterebi-front)
 ![Repo Size](https://img.shields.io/github/repo-size/AnimenosekaiGroup/japanterebi-front)
 ![Issues](https://img.shields.io/github/issues/AnimenosekaiGroup/japanterebi-front)
-
 
 ## Built With
 
@@ -28,7 +28,6 @@
 ## License
 
 This project is licensed under the GNU Affero General Public License v3.0 License - see the [LICENSE](LICENSE) file for details
-
 
 ## Disclaimer
 

@@ -9,6 +9,7 @@
 /* here is the variable with all of the current states, watching this staticly gives the defaults */
 let states = {
     "currentChannel": "",
+    "currentStream": "",
     "currentPage": "",
     "mouseMovementIndex": 0,
     "switchConfirmation": "",

@@ -98,10 +98,11 @@ async function watch(channel) {
             .then((channelsData) => {
                 if (channelsData) {
                     if (channel in channelsData) {
+                        states.currentStream = constants.STREAM_HOST.format({ channel: channel, token: window.localStorage.getItem("__japanterebi_auth") })
                         if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) { // fallback for safari and browsers supporting HLS natively
-                            watchWithNative(constants.STREAM_HOST.format({ channel: channel, token: window.localStorage.getItem("__japanterebi_auth") }))
+                            watchWithNative(states.currentStream)
                         } else if (Hls.isSupported()) { // hls.js
-                            watchWithHLSJS(constants.STREAM_HOST.format({ channel: channel, token: window.localStorage.getItem("__japanterebi_auth") }))
+                            watchWithHLSJS(states.currentStream)
                         } else { // if nothing is available
                             newInfo(localization[states.language].UI.announce.browserNotCompatible)
                             return
@@ -113,14 +114,16 @@ async function watch(channel) {
                             var queryParams = new URLSearchParams(window.location.search);
                             queryParams.set("channel", channel);
                             history.replaceState(null, null, "?" + queryParams.toString());
+                            document.getElementById("siteTitle").innerText = "{channel} — Japan Terebi".format({
+                                channel: channelsData[channel].name[localization[states.language].channelNameLanguage]
+                            })
+                            /*
                             request("/channels")
                                 .then((channelsData) => {
                                     if (channelsData) {
-                                        document.getElementById("siteTitle").innerText = "{channel} — Japan Terebi".format({
-                                            channel: channelsData[channel].name[localization[states.language].channelNameLanguage]
-                                        })
                                     }
                                 })
+                            */
                         } catch { }
                         document.getElementById("channelName").innerText = channelsData[channel].name.stylized
                         document.getElementById("responsiveChannel").innerText = channelsData[channel].name.stylized

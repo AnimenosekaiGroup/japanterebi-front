@@ -5,6 +5,49 @@
  * © Anime no Sekai — 2021
  */
 
+async function openDebugPanel() {
+    document.getElementById("debugPanel").classList.remove("unload")
+    goToWatch()
+}
+
+async function closeDebugPanel() {
+    document.getElementById("debugPanel").classList.add("unload")
+}
+
+function debugHeaderDrag(e) {
+    /*
+        var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+        e = e || window.event;
+        e.preventDefault();
+        // get the mouse cursor position at startup:
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = () => {
+            // stop moving when mouse button is released:
+            document.onmouseup = null;
+            document.onmousemove = null;
+        };
+        // call a function whenever the cursor moves:
+        document.onmousemove = (e) => {
+            let panel = document.getElementById("debugPanel")
+            e = e || window.event;
+            e.preventDefault();
+            // calculate the new cursor position:
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            //console.log({"x": e.clientX, "pos1": pos1, "offset": document.getElementById("debugPanel").offsetLeft,  "diff": document.getElementById("debugPanel").offsetLeft - pos1})
+            // set the element's new position:
+            let xInset = (e.clientX - panel.offsetLeft)
+            let yInset = (e.clientY - panel.offsetTop)
+            console.log({"inset": xInset, "re": e.clientX - (xInset > 0 ? xInset : 0)})
+            panel.style.left = e.clientX - (xInset > 0 ? xInset : 0) + "px";
+            panel.style.top = e.clientY - (yInset > 0 ? yInset : 0) + "px";
+        };
+    */
+};
+
 async function playVideo() {
     /* the play event */
     await document.getElementById("videoPlayer").play()

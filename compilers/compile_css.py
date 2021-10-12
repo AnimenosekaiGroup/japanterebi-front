@@ -17,6 +17,9 @@ with open("styles/main.css") as main:
 CSS += "\n\n"
 with open("styles/responsive.css") as responsive:
     CSS += responsive.read()
+CSS += "\n\n"
+with open("styles/debug.css") as debug:
+    CSS += debug.read()
 
 
 print("[step] Outputting result")

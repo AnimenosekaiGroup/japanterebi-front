@@ -20,7 +20,7 @@ data = """/** COPYRIGHT © ANIME NO SEKAI, 2021
  * Author Github: https://github.com/Animenosekai
  * Repository: https://github.com/AnimenosekaiGroup/japanterebi-front
  * Year: 2021
- * Last Update: 20th April 2021
+ * Last Update: 13th Oct. 2021
  * Version: v2.0
  * Experimental Version: v2.0 (α) (Upscale)
  * Project: Japan Terebi v4

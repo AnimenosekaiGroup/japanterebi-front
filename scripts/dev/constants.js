@@ -23,7 +23,7 @@ const constants = {
         "author_url": "https://github.com/Animenosekai",
         "repo": "https://github.com/AnimenosekaiGroup/japanterebi-front",
         "year": 2021,
-        "last_update": "7th May 2021",
+        "last_update": "13th Oct. 2021",
         "project": "Japan Terebi v4",
         "native_build": "https://github.com/AnimenosekaiGroup/japanterebi-front/releases"
     }

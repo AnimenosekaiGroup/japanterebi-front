@@ -276,7 +276,7 @@ async function shortcutHandler(event) {
 
 async function goToHome() {
     if (states.currentPage == "watch") {
-        states.lastAudioVolume = document.getElementById("videoPlayer").volume
+        states.video.lastAudioVolume = document.getElementById("videoPlayer").volume
     }
     states.currentPage = "home"
 
@@ -312,7 +312,7 @@ async function goToHome() {
 
 async function goToWatch() {
     states.currentPage = "watch"
-    document.getElementById("videoPlayer").volume = states.lastAudioVolume
+    document.getElementById("videoPlayer").volume = states.video.lastAudioVolume
 
     const currentPageElem = document.getElementById("currentPage")
     currentPageElem.classList.remove("current-page-home")
@@ -340,7 +340,7 @@ async function goToWatch() {
 
 async function goToGuide() {
     if (states.currentPage == "watch") {
-        states.lastAudioVolume = document.getElementById("videoPlayer").volume
+        states.video.lastAudioVolume = document.getElementById("videoPlayer").volume
     }
     states.currentPage = "guide"
 
@@ -397,11 +397,11 @@ async function addAuth() {
 async function showCurrentPasswordInput() {
     document.getElementById("changePasswordRequest").classList.add("hidden-password-request")
     setTimeout(() => {
-        document.getElementById("changePasswordRequest").classList.add("unload-password-input")
-        document.getElementById("currentPassword").classList.remove("unload-password-input")
+        document.getElementById("changePasswordRequest").classList.add("unload")
+        document.getElementById("currentPassword").classList.remove("unload")
         document.getElementById("currentPasswordSubmitButton").classList.add("submit-button-load")
         setTimeout(() => {
-            document.getElementById("currentPassword").classList.add("password-input-shown")
+            document.getElementById("currentPassword").classList.add("input-container-shown")
         }, 50)
     }, 100)
 }
@@ -412,11 +412,11 @@ async function showNewPasswordInput() {
     document.getElementById("currentPasswordSubmitButton").classList.remove("submit-button-pointerevent")
     setTimeout(() => {
         document.getElementById("currentPasswordSubmitButton").classList.remove("submit-button-load")
-        document.getElementById("currentPassword").classList.add("unload-password-input")
-        document.getElementById("newPassword").classList.remove("unload-password-input")
+        document.getElementById("currentPassword").classList.add("unload")
+        document.getElementById("newPassword").classList.remove("unload")
         document.getElementById("newPasswordSubmitButton").classList.add("submit-button-load")
         setTimeout(() => {
-            document.getElementById("newPassword").classList.add("password-input-shown")
+            document.getElementById("newPassword").classList.add("input-container-shown")
         }, 50)
     }, 250);
 }
@@ -427,13 +427,13 @@ async function changePassword() {
     document.getElementById("newPasswordSubmitButton").classList.remove("submit-button-pointerevent")
     setTimeout(() => {
         document.getElementById("newPasswordSubmitButton").classList.remove("submit-button-load")
-        document.getElementById("newPassword").classList.add("unload-password-input")
-        document.getElementById("changePasswordRequest").classList.remove("unload-password-input")
+        document.getElementById("newPassword").classList.add("unload")
+        document.getElementById("changePasswordRequest").classList.remove("unload")
         setTimeout(() => {
             document.getElementById("changePasswordRequest").classList.remove("hidden-password-request")
-            document.getElementById("currentPassword").classList.remove("password-input-shown")
+            document.getElementById("currentPassword").classList.remove("input-container-shown")
             document.getElementById("currentPassword").classList.remove("password-input-hidden")
-            document.getElementById("newPassword").classList.remove("password-input-shown")
+            document.getElementById("newPassword").classList.remove("input-container-shown")
             document.getElementById("newPassword").classList.remove("password-input-hidden")
         }, 50);
     }, 250);

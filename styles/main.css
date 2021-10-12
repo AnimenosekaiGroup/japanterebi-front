@@ -381,16 +381,11 @@ SVG Icons - svgicons.sparkk.fr
     display: none;
 }
 
-.unload {
-    display: none;
-}
-
-
 
 
 .channel-arrow {
     position: absolute;
-    z-index: 100;
+    z-index: 80;
     top: 50%;
     margin: 0px 50px;
     transform: scale(2) translateY(-50%);
@@ -833,22 +828,30 @@ more-title {
     opacity: 0;
 }
 
-.unload-password-input {
-    display: none;
-}
 
-.password-input-container {
+.input-container {
+    padding: 10px;
+    font-size: large;
+    border-radius: 5px;
+    color: white;
+    border: none;
+    opacity: 0;
+    transition: all 350ms cubic-bezier(0.1, 0.27, 0, 0.99);
+    background: rgba(15, 15, 15, 0.95);
     display: flex;
     flex-direction: row;
-    width: 132%;
-    margin-left: -10px;
+    max-width: 450px;
+    width: 30vw;
+    margin-top: 5px;
+    overflow-x: scroll;
+    min-height: 47px;
+    max-height: 47px;
+    min-width: 400px;
 }
 
-.username-input-container {
-    display: flex;
-    flex-direction: row;
-    width: 132%;
-    margin-left: -10px;
+.input-container::before {
+    content: attr(before-content);
+    width: 25%;
 }
 
 .submit-button {
@@ -903,7 +906,7 @@ more-title {
     background: rgba(15, 15, 15, 0.95);
 }
 
-.password-input-shown {
+.input-container-shown {
     opacity: 1;
     margin-left: 15px;
     transition: all 350ms cubic-bezier(0.59, 0.01, 0.25, 0.99)
@@ -1330,4 +1333,10 @@ epg-button:hover {
 
 .dot.is-grey:after {
     display: none
+}
+
+
+
+.unload {
+    display: none;
 }

@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="/styles/keyframes.css">
     <link rel="stylesheet" href="/styles/main.css">
     <link rel="stylesheet" href="/styles/responsive.css">
+    <link rel="stylesheet" href="/styles/debug.css">
 </head>
 
 <body>
@@ -116,6 +117,126 @@
     </home-container>
 
     <tvplayer id="tvplayer" class="tvplayer">
+        <debug id="debugPanel" class="unload player-debug">
+            <debug-header id="debugHeader" class="debug-header">
+                <debug-title id="debug-title">Debug Panel</debug-title>
+                <debug-close id="debugPanelCloser">x</debug-close>
+            </debug-header>
+            <debug-values class="debug-values">
+                <debug-container>
+                    <debug-key>FPS</debug-key>
+                    <debug-value id="debug-fps"></debug-value>
+                </debug-container>
+                <debug-container>
+                    <debug-key>Dimensions</debug-key>
+                    <debug-value id="debug-dimensions"></debug-value>
+                </debug-container>
+                <debug-container>
+                    <debug-key>Source</debug-key>
+                    <debug-value id="debug-source"></debug-value>
+                </debug-container>
+                <debug-container>
+                    <debug-key>Watching ID</debug-key>
+                    <debug-value id="debug-watching-id"></debug-value>
+                </debug-container>
+                <debug-container>
+                    <debug-key>Current Time</debug-key>
+                    <debug-value id="debug-current-time"></debug-value>
+                </debug-container>
+                <debug-container>
+                    <debug-key>Dropped Frames</debug-key>
+                    <debug-value id="debug-dropped-frames"></debug-value>
+                </debug-container>
+                <debug-container>
+                    <debug-key>Total Frames</debug-key>
+                    <debug-value id="debug-total-frames"></debug-value>
+                </debug-container>
+                <debug-container>
+                    <debug-key>Buffering</debug-key>
+                    <debug-value id="debug-buffering"></debug-value>
+                </debug-container>
+                <debug-container>
+                    <debug-key>Paused</debug-key>
+                    <debug-value id="debug-paused"></debug-value>
+                </debug-container>
+                <debug-container>
+                    <debug-key>Seeking</debug-key>
+                    <debug-value id="debug-seeking"></debug-value>
+                </debug-container>
+                <debug-container>
+                    <debug-key>Volume</debug-key>
+                    <debug-value id="debug-volume"></debug-value>
+                </debug-container>
+                <debug-container>
+                    <debug-key>Auto Play</debug-key>
+                    <debug-value id="debug-autoplay"></debug-value>
+                </debug-container>
+                <debug-container>
+                    <debug-key>Native Controls</debug-key>
+                    <debug-value id="debug-controls"></debug-value>
+                </debug-container>
+                <debug-container>
+                    <debug-key>Hls.js</debug-key>
+                    <debug-value id="debug-hls-js"></debug-value>
+                </debug-container>
+                <debug-container>
+                    <debug-key>Cursor Mov. Index</debug-key>
+                    <debug-value id="debug-mouse-movement-index"></debug-value>
+                </debug-container>
+                <debug-container>
+                    <debug-key>Switch Confirm.</debug-key>
+                    <debug-value id="debug-switch-confirmation"></debug-value>
+                </debug-container>
+                <debug-container>
+                    <debug-key>Online</debug-key>
+                    <debug-value id="debug-online"></debug-value>
+                </debug-container>
+                <debug-container>
+                    <debug-key>Language</debug-key>
+                    <debug-value id="debug-language"></debug-value>
+                </debug-container>
+                <debug-container>
+                    <debug-key>Language Edit</debug-key>
+                    <debug-value id="debug-language-edit"></debug-value>
+                </debug-container>
+                <debug-container>
+                    <debug-key>Announcement</debug-key>
+                    <debug-value id="debug-announcement"></debug-value>
+                </debug-container>
+                <debug-container>
+                    <debug-key>Orientation</debug-key>
+                    <debug-value id="debug-orientation"></debug-value>
+                </debug-container>
+                <debug-container>
+                    <debug-key>Current Page</debug-key>
+                    <debug-value id="debug-current-page"></debug-value>
+                </debug-container>
+                <debug-container>
+                    <debug-key>Current Channel</debug-key>
+                    <debug-value id="debug-current-channel"></debug-value>
+                </debug-container>
+                <debug-container>
+                    <debug-key>Current Stream</debug-key>
+                    <debug-value id="debug-current-stream"></debug-value>
+                </debug-container>
+                <debug-container>
+                    <debug-key>Available Channels</debug-key>
+                    <debug-value id="debug-available-channels"></debug-value>
+                </debug-container>
+                <debug-container>
+                    <debug-key>Version</debug-key>
+                    <debug-value id="debug-version"></debug-value>
+                </debug-container>
+                <debug-container>
+                    <debug-key>Commit</debug-key>
+                    <debug-value id="debug-commit"></debug-value>
+                </debug-container>
+                <debug-container>
+                    <debug-key>Credits</debug-key>
+                    <debug-value id="debug-credits"></debug-value>
+                </debug-container>
+            </debug-values>
+        </debug>
         <information id="information" class="information">
             <player-title class="player-title" id="static-tvplayer-header-title">
                 You are currently watching
@@ -293,23 +414,24 @@
                     </account-picture>
                     <account-info class="account-info" id="accountInfo">
                         <input-container id="static-more-account-username-title" before-content="Username: "
-                            class="username-input-container password-input password-input-shown">
+                            class="input-container username-input-container password-input input-container-shown">
                             <input class="account-name" id="accountName" placeholder="Username" type="text"
                                 autocomplete="off">
                             <button class="submit-button" id="usernameSubmitButton">Submit</button>
                         </input-container>
-                        <account-invite before-content="Invite: " class="account-invite" id="accountInvite">
+                        <account-invite before-content="Invite: "
+                            class="input-container account-invite input-container-shown" id="accountInvite">
                         </account-invite>
                         <account-password class="account-password">
                             <button class="change-password-request" id="changePasswordRequest">Change password</button>
-                            <input-container class="password-input-container">
-                                <input class="current-password password-input unload-password-input" type="password"
+                            <input-container class="input-container password-input-container">
+                                <input class="current-password password-input unload" type="password"
                                     id="currentPassword" placeholder="Current Password">
                                 <button class="submit-button" id="currentPasswordSubmitButton">Submit</button>
                             </input-container>
-                            <input-container class="password-input-container">
-                                <input class="new-password password-input unload-password-input" type="password"
-                                    id="newPassword" placeholder="New Password">
+                            <input-container class="input-container password-input-container">
+                                <input class="new-password password-input unload" type="password" id="newPassword"
+                                    placeholder="New Password">
                                 <button class="submit-button" id="newPasswordSubmitButton">Submit</button>
                             </input-container>
                         </account-password>
@@ -345,6 +467,7 @@
                         id="channelsStatusDot"></span>
                     <status-text id="channelsStatusText">Unknown</status-text>
                 </status>
+                <debug-panel-opener id="debugPanelOpener">Open Debug Panel</debug-panel-opener>
             </footer>
         </more-inner>
     </more>

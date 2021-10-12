@@ -20,10 +20,15 @@ let states = {
         "currentPlayPosition": 0,
         "bufferingDetected": false,
     },
-    "lastAudioVolume": 1,
-    "playlistErrors": 0,
-    "videoBinding": null,
     "online": true,
     "language": "ja",
-    "orientation": "landscape"
+    "orientation": "landscape",
+    "video": {
+        "fps": 0,
+        "droppedFrames": 0,
+        "totalFrames": 0,
+        "videoBinding": null,
+        "lastAudioVolume": 1,
+        "playlistErrors": 0
+    }
 }

@@ -45,12 +45,14 @@ setInterval(() => {
     document.getElementById("debug-switch-confirmation").innerText = states.switchConfirmation
     document.getElementById("debug-current-stream").innerText = states.currentStream
 
+    /*
     request("/channels/available")
     .then((data) => {
         if (data) {
             document.getElementById("debug-available-channels").innerText = data.join(", ")
         }
     })
+    */
     document.getElementById("debug-available-channels").innerText = ""
     document.getElementById("debug-version").innerText = constants.version.version
     document.getElementById("debug-commit").innerText = constants.version.commit

@@ -86,8 +86,8 @@ a:hover {
 
 
 /* -----
-SVG Icons - svgicons.sparkk.fr
------ */
+ SVG Icons - svgicons.sparkk.fr
+ ----- */
 
 .svg-icon {
     width: 2em;
@@ -188,29 +188,29 @@ SVG Icons - svgicons.sparkk.fr
 }
 
 /*
-
-
-.header {
-    display: flex;
-    flex-direction: row;
-    right: 0;
-    margin-right: 10px;
-    position: absolute;
-}
-
-.header-link {
-    color: white;
-    display: flex;
-    flex-direction: row;
-    padding: 15px;
-    margin: 15px;
-    text-decoration: none;
-    font-weight: 200;
-    background: rgba(0, 0, 0, 0.6);
-    height: 16px;
-    border-radius: 5px;
-}
-*/
+ 
+ 
+ .header {
+     display: flex;
+     flex-direction: row;
+     right: 0;
+     margin-right: 10px;
+     position: absolute;
+ }
+ 
+ .header-link {
+     color: white;
+     display: flex;
+     flex-direction: row;
+     padding: 15px;
+     margin: 15px;
+     text-decoration: none;
+     font-weight: 200;
+     background: rgba(0, 0, 0, 0.6);
+     height: 16px;
+     border-radius: 5px;
+ }
+ */
 
 .header-svg {
     fill: #fff;

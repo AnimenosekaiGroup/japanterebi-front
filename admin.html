@@ -30,31 +30,32 @@
 </head>
 
 <body>
+    <app class="app">
+        <admin-container>
+            <invites-container class="invitesContainer">
+                <admin-title>Japan Terebi — Invites List</admin-title>
+                <invites id="invitesList"></invites>
+            </invites-container>
 
-    <admin-container>
-        <invites-container class="invitesContainer">
-            <admin-title>Japan Terebi — Invites List</admin-title>
-            <invites id="invitesList"></invites>
-        </invites-container>
 
+            <announcement-container class="announcementContainer">
+                <current-announcement-title>Announcement</current-announcement-title>
+                <input id="currentAnnouncement" placeholder="Current Announcement"></input>
+                <input id="enAnnouncement" placeholder="English Announcement"></input>
+                <input id="jaAnnouncement" placeholder="Japanese Announcement"></input>
+                <input id="frAnnouncement" placeholder="French Announcement"></input>
+                <input id="persistentAnnouncement" placeholder="Persistent?"></input>
+            </announcement-container>
 
-        <announcement-container class="announcementContainer">
-            <current-announcement-title>Announcement</current-announcement-title>
-            <input id="currentAnnouncement" placeholder="Current Announcement"></input>
-            <input id="enAnnouncement" placeholder="English Announcement"></input>
-            <input id="jaAnnouncement" placeholder="Japanese Announcement"></input>
-            <input id="frAnnouncement" placeholder="French Announcement"></input>
-            <input id="persistentAnnouncement" placeholder="Persistent?"></input>
-        </announcement-container>
-
-        <button-container>
-            <button onclick="add()">New Invite</button>
-            <button onclick="reload()">Reload Invites</button>
-            <button onclick="submitAnnouncement()">Submit new announcement</button>
-            <button onclick="reloadAnnouncement()">Reload Announcement</button>
-            <button onclick="resetAnnouncement()">Reset Announcement</button>
-        </button-container>
-    </admin-container>
+            <button-container>
+                <button onclick="add()">New Invite</button>
+                <button onclick="reload()">Reload Invites</button>
+                <button onclick="submitAnnouncement()">Submit new announcement</button>
+                <button onclick="reloadAnnouncement()">Reload Announcement</button>
+                <button onclick="resetAnnouncement()">Reset Announcement</button>
+            </button-container>
+        </admin-container>
+    </app>
 
     <copyright-container>
         <copyright>© Anime no Sekai</copyright>

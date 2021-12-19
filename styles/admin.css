@@ -8,6 +8,13 @@ body {
     font-family: SF Pro Display, Inter, Helvetica, Arial;
 }
 
+.app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 25px 0px;
+}
+
 .info,
 .success,
 .warning,
@@ -89,12 +96,8 @@ admin-container {
     background: rgba(255, 244, 208, 0.4);
     padding: 30px;
     border-radius: 10px;
-    position: absolute;
-    top: 50%;
     width: 80vw;
     max-width: 650px;
-    left: 50%;
-    transform: translate(-50%, -50%);
 }
 
 .invitesContainer,
@@ -124,13 +127,11 @@ input {
 
 
 button-container {
-    position: absolute;
     display: flex;
     flex-direction: row;
     bottom: 0;
-    margin-bottom: -50px;
-    left: 50%;
-    transform: translateX(-50%);
+    align-content: flex-start;
+    flex-wrap: wrap;
 }
 
 
@@ -141,7 +142,7 @@ button {
     font-size: 1.2em;
     cursor: pointer;
     opacity: 1;
-    margin: 0px 5px;
+    margin: 10px;
     transition: opacity 300ms ease;
 }
 
@@ -228,6 +229,12 @@ svg:not(:root) {
         bottom: 40px;
         right: 40px;
         width: 50px;
+    }
+}
+
+@media screen and (max-width: 730px) {
+    admin-container {
+        width: 100vw;
     }
 }
 

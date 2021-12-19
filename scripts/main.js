@@ -1,499 +1,147 @@
 /** COPYRIGHT © ANIME NO SEKAI, 2021
  * Author: Anime no Sekai
  * Author Github: https://github.com/Animenosekai
- * Repository: https://github.com/AnimenosekaiGroup/japanterebi-front (private)
+ * Repository: https://github.com/AnimenosekaiGroup/japanterebi-front
  * Year: 2021
- * Last Update: 20th April 2021
+ * Last Update: 13th Oct. 2021
  * Version: v2.0
  * Experimental Version: v2.0 (α) (Upscale)
  * Project: Japan Terebi v4
  */
 
-// ONLOAD: initializing the page
-window.onload = function () {
-    const urlParams = new URLSearchParams(window.location.search);
-    const channel = urlParams.get("channel");
-    const page = urlParams.get("page");
-    buffering()
-    addAuth() // verify the authentification
-    checkOrientation(window.matchMedia("(orientation: portrait)"))
-    //addHome()
-    //addEPG()
-    //defineEvents() // defining all of the events
-    if (page == "watch") {
-        goToWatch()
-    } else if (page == "guide") {
-        goToGuide()
-    } else {
-        goToHome() // defaults to home
-    }
-    request("/channels/available")
-        .then((data) => {
-            if (data && (data.length > 0)) {
-                if (channel && (data.includes(channel))) {
-                    watch(channel)
-                } else {
-                    watch(data[0]) // defaults to the first channel available
-                }
-            } else {
-                newInfo(localization[states.language].Requests.errors.channels.available)
-            }
-        })
-    request("/announcement")
-        .then((data) => {
-            if (data && data.message) {
-                let hashValue = md5(String(data))
-                if (localStorage.getItem("announcement") == hashValue && !data.persistent) {
-                    console.info("Announcement already announced")
-                } else {
-                    if (states.language in data && data[states.language]) {
-                        newInfo(data[states.language])
-                    } else if (data.message) {
-                        newInfo(data.message)
-                    }
-                }
-                localStorage.setItem("announcement", hashValue)
-            }
-        })
-    checkVersion()
-    setInterval(refreshCache, 900000) // refresh the cache every 15 minutes
-    setInterval(refreshActiveCache, 300000) // refresh the cache every 5 minutes
-    setInterval(checkBuffering, 100) // do not use values lower than 50ms as the offset will not suffice
-    setInterval(checkStatus, 30000) // check the api status
-    setInterval(checkVersion, 900000) // checks for the front version every 15 minutes
-}
-
-async function checkVersion() {
-    try {
-        if (!constants.version.commit) {
-            constants.version.commit = commit // created during compilation
-        }
-
-        if (constants.version.commit) { // can be null
-            let text = "© {author} — {year} ".format({ "author": constants.credits.author, "year": constants.credits.year.toString() })
-            text += constants.version.display.format({ "version": constants.version.version, "commit": '<a href="' + constants.credits.repo + '" target="_blank">' + constants.version.commit.substring(0, 7) + "</a>" })
-            document.getElementById("credits").innerHTML = text
-            request("/version")
-                .then((data) => {
-                    if (data && data.commit && (data.commit != constants.version.commit)) {
-                        let message = localization[states.language].UI.announce.newVersionAvailable
-                        newInfo(message)
-                        text += " ({message})".format({ "message": message })
-                        document.getElementById("credits").innerHTML = text
-                    }
-                })
-        } else {
-
-        }
-    } catch { console.warn("Could not verify the current version") }
-}
-
-async function watch(channel) {
-    if (channel != states.currentChannel) {
-        buffering()
-        try {
-            switchHomeProgram(channel)
-        } catch { console.warn("[non critical] Error while switching home") }
-        request("/channels")
-            .then((channelsData) => {
-                if (channelsData) {
-                    if (channel in channelsData) {
-                        states.currentStream = constants.STREAM_HOST.format({ channel: channel, token: window.localStorage.getItem("__japanterebi_auth") })
-                        if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) { // fallback for safari and browsers supporting HLS natively
-                            watchWithNative(states.currentStream)
-                        } else if (Hls.isSupported()) { // hls.js
-                            watchWithHLSJS(states.currentStream)
-                        } else { // if nothing is available
-                            newInfo(localization[states.language].UI.announce.browserNotCompatible)
-                            return
-                        }
-                        states.currentChannel = channel
-                        watching(channel)
-                        playVideo()
-                        try {
-                            var queryParams = new URLSearchParams(window.location.search);
-                            queryParams.set("channel", channel);
-                            history.replaceState(null, null, "?" + queryParams.toString());
-                            document.getElementById("siteTitle").innerText = "{channel} — Japan Terebi".format({
-                                channel: channelsData[channel].name[localization[states.language].channelNameLanguage]
-                            })
-                            /*
-                            request("/channels")
-                                .then((channelsData) => {
-                                    if (channelsData) {
-                                    }
-                                })
-                            */
-                        } catch { }
-                        document.getElementById("channelName").innerText = channelsData[channel].name.stylized
-                        document.getElementById("responsiveChannel").innerText = channelsData[channel].name.stylized
-                        document.getElementById("responsiveLogo").src = constants.LOGO_HOST.format({ channel: channel })
-                        document.getElementById("repsonsiveProgram").innerText = localization[states.language].UI.dynamic.home.currentlyAiring.format({ channel: channelsData[channel].name[localization[states.language].channelNameLanguage] })
-                        request("/guide/now")
-                            .then((data) => {
-                                if (data) {
-                                    let found = false
-                                    for (programIndex in data) {
-                                        if (data[programIndex].channel == channel) {
-                                            found = true
-                                            let titleLength = data[programIndex].title.length
-                                            let titleFontSize = "x-large"
-                                            if (titleLength > 30) {
-                                                titleFontSize = "medium"
-                                            } else if (titleLength > 20) {
-                                                titleFontSize = "large"
-                                            } else if (titleLength > 10) {
-                                                titleFontSize = "larger"
-                                            }
-                                            document.getElementById("responsiveChannel").innerText = data[programIndex].title
-                                            document.getElementById("responsiveChannel").setAttribute("style", "font-size: {size}".format({ size: titleFontSize }))
-                                            let description = data[programIndex].description
-                                            if (localization[states.language].translateDescription) {
-                                                translate(description, localization[states.language].language)
-                                                    .then((result) => {
-                                                        document.getElementById("responsiveDescription").innerText = result
-                                                    })
-                                            } else {
-                                                document.getElementById("responsiveDescription").innerText = description
-                                            }
-                                            break
-                                        }
-                                    }
-                                    if (!found) {
-                                        document.getElementById("responsiveDescription").innerText = localization[states.language].UI.dynamic.home.noprogram.description
-                                    }
-                                } else {
-                                    document.getElementById("responsiveDescription").innerText = localization[states.language].UI.dynamic.home.noprogram.description
-                                }
-                            })
-                    } else {
-                        newInfo(localization[states.language].UI.announce.unknownChannel)
-                    }
-                }
-            })
-    }
-}
-
-
-async function mouseMoved() {
-    if (states.currentPage != "watch") {
-        // document.getElementById("tvplayer").classList.add("hidden-cursor");
-        document.getElementById("controls").classList.add("hidden-controls");
-        document.getElementById("previousChannel").classList.add("hidden-channel-arrows");
-        document.getElementById("nextChannel").classList.add("hidden-channel-arrows");
-        document.getElementById("information").classList.add("hidden-information");
-        document.getElementById("header").classList.remove("hidden-header");
-        return
-    }
-    states.mouseMovementIndex += 1;
-    let movement = states.mouseMovementIndex;
-    document.getElementById("tvplayer").classList.remove("hidden-cursor");
-    document.getElementById("controls").classList.remove("hidden-controls");
-    document.getElementById("previousChannel").classList.remove("hidden-channel-arrows");
-    document.getElementById("nextChannel").classList.remove("hidden-channel-arrows");
-    document.getElementById("information").classList.remove("hidden-information");
-    document.getElementById("header").classList.remove("hidden-header");
-    setTimeout(() => {
-        if (movement == states.mouseMovementIndex) {
-            document.getElementById("tvplayer").classList.add("hidden-cursor");
-            document.getElementById("controls").classList.add("hidden-controls");
-            document.getElementById("previousChannel").classList.add("hidden-channel-arrows");
-            document.getElementById("nextChannel").classList.add("hidden-channel-arrows");
-            document.getElementById("information").classList.add("hidden-information");
-            if (states.currentPage == "watch") {
-                document.getElementById("header").classList.add("hidden-header");
-            }
-        }
-    }, 3000);
-}
-
-
-async function shortcutHandler(event) {
-    /**
-     * handling all of the shortcuts
-     */
-    if (["currentPassword", "newPassword", "accountName"].includes(document.activeElement.id)) {  // check if the user is typing in one of the inputs
-        setTimeout(() => {
-            if (document.activeElement.value != "") {
-                if (event.key == "Enter") {
-                    document.activeElement.nextElementSibling.click()
-                }
-                document.activeElement.nextElementSibling.classList.add("show-submit-button")
-                document.activeElement.nextElementSibling.classList.add("submit-button-pointerevent")
-            } else {
-                document.activeElement.nextElementSibling.classList.remove("show-submit-button")
-                document.activeElement.nextElementSibling.classList.remove("submit-button-pointerevent")
-            }
-        }, 50);
-        return
-    }
-    switch (event.key) {
-        case "f":
-            fullscreen()
-            break;
-        case "ArrowRight":
-            if (states.switchConfirmation != "next") {
-                states.switchConfirmation = "next"
-                newInfo(localization[states.language].UI.announce.nextChannelSwitch)
-                setTimeout(() => { states.switchConfirmation = "" }, 5000)
-            } else { nextChannel() }
-            break;
-        case "ArrowLeft":
-            if (states.switchConfirmation != "previous") {
-                states.switchConfirmation = "previous"
-                newInfo(localization[states.language].UI.announce.previousChannelSwitch)
-                setTimeout(() => { states.switchConfirmation = "" }, 5000)
-            } else { previousChannel() }
-            break;
-        case "m":
-            volume()
-            break;
-        case "w":
-            if (states.currentPage != "watch") { goToWatch() }
-            break;
-        case "h":
-            if (states.currentPage != "home") { goToHome() }
-            break;
-        case "g":
-            if (states.currentPage != "guide") { goToGuide() }
-            break;
-        case " ":
-            if (states.currentPage == "watch") { playPause() }
-            break;
-        case "r":
-            if (states.currentPage == "watch") { reloadVideo() }
-            break;
-
-        default:
-            break;
-    }
-}
-
-
-
-
-// PAGES //
-
-async function goToHome() {
-    if (states.currentPage == "watch") {
-        states.video.lastAudioVolume = document.getElementById("videoPlayer").volume
-    }
-    states.currentPage = "home"
-
-    const currentPageElem = document.getElementById("currentPage")
-    currentPageElem.classList.remove("current-page-watch")
-    currentPageElem.classList.remove("current-page-guide")
-    currentPageElem.classList.add("current-page-home")
-
-    document.getElementById("videoPlayer").volume = constants.NON_FOCUS_VOLUME
-
-    document.getElementById("more").classList.add("hidden-more")
-    document.getElementById("header").classList.remove("hidden-header")
-    document.getElementById("homeContainer").classList.remove("home-hidden")
-    document.getElementById("nextChannel").classList.add("hidden-channel-arrows")
-    document.getElementById("previousChannel").classList.add("hidden-channel-arrows")
-
-    document.getElementById("tvplayer").style.pointerEvents = "none"
-
-    document.getElementById("returnBackButton").style.transform = "scale(1)"
-
-    document.getElementById("epgProgramInformation").style.display = "none"
-
-    try {
-        var queryParams = new URLSearchParams(window.location.search);
-        queryParams.set("page", "home");
-        history.replaceState(null, null, "?" + queryParams.toString());
-    } catch { }
-
-    if (window.matchMedia("(orientation: portrait)").matches) {
-        goToWatch()
-    }
-}
-
-async function goToWatch() {
-    states.currentPage = "watch"
-    document.getElementById("videoPlayer").volume = states.video.lastAudioVolume
-
-    const currentPageElem = document.getElementById("currentPage")
-    currentPageElem.classList.remove("current-page-home")
-    currentPageElem.classList.remove("current-page-guide")
-    currentPageElem.classList.add("current-page-watch")
-    document.getElementById("nextChannel").classList.remove("hidden-channel-arrows")
-    document.getElementById("previousChannel").classList.remove("hidden-channel-arrows")
-
-
-    document.getElementById("homeContainer").classList.add("home-hidden")
-    document.getElementById("more").classList.add("hidden-more")
-    mouseMoved()
-    document.getElementById("tvplayer").style.pointerEvents = "all"
-
-    document.getElementById("returnBackButton").style.transform = "scale(1)"
-
-    document.getElementById("epgProgramInformation").style.display = "none"
-
-    try {
-        var queryParams = new URLSearchParams(window.location.search);
-        queryParams.set("page", "watch");
-        history.replaceState(null, null, "?" + queryParams.toString());
-    } catch { }
-}
-
-async function goToGuide() {
-    if (states.currentPage == "watch") {
-        states.video.lastAudioVolume = document.getElementById("videoPlayer").volume
-    }
-    states.currentPage = "guide"
-
-    const currentPageElem = document.getElementById("currentPage")
-    currentPageElem.classList.remove("current-page-home")
-    currentPageElem.classList.remove("current-page-watch")
-    currentPageElem.classList.add("current-page-guide")
-
-    document.getElementById("videoPlayer").volume = constants.NON_FOCUS_VOLUME
-
-    document.getElementById("homeContainer").classList.add("home-hidden")
-    document.getElementById("header").classList.remove("hidden-header")
-    document.getElementById("more").classList.remove("hidden-more")
-    document.getElementById("nextChannel").classList.add("hidden-channel-arrows")
-    document.getElementById("previousChannel").classList.add("hidden-channel-arrows")
-
-    document.getElementById("tvplayer").style.pointerEvents = "none"
-
-    document.getElementById("returnBackButton").style.transform = "scale(1.05)"
-
-    document.getElementById("epgProgramInformation").style.display = "flex"
-
-    try {
-        var queryParams = new URLSearchParams(window.location.search);
-        queryParams.set("page", "guide");
-        history.replaceState(null, null, "?" + queryParams.toString());
-    } catch { }
-}
-
-async function addAuth() {
-    request("/account")
-        .then((data) => {
-            if (data) {
-                document.getElementById("accountName").value = data.username
-                document.getElementById("accountInvite").innerText = data.invite
-                if (window.localStorage.getItem("lang") && window.localStorage.getItem("lang-edit") && Date.now() - parseInt(window.localStorage.getItem("lang-edit")) < 3600000) {
-                    loadLanguage(localStorage.getItem("lang"))
-                    document.getElementById("accountLanguage").value = localStorage.getItem("lang")
-                    try {
-                        document.getElementById("accountLanguage").querySelector("option[value=\"{value}\"]".format({ value: localStorage.getItem("lang") })).setAttribute("selected", "")
-                    } catch { console.warn("No such language option") }
-                } else {
-                    loadLanguage(data.language)
-                    document.getElementById("accountLanguage").value = data.language
-                    try {
-                        document.getElementById("accountLanguage").querySelector("option[value=\"{value}\"]".format({ value: data.language })).setAttribute("selected", "")
-                    } catch { console.warn("No such language option") }
-                }
-            }
-        })
-    request("/account/picture", document.getElementById("accountPicture"))
-}
-
-async function showCurrentPasswordInput() {
-    document.getElementById("changePasswordRequest").classList.add("hidden-password-request")
-    setTimeout(() => {
-        document.getElementById("changePasswordRequest").classList.add("unload")
-        document.getElementById("currentPassword").classList.remove("unload")
-        document.getElementById("currentPasswordSubmitButton").classList.add("submit-button-load")
-        setTimeout(() => {
-            document.getElementById("currentPassword").classList.add("input-container-shown")
-        }, 50)
-    }, 100)
-}
-
-async function showNewPasswordInput() {
-    document.getElementById("currentPassword").classList.add("password-input-hidden")
-    document.getElementById("currentPasswordSubmitButton").classList.remove("show-submit-button")
-    document.getElementById("currentPasswordSubmitButton").classList.remove("submit-button-pointerevent")
-    setTimeout(() => {
-        document.getElementById("currentPasswordSubmitButton").classList.remove("submit-button-load")
-        document.getElementById("currentPassword").classList.add("unload")
-        document.getElementById("newPassword").classList.remove("unload")
-        document.getElementById("newPasswordSubmitButton").classList.add("submit-button-load")
-        setTimeout(() => {
-            document.getElementById("newPassword").classList.add("input-container-shown")
-        }, 50)
-    }, 250);
-}
-
-async function changePassword() {
-    document.getElementById("newPassword").classList.add("password-input-hidden")
-    document.getElementById("newPasswordSubmitButton").classList.remove("show-submit-button")
-    document.getElementById("newPasswordSubmitButton").classList.remove("submit-button-pointerevent")
-    setTimeout(() => {
-        document.getElementById("newPasswordSubmitButton").classList.remove("submit-button-load")
-        document.getElementById("newPassword").classList.add("unload")
-        document.getElementById("changePasswordRequest").classList.remove("unload")
-        setTimeout(() => {
-            document.getElementById("changePasswordRequest").classList.remove("hidden-password-request")
-            document.getElementById("currentPassword").classList.remove("input-container-shown")
-            document.getElementById("currentPassword").classList.remove("password-input-hidden")
-            document.getElementById("newPassword").classList.remove("input-container-shown")
-            document.getElementById("newPassword").classList.remove("password-input-hidden")
-        }, 50);
-    }, 250);
-    request("/account/change/password?password={currentPassword}&newPassword={newPassword}".format({
-        currentPassword: document.getElementById("currentPassword").value,
-        newPassword: document.getElementById("newPassword").value
-    }), null, "POST")
-        .then((data) => {
-            document.getElementById("currentPassword").value = ""
-            document.getElementById("newPassword").value = ""
-            if (data) {
-                newInfo(localization[states.language].Requests.success.account.change.password)
-            }
-        })
-}
-
-async function changeUsername() {
-    request("/account/change/username?username={username}".format({
-        username: document.getElementById("accountName").value
-    }), null, "POST")
-        .then((data) => {
-            if (data) {
-                newInfo(localization[states.language].Requests.success.account.change.username)
-                window.localStorage.setItem("__japanterebi_auth", data.token)
-            } else {
-                addAuth()
-            }
-        })
-}
-
-async function changeLanguage() {
-    loadLanguage(this.value)
-    request("/account/change/language?language={lang}".format({ lang: this.value }), null, "POST")
-}
-
-async function addProfilePicture() {
-    let newFileInput = document.createElement("input")
-    newFileInput.type = "file"
-    newFileInput.accept = "image/*"
-    document.getElementsByTagName("body")[0].appendChild(newFileInput)
-    newFileInput.addEventListener("change", () => {
-        let requestBody = new FormData()
-        requestBody.set("image", newFileInput.files[0])
-        fetch(constants.MAIN_HOST + "/account/picture/new?token=" + localStorage.getItem("__japanterebi_auth"), {
-            method: "POST",
-            body: requestBody
-        })
-            .then((response) => response.json())
-            .then((response) => {
-                if (response.success) {
-                    newInfo(localization[states.language].Requests.success.account.picture.new)
-                    request("/account/picture", document.getElementById("accountPicture"))
-                } else {
-                    newInfo(localization[states.language].Requests.errors.account.picture.new)
-                }
-                newFileInput.remove()
-            })
-            .catch((error) => {
-                newFileInput.remove()
-            })
-    }, false)
-    newFileInput.click()
-}
+function checkBuffering(){let a=document.getElementById("videoPlayer");states.buffering.currentPlayPosition=a.currentTime;!states.buffering.bufferingDetected&&states.buffering.currentPlayPosition<states.buffering.lastPlayPosition+constants.BUFFERING_OFFSET&&!a.paused&&(buffering(),states.buffering.bufferingDetected=!0);states.buffering.bufferingDetected&&states.buffering.currentPlayPosition>states.buffering.lastPlayPosition+constants.BUFFERING_OFFSET&&!a.paused&&(stopBuffering(),states.buffering.bufferingDetected=
+!1);states.buffering.lastPlayPosition=states.buffering.currentPlayPosition}async function buffering(){document.getElementById("loadingContainer").classList.remove("unload")}async function stopBuffering(){document.getElementById("loadingContainer").classList.add("unload")};let caches={"/channels":null,"/channels/available":null};async function refreshActiveCache(){request("/channels/available").then(a=>{caches["/channels/available"]=a;addHome();addEPG()})}async function refreshCache(){request("/channels").then(a=>{caches["/channels"]=a})};const commit="47f5c5de4dee5f1ccf6d719fc4a93c7cf75f5bd5";const constants={NON_FOCUS_VOLUME:.4,BUFFERING_OFFSET:.08,MAIN_HOST:"https://japanterebi.vercel.app/japanterebi",STREAM_HOST:"https://japanterebi.herokuapp.com/japanterebi/channels/stream/{channel}?token={token}",LOGO_HOST:"/assets/channels/logo/{channel}.png",version:{version:"v4",commit:null,display:"({version}@{commit})"},credits:{author:"Anime no Sekai",author_url:"https://github.com/Animenosekai",repo:"https://github.com/AnimenosekaiGroup/japanterebi-front",year:2021,last_update:"13th Oct. 2021",
+project:"Japan Terebi v4",native_build:"https://github.com/AnimenosekaiGroup/japanterebi-front/releases"}};let programRegistry={};async function hideInformation(){document.getElementById("epgProgramInformation").classList.remove("epg-program-information-container-shown")}
+async function showInformation(a){request("/channels").then(b=>{if(b)if(a in programRegistry){document.getElementById("epgProgramInformationDescription").innerText="";document.getElementById("epgProgramInformationChannel").innerText=localization[states.language].UI.dynamic.more.information.channel.format({channel:b[programRegistry[a].channel].name[localization[states.language].channelNameLanguage]});b=new Date(1E3*programRegistry[a].startTime);b=String(b.getUTCHours())+":"+correctMinute(b.getUTCMinutes());
+var c=new Date(1E3*programRegistry[a].endTime);c=String(c.getUTCHours())+":"+correctMinute(c.getUTCMinutes());document.getElementById("epgProgramInformationTimestamp").innerText=localization[states.language].UI.dynamic.more.information.timestamp.format({startTime:b,endTime:c});document.getElementById("epgProgramInformationTitle").innerText=programRegistry[a].title;localization[states.language].translateDescription?translate(programRegistry[a].description,states.language).then(d=>{document.getElementById("epgProgramInformationDescription").innerText=
+d}):document.getElementById("epgProgramInformationDescription").innerText=programRegistry[a].description;"string"===typeof programRegistry[a].url||programRegistry[a].url instanceof String?(document.getElementById("epgProgramInformationURL").classList.remove("unload"),document.getElementById("epgProgramInformationURL").innerText=localization[states.language].UI.dynamic.more.information.url+"\n\n",document.getElementById("epgProgramInformationURL").setAttribute("href",programRegistry[a].url)):document.getElementById("epgProgramInformationURL").classList.add("unload");
+document.getElementById("epgProgramInformation").classList.add("epg-program-information-container-shown")}else newInfo(localization[states.language].UI.announce.noInformationForSelectedProgram)})}
+function createCurrenTime(){let a=document.createElement("epg-current-time");a.id="epgCurrentTime";a.classList.add("epg-current-time");let b=document.createElement("date-bar");b.classList.add("epg-date-bar");let c=document.createElement("time");c.id="epgCurrentTimeWrapper";c.classList.add("epg-time-wrapper");let d=document.createElement("span");d.id="epgTimeSpan";d.classList.add("epg-time-span");c.appendChild(d);b.appendChild(c);a.appendChild(b);return a}
+async function addEPG(){request("/channels/available").then(a=>{if(a){for(;document.getElementById("epgRows").firstChild;)document.getElementById("epgRows").removeChild(document.getElementById("epgRows").firstChild);for(;document.getElementById("epgChannels").firstChild;)document.getElementById("epgChannels").removeChild(document.getElementById("epgChannels").firstChild);programRegistry={};async function b(d,e){request("/guide/"+d[e]+"?epg=true").then(f=>{try{if(f){channelName=d[e];let g=document.createElement("epg-channel");
+g.setAttribute("class","epg-channel");g.setAttribute("onclick",'watch("'+channelName+'"); goToWatch()');let h=document.createElement("img");h.setAttribute("src",constants.LOGO_HOST.format({channel:"bw/"+channelName}));h.setAttribute("alt","{channel} logo".format({channel:channelName}));h.setAttribute("class","epg-channel-img");g.appendChild(h);document.getElementById("epgChannels").appendChild(g);let k=document.createElement("epg-row");k.setAttribute("class","epg-row");for(program in f)(newProgram=
+_createEPGProgram(f[program]))&&k.appendChild(newProgram);document.getElementById("epgRows").appendChild(k)}}catch{}}).catch(f=>{})}for(channelIndex in a)b(a,channelIndex);async function c(){setTimeout(()=>{1>document.getElementById("epgRows").childElementCount?c():(document.getElementById("epgRows").firstElementChild.insertBefore(createCurrenTime(),document.getElementById("epgRows").firstElementChild.firstElementChild),document.getElementById("epgRows").style.width=String(24*document.getElementById("epgTimes").firstElementChild.offsetWidth)+
+"px")},100)}c();scrollToCurrentTime()}})}
+async function verifyEPGCurrentTime(){try{let a=new Date,b=new Date(("string"===typeof a?new Date(a):a).toLocaleString("en-US",{timeZone:"Asia/Tokyo"})),c=b.getSeconds()+60*b.getMinutes()+3600*b.getHours(),d=24*document.getElementById("epgTimes").firstElementChild.offsetWidth*c/86400;document.getElementById("epgTimeSpan").innerText=String(b.getHours())+":"+correctMinute(b.getMinutes());document.getElementById("epgCurrentTime").setAttribute("style","left: "+String(d)+"px;");isElementInViewport(document.getElementById("epgCurrentTimeWrapper"))?
+document.getElementById("returnToCurrentTime").classList.add("hidden-epg-button"):document.getElementById("returnToCurrentTime").classList.remove("hidden-epg-button")}catch{}}setInterval(verifyEPGCurrentTime,100);
+function _createEPGProgram(a){if(a){var b=Math.abs(new Date(1E3*a.endTime)-new Date(1E3*a.startTime))/1E3/60;b=5*Math.round(b/5);let d=document.createElement("epg-program");d.setAttribute("class","epg-program");let e=document.createElement("epg-program-title-wrapper");e.setAttribute("class","epg-program-title-wrapper");var c=document.createElement("epg-program-duration");c.setAttribute("class","epg-program-duration");c.innerText=Math.round(b);let f=document.createElement("epg-program-title");f.setAttribute("class",
+"epg-program-title");f.innerText=a.title;e.appendChild(c);e.appendChild(f);c=document.createElement("epg-program-description");c.setAttribute("class","epg-program-description");c.innerText=a.description;d.appendChild(e);d.appendChild(c);let g=createRandomID(16);async function h(){setTimeout(()=>{g in programRegistry?(g=createRandomID(16),h()):(programRegistry[g]=a,d.setAttribute("onclick","showInformation('{id}')".format({id:g})))},10)}h();b=b*document.getElementById("epgTimes").firstElementChild.offsetWidth/
+60;d.setAttribute("style","width: "+String(b)+"px;");return d}return null}async function scrollToCurrentTime(){var a=new Date;a=new Date(("string"===typeof a?new Date(a):a).toLocaleString("en-US",{timeZone:"Asia/Tokyo"}));a=9600*(a.getSeconds()+60*a.getMinutes()+3600*a.getHours())/86400;document.getElementById("epgContent").scrollTo({top:0,left:a,behavior:"smooth"})};async function defineEvents(){document.getElementById("videoPlayer").addEventListener("timeupdate",function(a){stopBuffering()});document.getElementById("videoPlayer").addEventListener("error",function(a){if(document.getElementById("videoPlayer").canPlayType("application/vnd.apple.mpegurl"))switch(a.target.error.code){case a.target.error.MEDIA_ERR_ABORTED:setTimeout(function(){watchWithNative(document.getElementById("videoPlayer").src)},100);break;case a.target.error.MEDIA_ERR_NETWORK:states.online&&
+reloadVideo();break;case a.target.error.MEDIA_ERR_DECODE:case a.target.error.MEDIA_ERR_SRC_NOT_SUPPORTED:setTimeout(function(){watchWithHLSJS(document.getElementById("videoPlayer").src)},100);break;default:newInfo(localization[states.language].UI.announce.channelLoadUnknownError)}else console.warn("Error from <video> but source is hls.js")});window.addEventListener("online",function(){newInfo(localization[states.language].UI.announce.online);states.online=!0;reloadVideo()});window.addEventListener("offline",
+function(){newInfo(localization[states.language].UI.announce.offline);states.online=!1});document.getElementById("playBtn").addEventListener("click",playPause);document.getElementById("volumeBtn").addEventListener("click",volume);document.getElementById("reloadBtn").addEventListener("click",reloadVideo);document.getElementById("fullscreenBtn").addEventListener("click",fullscreen);document.getElementById("homeBtn").addEventListener("click",goToHome);document.getElementById("watchBtn").addEventListener("click",
+goToWatch);document.getElementById("guideBtn").addEventListener("click",goToGuide);document.getElementById("nextChannel").addEventListener("click",nextChannel);document.getElementById("previousChannel").addEventListener("click",previousChannel);document.getElementById("returnToCurrentTime").addEventListener("click",scrollToCurrentTime);document.getElementById("changePasswordRequest").addEventListener("click",showCurrentPasswordInput);document.getElementById("accountPictureContainer").addEventListener("click",
+addProfilePicture);document.getElementById("accountLanguage").addEventListener("change",changeLanguage,!1);document.getElementById("tvplayer").addEventListener("mousemove",mouseMoved);document.getElementById("tvplayer").addEventListener("touchstart",mouseMoved);document.getElementById("responsiveEPGButton").addEventListener("click",goToGuide);document.getElementById("usernameSubmitButton").addEventListener("click",changeUsername);document.getElementById("currentPasswordSubmitButton").addEventListener("click",
+showNewPasswordInput);document.getElementById("newPasswordSubmitButton").addEventListener("click",changePassword);document.getElementById("returnBackButton").addEventListener("click",goToWatch);document.getElementById("epgProgramInformationCloseButton").addEventListener("click",hideInformation);document.getElementById("debugPanelOpener").addEventListener("click",openDebugPanel);document.getElementById("debugPanelCloser").addEventListener("click",closeDebugPanel);document.getElementById("debugHeader").addEventListener("mousedown",
+debugHeaderDrag);document.addEventListener("fullscreenchange",fullscreenHandler);document.addEventListener("webkitfullscreenchange",fullscreenHandler);document.addEventListener("msfullscreenchange",fullscreenHandler);document.addEventListener("keydown",shortcutHandler);window.matchMedia("(orientation: portrait)").addEventListener("change",a=>{checkOrientation(a)});window.WebKitPlaybackTargetAvailabilityEvent&&(document.getElementById("videoPlayer").addEventListener("webkitplaybacktargetavailabilitychanged",
+a=>{switch(a.availability){case "available":document.getElementById("airPlayButton").style.display="block";break;case "not-available":document.getElementById("airPlayButton").style.display="none"}}),document.getElementById("airPlayButton").addEventListener("click",a=>{document.getElementById("videoPlayer").webkitShowPlaybackTargetPicker()}))};async function switchHomeProgram(a){let b=a;if("object"==typeof a)try{b=a.getAttribute("channel")}catch{b=a.id}const c=document.getElementById("program_"+b);c&&(Array.prototype.forEach.call(document.getElementsByClassName("home-program-visible"),function(d){d!=c&&d.classList.remove("home-program-visible")}),setTimeout(function(){Array.prototype.forEach.call(document.getElementsByClassName("home-program-load"),function(d){d!=c&&d.classList.remove("home-program-load")});c.classList.add("home-program-load");
+setTimeout(function(){c.classList.add("home-program-visible")},10)},50))}
+async function createDummyProgram(a,b,c=!1,d=!1){var e=document.createElement("program");e.setAttribute("id","program_"+b);e.setAttribute("class","home-program");var f=document.createElement("program-title");f.setAttribute("class","home-program-title home-program-title-size-large");f.innerText=localization[states.language].UI.dynamic.home.noprogram.title;var g=document.createElement("program-description");g.setAttribute("class","home-program-description");g.innerText=localization[states.language].UI.dynamic.home.noprogram.description;
+let h=document.createElement("program-channel");h.setAttribute("class","home-program-channel");h.innerText=localization[states.language].UI.dynamic.home.currentlyAiring.format({channel:a[b].name[localization[states.language].channelNameLanguage]});e.appendChild(f);e.appendChild(g);e.appendChild(h);document.getElementById("programDetails").appendChild(e);a=document.createElement("tile");a.setAttribute("class","home-tile");e=document.createElement("tile-media");e.setAttribute("class","home-tile-media");
+f=document.createElement("img");request("/channels/thumbnail/"+b,f);f.setAttribute("class","home-tile-img");g=document.createElement("img");g.setAttribute("src",constants.LOGO_HOST.format({channel:b}));g.setAttribute("class","home-tile-logo");e.appendChild(g);e.appendChild(f);f=document.createElement("tile-footer");f.setAttribute("class","home-tile-details");g=document.createElement("tile-title");g.setAttribute("class","home-tile-title");g.innerText=localization[states.language].UI.dynamic.home.noprogram.tileTitle;
+f.appendChild(g);a.appendChild(e);a.appendChild(f);a.setAttribute("channel",b);a.setAttribute("onmouseover","switchHomeProgram(this)");a.setAttribute("ontouchstart","switchHomeProgram(this)");a.setAttribute("onclick","watch('"+b+"'); goToWatch()");document.getElementById("tilesRowInner").appendChild(a);c&&a.setAttribute("style","margin-right: 100px;");d&&a.setAttribute("style","margin-left: 50px;")}
+async function addHome(){request("/channels").then(a=>{a&&request("/channels/available").then(b=>{b&&request("/guide/now").then(c=>{const d=JSON.parse(JSON.stringify(b)),e=d.length;for(;document.getElementById("programDetails").firstChild;)document.getElementById("programDetails").removeChild(document.getElementById("programDetails").firstChild);for(;document.getElementById("tilesRowInner").firstChild;)document.getElementById("tilesRowInner").removeChild(document.getElementById("tilesRowInner").firstChild);
+let f=!1;if(c)for(programIndex in c){let l=c[programIndex];if(b.includes(l.channel)){var g=document.createElement("program");g.setAttribute("id","program_"+l.channel);g.setAttribute("class","home-program");var h=document.createElement("program-title");h.setAttribute("class","home-program-title");h.innerText=l.title.split("\n").join(" ");var k=l.title.length,m="home-program-title-size-large";30<k?m="home-program-title-size-small":20<k?m="home-program-title-size-medium":10<k&&(m="home-program-title-size-normal");
+h.classList.add(m);let p=document.createElement("program-description");p.setAttribute("class","home-program-description");let n=l.description.split("\n").join(" ");localization[states.language].translateDescription?translate(n,localization[states.language].language).then(r=>{n=r;160<n.length&&(n=n.substring(0,160)+"...");p.innerText=n}):(160<n.length&&(n=n.substring(0,160)+"..."),p.innerText=n);k=document.createElement("program-channel");k.setAttribute("class","home-program-channel");k.innerText=
+localization[states.language].UI.dynamic.home.currentlyAiring.format({channel:a[l.channel].name[localization[states.language].channelNameLanguage]});g.appendChild(h);g.appendChild(p);g.appendChild(k);document.getElementById("programDetails").appendChild(g);g=document.createElement("tile");g.setAttribute("class","home-tile");h=document.createElement("tile-media");h.setAttribute("class","home-tile-media");k=document.createElement("img");request("/channels/thumbnail/"+l.channel,k);k.setAttribute("class",
+"home-tile-img");m=document.createElement("img");m.setAttribute("src",constants.LOGO_HOST.format({channel:l.channel}));m.setAttribute("class","home-tile-logo");h.appendChild(m);h.appendChild(k);k=document.createElement("tile-footer");k.setAttribute("class","home-tile-details");m=document.createElement("tile-title");m.setAttribute("class","home-tile-title");let q=l.title;23<q.length&&(q=q.substring(0,23)+"...");m.innerText=q;k.appendChild(m);g.appendChild(h);g.appendChild(k);g.setAttribute("channel",
+l.channel);g.setAttribute("onmouseover","switchHomeProgram(this)");g.setAttribute("ontouchstart","switchHomeProgram(this)");g.setAttribute("onclick","watch('"+l.channel+"'); goToWatch()");document.getElementById("tilesRowInner").appendChild(g);h=d.indexOf(l.channel);-1<h&&d.splice(h,1);f?programIndex==c.length-1&&0>=d.length&&g.setAttribute("style","margin-right: 100px;"):(f=!0,switchHomeProgram(l.channel),g.setAttribute("style","margin-left: 50px;"))}}e!=d.length&&f||(createDummyProgram(a,d[0],!1,
+!0),c=d.indexOf(program.channel),-1<c&&d.splice(c,1));for(channelIndex in d)channelIndex==d.length-1?createDummyProgram(a,d[channelIndex],!0):createDummyProgram(a,d[channelIndex])})})})};function loadLanguage(a){a in localization||(a="en");states.language=a;window.localStorage.setItem("lang",a);window.localStorage.setItem("lang-edit",Date.now());var b=document.getElementById("static-navbar-home").getElementsByTagName("svg")[0];document.getElementById("static-navbar-home").innerText=localization[a].UI.static.navbar.home+" ";document.getElementById("static-navbar-home").appendChild(b);b=document.getElementById("static-navbar-watch").getElementsByTagName("svg")[0];document.getElementById("static-navbar-watch").innerText=
+localization[a].UI.static.navbar.watch+" ";document.getElementById("static-navbar-watch").appendChild(b);b=document.getElementById("static-navbar-guide").getElementsByTagName("svg")[0];document.getElementById("static-navbar-guide").innerText=localization[a].UI.static.navbar.guide+" ";document.getElementById("static-navbar-guide").appendChild(b);b=document.getElementById("channelName").innerText;document.getElementById("static-tvplayer-header-title").innerText=localization[a].UI.static.tvplayer.header.title;
+let c=document.createElement("channel-name");c.id="channelName";c.innerText=b;c.classList.add("channel-name");document.getElementById("static-tvplayer-header-title").appendChild(c);document.getElementById("static-tvplayer-controls-watching-tooltip").innerText=localization[a].UI.static.tvplayer.controls.watching.tooltip;document.getElementById("static-more-account-title").innerText=localization[a].UI.static.more.account.title;Array.prototype.forEach.call(document.getElementsByClassName("submit-button"),
+d=>{d.innerText=localization[a].UI.static.more.account.submit});document.getElementById("static-more-account-username-title").setAttribute("before-content",localization[a].UI.static.more.account.username.title);document.getElementById("accountName").setAttribute("placeholder",localization[a].UI.static.more.account.username.placeholder);document.getElementById("accountInvite").setAttribute("before-content",localization[a].UI.static.more.account.invite.title);document.getElementById("changePasswordRequest").innerText=
+localization[a].UI.static.more.account.passwordChange.button;document.getElementById("currentPassword").setAttribute("placeholder",localization[a].UI.static.more.account.passwordChange.currentPasswordPlaceholder);document.getElementById("newPassword").setAttribute("placeholder",localization[a].UI.static.more.account.passwordChange.newPasswordPlaceholder);document.getElementById("static-more-account-picture-edit").innerText=localization[a].UI.static.more.account.picture.edit;document.getElementById("static-more-guide-title").innerText=
+localization[a].UI.static.more.guide.title;b=document.createElement("epg-button");b.id="returnToCurrentTime";b.innerText=localization[a].UI.static.more.guide.returnToCurrentTime;for(document.getElementById("static-more-guide-title").appendChild(b);document.getElementById("epgTimes").firstChild;)document.getElementById("epgTimes").removeChild(document.getElementById("epgTimes").firstChild);localization[a].UI.static.more.guide.timestamps.forEach(d=>{let e=document.createElement("epg-time");e.classList.add("epg-time");
+let f=document.createElement("span");f.classList.add("epg-time-inner");f.innerHTML=d;e.appendChild(f);document.getElementById("epgTimes").appendChild(e)});document.getElementById("responsiveEPGButton").innerText=localization[a].UI.static.tvplayer.goToGuide;document.getElementById("returnBackButton").innerText=localization[a].UI.static.more.returnButton;document.getElementById("mainStatusTitle").innerText=localization[a].UI.dynamic.more.status.mainStatusTitle;document.getElementById("channelsStatusTitle").innerText=
+localization[a].UI.dynamic.more.status.channelsStatusTitle;addHome();addEPG();checkStatus();defineEvents();document.getElementById("pageLoad").classList.add("page-load-hidden");setTimeout(()=>{document.getElementById("pageLoad").classList.add("unload")},500)}
+const localization={en:{language:"english",channelNameLanguage:"english",translateDescription:!0,version:"v2.0",UI:{"static":{navbar:{home:"Home",watch:"Watch",guide:"TV Guide"},tvplayer:{goToGuide:"Go to the TV Guide",header:{title:"You are currently watching"},controls:{watching:{tooltip:"The number of people currently watching the channel"}}},more:{returnButton:"Go back to TV",account:{title:"Account",submit:"Submit",username:{title:"Username: ",placeholder:"Username"},invite:{title:"Invite: "},
+passwordChange:{button:"Change password",currentPasswordPlaceholder:"Current Password",newPasswordPlaceholder:"New Password"},picture:{edit:"Edit"}},guide:{title:"TV Guide",returnToCurrentTime:"Return to current time",timestamps:"00:00 01:00 02:00 03:00 04:00 05:00 06:00 07:00 08:00 09:00 10:00 11:00 12:00 13:00 14:00 15:00 16:00 17:00 18:00 19:00 20:00 21:00 22:00 23:00".split(" "),currentTimeDefault:"No time"}}},dynamic:{home:{noprogram:{title:"No program information",description:"We are sorry but I couldn't find any program information for this channel",
+tileTitle:"No program information"},currentlyAiring:"Currently airing on: {channel}"},more:{information:{channel:"Airing on {channel}",timestamp:"From {startTime} to {endTime}",url:"Link to the program site"},status:{mainStatusTitle:"Main API Status:",channelsStatusTitle:"Channels Status:",paused:"Monitoring Paused",notCheckedYet:"Not checking",up:"Operational",seemsDown:"Seems Down",down:"Down",unknown:"Unknown"}}},announce:{browserNotCompatible:"We are sorry but your browser is not compatible",
+unknownChannel:"We don't know this channel",nextChannelSwitch:"Press one more time to switch to the next channel",previousChannelSwitch:"Press one more time to switch to the previous channel",noInformationForSelectedProgram:"I couldn't get the information for the selected program",channelLoadUnknownError:"An unknown error occured while loading the channel",online:"You are back online!",offline:"You seem to be disconnected",unknownPlayerError:"An unknown error occured with the player, please restart the webpage if it doesn't work",
+noAvailableChannels:"I couldn't get the available channels",newVersionAvailable:"A new version is available"}},Requests:{errors:{SECTOR_NOT_FOUND:"An error occured while trying to request some information",AUTH_ERROR:"We are sorry but to ensure your security, this session expired",SERVER_ERROR:"We are sorry but an error occured on the server while processing a request",UNKNOWN_ERROR:"We are sorry but an unknown error occured on the server",NO_TOKEN:"We are sorry but we couldn't verify your request",
+ACCOUNT_NOT_FOUND:"We couldn't find your account",MISSING_ARG:"We are sorry but an error occured while sending a request",WRONG_TOKEN:"We are sorry but your seem to have a wrong token",NOT_FOUND:"We are sorry but something couldn't be found while requesting it",WRONG_PASSWORD:"This seems to be the wrong password",USERNAME_ALREADY_IN_USE:"This username is already taken",NO_IMAGE:"There is no image",INVITE_ALREADY_IN_USE:"This invite is already used by another account",INVITE_NOT_FOUND:"We don't know this invite",
+CHANNEL_NOT_FOUND:"We couldn't find the requested channel",other:"An unknown error occured while processing a request",account:{picture:{"new":"An error occured while setting your profile picture"}},channels:{available:"No channel is available for now"}},success:{account:{change:{password:"We successfully changed your password!",username:"We successfully changed your username!"},picture:{"new":"New profile picture set successfully!"}}}}},ja:{language:"japanese",channelNameLanguage:"japanese",translateDescription:!1,
+version:"v2.0",UI:{"static":{navbar:{home:"\u30db\u30fc\u30e0",watch:"\u898b\u308b",guide:"\u756a\u7d44\u8868"},tvplayer:{goToGuide:"\u756a\u7d44\u8868\u3092\u8868\u793a\u3059\u308b",header:{title:"\u3054\u8996\u8074\u4e2d\u306e\u30c1\u30e3\u30f3\u30cd\u30eb"},controls:{watching:{tooltip:"\u73fe\u5728\u3053\u306e\u756a\u7d44\u3092\u89b3\u3066\u3044\u308b\u8996\u8074\u8005\u6570"}}},more:{returnButton:"\u30c6\u30ec\u30d3\u306b\u623b\u308b",account:{title:"\u30a2\u30ab\u30a6\u30f3\u30c8",submit:"Ok",
+username:{title:"\u540d\u524d: ",placeholder:"\u540d"},invite:{title:"\u62db\u5f85\u30ad\u30fc: "},passwordChange:{button:"\u30d1\u30b9\u30ef\u30fc\u30c9\u3092\u5909\u66f4\u3059\u308b",currentPasswordPlaceholder:"\u73fe\u5728\u304a\u4f7f\u3044\u306e\u30d1\u30b9\u30fc\u30ef\u30fc\u30c9",newPasswordPlaceholder:"\u65b0\u3057\u3044\u30d1\u30b9\u30ef\u30fc\u30c9"},picture:{edit:"\u7de8\u96c6"}},guide:{title:"\u756a\u7d44\u8868",returnToCurrentTime:"\u4eca\u89b3\u308c\u308b\u756a\u7d44\u306b\u623b\u308b",
+timestamps:'00<span style="font-size: 15px;">\u6642</span>00,01<span style="font-size: 15px;">\u6642</span>00,02<span style="font-size: 15px;">\u6642</span>00,03<span style="font-size: 15px;">\u6642</span>00,04<span style="font-size: 15px;">\u6642</span>00,05<span style="font-size: 15px;">\u6642</span>00,06<span style="font-size: 15px;">\u6642</span>00,07<span style="font-size: 15px;">\u6642</span>00,08<span style="font-size: 15px;">\u6642</span>00,09<span style="font-size: 15px;">\u6642</span>00,10<span style="font-size: 15px;">\u6642</span>00,11<span style="font-size: 15px;">\u6642</span>00,12<span style="font-size: 15px;">\u6642</span>00,13<span style="font-size: 15px;">\u6642</span>00,14<span style="font-size: 15px;">\u6642</span>00,15<span style="font-size: 15px;">\u6642</span>00,16<span style="font-size: 15px;">\u6642</span>00,17<span style="font-size: 15px;">\u6642</span>00,18<span style="font-size: 15px;">\u6642</span>00,19<span style="font-size: 15px;">\u6642</span>00,20<span style="font-size: 15px;">\u6642</span>00,21<span style="font-size: 15px;">\u6642</span>00,22<span style="font-size: 15px;">\u6642</span>00,23<span style="font-size: 15px;">\u6642</span>00'.split(","),
+currentTimeDefault:"\u6642\u9593\u306a\u3057"}}},dynamic:{home:{noprogram:{title:"\u756a\u7d44\u60c5\u5831\u304c\u3042\u308a\u307e\u305b\u3093",description:"\u7533\u3057\u8a33\u3054\u3056\u3044\u307e\u305b\u3093\u304c\u3001\u73fe\u5728\u3053\u306e\u30c1\u30e3\u30f3\u30cd\u30eb\u306e\u756a\u7d44\u60c5\u5831\u304c\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f",tileTitle:"\u756a\u7d44\u60c5\u5831\u306a\u3057"},currentlyAiring:"\u305f\u3060\u3044\u307e {channel} \u3067\u653e\u9001\u4e2d"},
+more:{information:{channel:"{channel} \u3067\u653e\u9001",timestamp:"{startTime}\u304b\u3089{endTime}\u307e\u3067",url:"\u756a\u7d44\u306e\u8a73\u7d30"},status:{mainStatusTitle:"\u30e1\u30a4\u30f3\u30b5\u30fc\u30d0\u30fc\u306e\u72b6\u614b:",channelsStatusTitle:"\u30c1\u30e3\u30f3\u30cd\u30eb\u30b5\u30fc\u30d0\u30fc\u306e\u72b6\u614b:",paused:"\u30e2\u30cb\u30bf\u30ea\u30f3\u30b0\u30aa\u30d5",notCheckedYet:"\u307e\u3060\u30c7\u30fc\u30bf\u304c\u3042\u308a\u307e\u305b\u3093",up:"\u554f\u984c\u306a\u3057",
+seemsDown:"\u554f\u984c\u304c\u767a\u751f\u3057\u3066\u3044\u308b\u3088\u3046",down:"\u505c\u6b62",unknown:"\u4e0d\u660e"}}},announce:{browserNotCompatible:"\u7533\u3057\u8a33\u3054\u3056\u3044\u307e\u305b\u3093\u304c\u3001\u304a\u4f7f\u3044\u306e\u30d6\u30e9\u30a6\u30b6\u3067\u306f\u3054\u5229\u7528\u3044\u305f\u3060\u3051\u307e\u305b\u3093",unknownChannel:"\u304a\u63a2\u3057\u306e\u30c1\u30e3\u30f3\u30cd\u30eb\u306f\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f",nextChannelSwitch:"\u6b21\u306e\u30c1\u30e3\u30f3\u30cd\u30eb\u3092\u3054\u89a7\u306b\u306a\u308b\u306b\u306f\u3001\u3082\u3046\u4e00\u5ea6\u62bc\u3057\u3066\u304f\u3060\u3055\u3044",
+previousChannelSwitch:"\u524d\u306e\u30c1\u30e3\u30f3\u30cd\u30eb\u3092\u3054\u89a7\u306b\u306a\u308b\u306b\u306f\u3001\u3082\u3046\u4e00\u5ea6\u62bc\u3057\u3066\u304f\u3060\u3055\u3044",noInformationForSelectedProgram:"\u3054\u9078\u629e\u306e\u756a\u7d44\u306e\u60c5\u5831\u304c\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f",channelLoadUnknownError:"\u30c1\u30e3\u30f3\u30cd\u30eb\u306e\u8aad\u307f\u8fbc\u307f\u4e2d\u306b\u30a8\u30e9\u30fc\u304c\u767a\u751f\u3057\u307e\u3057\u305f",
+online:"\u30a4\u30f3\u30bf\u30fc\u30cd\u30c3\u30c8\u63a5\u7d9a\u304c\u623b\u308a\u307e\u3057\u305f!",offline:"\u30a4\u30f3\u30bf\u30fc\u30cd\u30c3\u30c8\u63a5\u7d9a\u304c\u5207\u3089\u308c\u3066\u3044\u307e\u3059",unknownPlayerError:"\u30d7\u30ec\u30a4\u30e4\u30fc\u306b\u4e0d\u660e\u306a\u30a8\u30e9\u30fc\u304c\u767a\u751f\u3057\u307e\u3057\u305f\u3002\u66f4\u65b0\u3057\u3066\u307f\u3066\u304f\u3060\u3055\u3044\u3002",noAvailableChannels:"\u89b3\u308c\u308b\u30c1\u30e3\u30f3\u30cd\u30eb\u306f\u73fe\u5728\u3042\u308a\u307e\u305b\u3093",
+newVersionAvailable:"\u65b0\u3057\u3044\u30d0\u30fc\u30b8\u30e7\u30f3\u304c\u3042\u308a\u307e\u3059"}},Requests:{errors:{SECTOR_NOT_FOUND:"\u30ea\u30af\u30a8\u30b9\u30c8\u4e2d\u306b\u554f\u984c\u304c\u767a\u751f\u3057\u307e\u3057\u305f",AUTH_ERROR:"\u7533\u3057\u8a33\u3054\u3056\u3044\u307e\u305b\u3093\u304c\u3001\u304a\u5ba2\u69d8\u306e\u30a2\u30ab\u30a6\u30f3\u30c8\u306e\u5b89\u5168\u3092\u5b88\u308b\u305f\u3081\u3001\u3082\u3046\u4e00\u5ea6\u30ed\u30b0\u30a4\u30f3\u3057\u3066\u304f\u3060\u3055\u3044\u3002",
+SERVER_ERROR:"\u7533\u3057\u8a33\u3054\u3056\u3044\u307e\u305b\u3093\u304c\u3001\u30b5\u30fc\u30d0\u30fc\u4e0a\u3067\u4f55\u3089\u304b\u306e\u554f\u984c\u304c\u767a\u751f\u3057\u307e\u3057\u305f",UNKNOWN_ERROR:"\u7533\u3057\u8a33\u3054\u3056\u3044\u307e\u305b\u3093\u304c\u3001\u30b5\u30fc\u30d0\u30fc\u4e0a\u3067\u4e0d\u660e\u306a\u554f\u984c\u304c\u767a\u751f\u3057\u307e\u3057\u305f",NO_TOKEN:"\u7533\u3057\u8a33\u3054\u3056\u3044\u307e\u305b\u3093\u304c\u3001\u304a\u5ba2\u69d8\u306e\u30a2\u30ab\u30a6\u30f3\u30c8\u60c5\u5831\u306e\u78ba\u8a8d\u304c\u51fa\u6765\u307e\u305b\u3093\u3067\u3057\u305f",
+ACCOUNT_NOT_FOUND:"\u30a2\u30ab\u30a6\u30f3\u30c8\u304c\u898b\u3064\u304b\u308a\u307e\u305b\u3093",MISSING_ARG:"\u7533\u3057\u8a33\u3054\u3056\u3044\u307e\u305b\u3093\u304c\u3001\u30ea\u30af\u30a8\u30b9\u30c8\u306e\u9001\u4fe1\u4e2d\u306b\u554f\u984c\u304c\u767a\u751f\u3057\u307e\u3057\u305f",WRONG_TOKEN:"\u7533\u3057\u8a33\u3054\u3056\u3044\u307e\u305b\u3093\u304c\u3001\u30bb\u30c3\u30b7\u30e7\u30f3\u30ad\u30fc\u304c\u9593\u9055\u3063\u3066\u3044\u307e\u3059",NOT_FOUND:"\u7533\u3057\u8a33\u3054\u3056\u3044\u307e\u305b\u3093\u304c\u3001\u4f55\u304b\u304c\u30b5\u30fc\u30d0\u30fc\u4e0a\u3067\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f",
+WRONG_PASSWORD:"\u30d1\u30b9\u30ef\u30fc\u30c9\u306b\u9593\u9055\u3048\u304c\u3042\u308b\u3088\u3046\u3067\u3059",USERNAME_ALREADY_IN_USE:"\u3053\u306e\u30e6\u30fc\u30b6\u30fc\u540d\u306f\u73fe\u5728\u5225\u306e\u30a2\u30ab\u30a6\u30f3\u30c8\u3067\u4f7f\u308f\u308c\u3066\u3044\u307e\u3059",NO_IMAGE:"\u753b\u50cf\u304c\u3042\u308a\u307e\u305b\u3093",INVITE_ALREADY_IN_USE:"\u3053\u306e\u62db\u5f85\u30ad\u30fc\u306f\u65e2\u306b\u5225\u306e\u30a2\u30ab\u30a6\u30f3\u30c8\u3067\u4f7f\u308f\u308c\u3066\u3044\u307e\u3059",
+INVITE_NOT_FOUND:"\u3053\u306e\u62db\u5f85\u30ad\u30fc\u304c\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f",CHANNEL_NOT_FOUND:"\u304a\u63a2\u3057\u306e\u30c1\u30e3\u30f3\u30cd\u30eb\u306f\u898b\u3064\u304b\u308a\u307e\u305b\u3093",other:"\u30ea\u30af\u30a8\u30b9\u30c8\u306e\u51e6\u7406\u4e2d\u306b\u4e0d\u660e\u306a\u554f\u984c\u304c\u767a\u751f\u3057\u307e\u3057\u305f",account:{picture:{"new":"\u30d7\u30ed\u30d5\u30a1\u30a4\u30eb\u753b\u50cf\u306e\u5909\u66f4\u306b\u4f55\u304b\u554f\u984c\u304c\u767a\u751f\u3057\u307e\u3057\u305f"}},
+channels:{available:"\u73fe\u5728\u8996\u8074\u3067\u304d\u308b\u30c1\u30e3\u30f3\u30cd\u30eb\u306f\u3042\u308a\u307e\u305b\u3093"}},success:{account:{change:{password:"\u30d1\u30b9\u30ef\u30fc\u30c9\u3092\u5909\u66f4\u3057\u307e\u3057\u305f\uff01",username:"\u30a2\u30ab\u30a6\u30f3\u30c8\u540d\u3092\u5909\u66f4\u3057\u307e\u3057\u305f!"},picture:{"new":"\u65b0\u3057\u3044\u30d7\u30ed\u30d5\u30a1\u30a4\u30eb\u753b\u50cf\u3092\u8ffd\u52a0\u3057\u307e\u3057\u305f!"}}}}},fr:{language:"french",channelNameLanguage:"english",
+translateDescription:!0,version:"v2.0",UI:{"static":{navbar:{home:"Home",watch:"Regarder",guide:"Autre"},tvplayer:{goToGuide:"Voir le programme TV",header:{title:"Vous \u00eates actuellement entrain de regarder"},controls:{watching:{tooltip:"Nombre de personnes regardant actuellement cette cha\u00eene"}}},more:{returnButton:"Revenir \u00e0 la cha\u00eene",account:{title:"Compte",submit:"Soumettre",username:{title:"Nom: ",placeholder:"Nom d'utilisateur"},invite:{title:"Invitation: "},passwordChange:{button:"Changer le mot de passe",
+currentPasswordPlaceholder:"Mot de passe actuel",newPasswordPlaceholder:"Nouveau mot de passe"},picture:{edit:"Changer"}},guide:{title:"Programme TV",returnToCurrentTime:"Voir les programmes en ce moment",timestamps:"00:00 01:00 02:00 03:00 04:00 05:00 06:00 07:00 08:00 09:00 10:00 11:00 12:00 13:00 14:00 15:00 16:00 17:00 18:00 19:00 20:00 21:00 22:00 23:00".split(" "),currentTimeDefault:"Pas de temps"}}},dynamic:{home:{noprogram:{title:"Sans information",description:"Nous sommes d\u00e9sol\u00e9s mais nous n'avons pas r\u00e9ussi \u00e0 trouver d'information sur le programme actuellement en diffusion sur cette cha\u00eene",
+tileTitle:"Sans information"},currentlyAiring:"Actuellement sur: {channel}"},more:{information:{channel:"Diffus\u00e9 sur {channel}",timestamp:"De {startTime} \u00e0 {endTime}",url:"Lien vers le site de l'\u00e9mission"},status:{mainStatusTitle:"Statut de l'API Principale:",channelsStatusTitle:"Statut des cha\u00eenes:",paused:"Monitoring en pause",notCheckedYet:"Pas encore v\u00e9rifi\u00e9",up:"Operationnel",seemsDown:"Semble rencontrer des probl\u00e8mes",down:"Hors Service",unknown:"Inconnu"}}},
+announce:{browserNotCompatible:"Votre navigateur ne semble pas compatible",unknownChannel:"Nous ne connaissons pas cette cha\u00eene",nextChannelSwitch:"Apr\u00e9ussiyez encore une fois pour aller \u00e0 la cha\u00eene suivante",previousChannelSwitch:"Apr\u00e9ussiyez encore une fois pour revenir \u00e0 la cha\u00eene pr\u00e9c\u00e9dente",noInformationForSelectedProgram:"Nous n'avons pas r\u00e9ussi trouver d'informations sur le programme s\u00e9lectionn\u00e9",channelLoadUnknownError:"Un erreur est survenue lors du chargement de la cha\u00eene",
+online:"Vous \u00eates de nouveau en ligne!",offline:"Vous semblez \u00eatre d\u00e9connect\u00e9",unknownPlayerError:"Une erreur est survenue avec le player, merci de rafra\u00eechir la page si vous rencontrez un probl\u00e8me",noAvailableChannels:"Une erreur est survenue lors de l'obtention des cha\u00eenes disponibles",newVersionAvailable:"Une nouvelle version est disponible"}},Requests:{errors:{SECTOR_NOT_FOUND:"Une erreur est survenue lors de la recherche d'information",AUTH_ERROR:"Nous sommes d\u00e9sol\u00e9s mais pour garantir la s\u00e9curit\u00e9 de votre compte, votre session a expir\u00e9",
+SERVER_ERROR:"Nous sommes d\u00e9sol\u00e9s mais une erreur est survenue au niveau du serveur",UNKNOWN_ERROR:"Nous sommes d\u00e9sol\u00e9s mais une erreur inconnue est survenue",NO_TOKEN:"Nous sommes d\u00e9sol\u00e9s mais nous n'avons pas r\u00e9ussi \u00e0 v\u00e9rifier votre cl\u00e9 de session",ACCOUNT_NOT_FOUND:"Nous n'avons pas r\u00e9ussi \u00e0 trouver votre compte",MISSING_ARG:"Nous sommes d\u00e9sol\u00e9s mais une erreur est survenue lors de la requ\u00eate",WRONG_TOKEN:"Nous sommes d\u00e9sol\u00e9s mais vous semblez avoir la mauvaise cl\u00e9 de session",
+NOT_FOUND:"Nous sommes d\u00e9sol\u00e9s mais nous n'avons pas r\u00e9ussi \u00e0 trouver ce qui a \u00e9t\u00e9 demand\u00e9 sur le serveur",WRONG_PASSWORD:"Mot de passe incorrect",USERNAME_ALREADY_IN_USE:"Ce nom d'utilisateur est d\u00e9j\u00e0 enregistr\u00e9",NO_IMAGE:"Il n'y a pas d'image",INVITE_ALREADY_IN_USE:"Cette cl\u00e9 d'invitation est d\u00e9j\u00e0 utilis\u00e9e sur un autre compte",INVITE_NOT_FOUND:"Nous ne reconnaissons pas cette cl\u00e9 d'invitation",CHANNEL_NOT_FOUND:"Nous n'avons pas r\u00e9ussi \u00e0 trouver la cha\u00eene que vous avez demand\u00e9e",
+other:"Une erreur inconnue est survenue lors de la requ\u00eate",account:{picture:{"new":"Une erreur est survenue lors du changement de votre photo de profile"}},channels:{available:"Aucune cha\u00eene n'est disponible pour le moment"}},success:{account:{change:{password:"Mot de passe modifi\u00e9 avec succ\u00e8s!",username:"Nom d'utilisateur modifi\u00e9 avec succ\u00e8s!"},picture:{"new":"Photo de profile chang\u00e9 avec succ\u00e8s!"}}}}}};function md5cycle(a,b){var c=a[0],d=a[1],e=a[2],f=a[3];c=ff(c,d,e,f,b[0],7,-680876936);f=ff(f,c,d,e,b[1],12,-389564586);e=ff(e,f,c,d,b[2],17,606105819);d=ff(d,e,f,c,b[3],22,-1044525330);c=ff(c,d,e,f,b[4],7,-176418897);f=ff(f,c,d,e,b[5],12,1200080426);e=ff(e,f,c,d,b[6],17,-1473231341);d=ff(d,e,f,c,b[7],22,-45705983);c=ff(c,d,e,f,b[8],7,1770035416);f=ff(f,c,d,e,b[9],12,-1958414417);e=ff(e,f,c,d,b[10],17,-42063);d=ff(d,e,f,c,b[11],22,-1990404162);c=ff(c,d,e,f,b[12],7,1804603682);f=ff(f,c,d,e,b[13],12,
+-40341101);e=ff(e,f,c,d,b[14],17,-1502002290);d=ff(d,e,f,c,b[15],22,1236535329);c=gg(c,d,e,f,b[1],5,-165796510);f=gg(f,c,d,e,b[6],9,-1069501632);e=gg(e,f,c,d,b[11],14,643717713);d=gg(d,e,f,c,b[0],20,-373897302);c=gg(c,d,e,f,b[5],5,-701558691);f=gg(f,c,d,e,b[10],9,38016083);e=gg(e,f,c,d,b[15],14,-660478335);d=gg(d,e,f,c,b[4],20,-405537848);c=gg(c,d,e,f,b[9],5,568446438);f=gg(f,c,d,e,b[14],9,-1019803690);e=gg(e,f,c,d,b[3],14,-187363961);d=gg(d,e,f,c,b[8],20,1163531501);c=gg(c,d,e,f,b[13],5,-1444681467);
+f=gg(f,c,d,e,b[2],9,-51403784);e=gg(e,f,c,d,b[7],14,1735328473);d=gg(d,e,f,c,b[12],20,-1926607734);c=hh(c,d,e,f,b[5],4,-378558);f=hh(f,c,d,e,b[8],11,-2022574463);e=hh(e,f,c,d,b[11],16,1839030562);d=hh(d,e,f,c,b[14],23,-35309556);c=hh(c,d,e,f,b[1],4,-1530992060);f=hh(f,c,d,e,b[4],11,1272893353);e=hh(e,f,c,d,b[7],16,-155497632);d=hh(d,e,f,c,b[10],23,-1094730640);c=hh(c,d,e,f,b[13],4,681279174);f=hh(f,c,d,e,b[0],11,-358537222);e=hh(e,f,c,d,b[3],16,-722521979);d=hh(d,e,f,c,b[6],23,76029189);c=hh(c,d,
+e,f,b[9],4,-640364487);f=hh(f,c,d,e,b[12],11,-421815835);e=hh(e,f,c,d,b[15],16,530742520);d=hh(d,e,f,c,b[2],23,-995338651);c=ii(c,d,e,f,b[0],6,-198630844);f=ii(f,c,d,e,b[7],10,1126891415);e=ii(e,f,c,d,b[14],15,-1416354905);d=ii(d,e,f,c,b[5],21,-57434055);c=ii(c,d,e,f,b[12],6,1700485571);f=ii(f,c,d,e,b[3],10,-1894986606);e=ii(e,f,c,d,b[10],15,-1051523);d=ii(d,e,f,c,b[1],21,-2054922799);c=ii(c,d,e,f,b[8],6,1873313359);f=ii(f,c,d,e,b[15],10,-30611744);e=ii(e,f,c,d,b[6],15,-1560198380);d=ii(d,e,f,c,b[13],
+21,1309151649);c=ii(c,d,e,f,b[4],6,-145523070);f=ii(f,c,d,e,b[11],10,-1120210379);e=ii(e,f,c,d,b[2],15,718787259);d=ii(d,e,f,c,b[9],21,-343485551);a[0]=add32(c,a[0]);a[1]=add32(d,a[1]);a[2]=add32(e,a[2]);a[3]=add32(f,a[3])}function cmn(a,b,c,d,e,f){b=add32(add32(b,a),add32(d,f));return add32(b<<e|b>>>32-e,c)}function ff(a,b,c,d,e,f,g){return cmn(b&c|~b&d,a,b,e,f,g)}function gg(a,b,c,d,e,f,g){return cmn(b&d|c&~d,a,b,e,f,g)}function hh(a,b,c,d,e,f,g){return cmn(b^c^d,a,b,e,f,g)}
+function ii(a,b,c,d,e,f,g){return cmn(c^(b|~d),a,b,e,f,g)}function md51(a){txt="";var b=a.length,c=[1732584193,-271733879,-1732584194,271733878],d;for(d=64;d<=a.length;d+=64)md5cycle(c,md5blk(a.substring(d-64,d)));a=a.substring(d-64);var e=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];for(d=0;d<a.length;d++)e[d>>2]|=a.charCodeAt(d)<<(d%4<<3);e[d>>2]|=128<<(d%4<<3);if(55<d)for(md5cycle(c,e),d=0;16>d;d++)e[d]=0;e[14]=8*b;md5cycle(c,e);return c}
+function md5blk(a){var b=[],c;for(c=0;64>c;c+=4)b[c>>2]=a.charCodeAt(c)+(a.charCodeAt(c+1)<<8)+(a.charCodeAt(c+2)<<16)+(a.charCodeAt(c+3)<<24);return b}var hex_chr="0123456789abcdef".split("");function rhex(a){for(var b="",c=0;4>c;c++)b+=hex_chr[a>>8*c+4&15]+hex_chr[a>>8*c&15];return b}function hex(a){for(var b=0;b<a.length;b++)a[b]=rhex(a[b]);return a.join("")}function md5(a){return hex(md51(a))}function add32(a,b){return a+b&4294967295}
+if("5d41402abc4b2a76b9719d911017c592"!=md5("hello"))var add32$0=function(a,b){var c=(a&65535)+(b&65535);return(a>>16)+(b>>16)+(c>>16)<<16|c&65535};async function openDebugPanel(){document.getElementById("debugPanel").classList.remove("unload");goToWatch()}async function closeDebugPanel(){document.getElementById("debugPanel").classList.add("unload")}function debugHeaderDrag(a){}async function playVideo(){await document.getElementById("videoPlayer").play();document.getElementById("icon-pause").classList.remove("hiddenButton");document.getElementById("icon-play").classList.add("hiddenButton")}
+async function pauseVideo(){await document.getElementById("videoPlayer").pause();document.getElementById("icon-play").classList.remove("hiddenButton");document.getElementById("icon-pause").classList.add("hiddenButton")}async function playPause(){document.getElementById("videoPlayer").paused?playVideo():pauseVideo()}async function reloadVideo(){await document.getElementById("videoPlayer").load()}
+async function volume(){document.getElementById("videoPlayer").muted?(document.getElementById("videoPlayer").muted=!1,document.getElementById("icon-volume-unmuted").classList.remove("hiddenButton"),document.getElementById("icon-volume-muted").classList.add("hiddenButton")):(document.getElementById("videoPlayer").muted=!0,document.getElementById("icon-volume-muted").classList.remove("hiddenButton"),document.getElementById("icon-volume-unmuted").classList.add("hiddenButton"))}
+async function fullscreenHandler(){window.fullScreen||window.innerWidth==screen.width&&window.innerHeight==screen.height?(document.getElementById("icon-fullscreen-close").classList.remove("hiddenButton"),document.getElementById("icon-fullscreen-open").classList.add("hiddenButton")):(document.getElementById("icon-fullscreen-open").classList.remove("hiddenButton"),document.getElementById("icon-fullscreen-close").classList.add("hiddenButton"))}
+async function fullscreen(){window.fullScreen||window.innerWidth==screen.width&&window.innerHeight==screen.height?document.exitFullscreen?document.exitFullscreen():document.webkitExitFullscreen?document.webkitExitFullscreen():document.msExitFullscreen?document.msExitFullscreen():document.getElementById("videoPlayer").webkitExitFullscreen&&document.getElementById("videoPlayer").webkitExitFullscreen():document.documentElement.requestFullscreen?document.documentElement.requestFullscreen():document.documentElement.webkitRequestFullscreen?
+document.documentElement.webkitRequestFullscreen():document.documentElement.msRequestFullscreen?document.documentElement.msRequestFullscreen():document.getElementById("videoPlayer").webkitEnterFullscreen&&document.getElementById("videoPlayer").webkitEnterFullscreen()};async function request(a,b=null,c="GET",d=!1){if(!d&&a in caches&&caches[a])return JSON.parse(JSON.stringify(caches[a]));d=a.lastIndexOf("?");let e="";0<=d&&(e=a.substring(d+1),a=a.substring(0,d));c=await fetch("{host}{endpoint}?token={token}&{params}".format({host:constants.MAIN_HOST,endpoint:a,token:window.localStorage.getItem("__japanterebi_auth"),params:e}),{method:c});try{if(b){let f=c.headers.get("Content-Type");c=await c.arrayBuffer();let g=URL.createObjectURL(new Blob([c],{type:f}));b.src=
+g}else c=await c.json(),c.success?c=c.data:("AUTH_ERROR"==c.error?(newInfo(localization[states.language].Requests.errors.AUTH_ERROR),window.location.href="/login.html?session_expired=true"):c.error in localization[states.language].Requests.errors?newInfo(localization[states.language].Requests.errors[c.error]):newInfo(localization[states.language].Requests.errors.other),c=null)}catch{c=null}a in caches&&(caches[a]=JSON.parse(JSON.stringify(c)));return c};async function checkOrientation(a){a.matches?loadPortrait():loadLandscape()}async function loadPortrait(){"portrait"!=states.orientation&&(states.orientation="portrait","home"==states.currentPage&&goToWatch(),window.scrollTo(0,0),document.getElementById("responsiveProgramsList").appendChild(document.getElementById("homeTiles")),document.getElementById("homeTiles").style.position="relative")}
+async function loadLandscape(){"landscape"!=states.orientation&&(states.orientation="landscape",document.getElementById("home").appendChild(document.getElementById("homeTiles")),document.getElementById("homeTiles").style.position="absolute")};let states={currentChannel:"",currentStream:"",currentPage:"",mouseMovementIndex:0,switchConfirmation:"",counterInterval:null,watchingID:null,buffering:{lastPlayPosition:0,currentPlayPosition:0,bufferingDetected:!1},online:!0,language:"ja",orientation:"landscape",video:{fps:0,droppedFrames:0,totalFrames:0,videoBinding:null,lastAudioVolume:1,playlistErrors:0}};function getStatusFromCode(a){switch(a){case 0:return"paused";case 1:return"notCheckedYet";case 2:return"up";case 8:return"seemsDown";case 9:return"down";default:return"unknown"}}function getColorFromStatus(a){switch(a){case "up":return null;case "seemsDown":case "down":return"is-error";default:return"is-grey"}}
+async function checkStatus(){fetch("https://api.uptimerobot.com/v2/getMonitors?api_key=m787817878-b8981da3cd50ccafba042058",{method:"POST"}).then(a=>a.json()).then(a=>{if("ok"==a.stat){a=getStatusFromCode(a.monitors[0].status);const b=getColorFromStatus(a);document.getElementById("mainStatusDot").classList.remove("is-error");document.getElementById("mainStatusDot").classList.remove("is-grey");b&&document.getElementById("mainStatusDot").classList.add(b);document.getElementById("mainStatusText").innerText=
+localization[states.language].UI.dynamic.more.status[a]}else document.getElementById("mainStatusDot").classList.remove("is-error"),document.getElementById("mainStatusDot").classList.remove("is-grey"),document.getElementById("mainStatusDot").classList.add("is-grey"),document.getElementById("mainStatusText").innerText=localization[states.language].UI.dynamic.more.status.unknown});fetch("https://api.uptimerobot.com/v2/getMonitors?api_key=m787903761-eee8bc3c1af299a23226af9f",{method:"POST"}).then(a=>
+a.json()).then(a=>{if("ok"==a.stat){a=getStatusFromCode(a.monitors[0].status);const b=getColorFromStatus(a);document.getElementById("channelsStatusDot").classList.remove("is-error");document.getElementById("channelsStatusDot").classList.remove("is-grey");b&&document.getElementById("channelsStatusDot").classList.add(b);document.getElementById("channelsStatusText").innerText=localization[states.language].UI.dynamic.more.status[a]}else document.getElementById("channelsStatusDot").classList.remove("is-error"),
+document.getElementById("channelsStatusDot").classList.remove("is-grey"),document.getElementById("channelsStatusDot").classList.add("is-grey"),document.getElementById("channelsStatusText").innerText=localization[states.language].UI.dynamic.more.status.unknown})};String.prototype.format=function(){var a=this.toString();if(arguments.length){var b=typeof arguments[0],c;b="string"===b||"number"===b?Array.prototype.slice.call(arguments):arguments[0];for(c in b)a=a.replace(new RegExp("\\{"+c+"\\}","gi"),b[c])}return a};function isElementInViewport(a){a=a.getBoundingClientRect();return 0<=a.left&&a.right<=(window.innerWidth||document.documentElement.clientWidth)}function correctMinute(a){return 10>Number(a)?"0"+String(a):String(a)}
+function nextElement(a,b){b=a.indexOf(b);return b==a.length-1||-1==b?0:b+1}function previousElement(a,b){b=a.indexOf(b);return 0==b||-1==b?a.length-1:b-1}
+async function newInfo(a){console.log("[Info] "+String(a));let b=document.createElement("info");b.setAttribute("class","info-box");b.innerText=String(a);document.getElementById("tvplayer").appendChild(b);setTimeout(function(){b.classList.add("visibleInfo");setTimeout(function(){b.classList.remove("visibleInfo");setTimeout(function(){b.remove()},1E3)},5E3)},50)}
+async function translate(a,b){try{return response=await fetch("https://anise-translate.vercel.app/translate?text={text}&destination={destination}".format({text:encodeURIComponent(a),destination:encodeURIComponent(b)})),response=await response.json(),response.success?response.data.result:a}catch{return a}}
+function isElementInView(a,b=!0){var c=document.body.scrollTop,d=c+parseFloat(getComputedStyle(document.body,null).height.replace("px","")),e=a.getBoundingClientRect().top+document.body.scrollTop;a=e+parseFloat(getComputedStyle(a,null).height.replace("px",""));return!0===b?c<e&&d>a:e<=d&&a>=c}function sleep(a){return new Promise(b=>setTimeout(b,a))}
+function createRandomID(a,b=null){var c=[];for(let d=0;d<a;d++)c.push("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".charAt(Math.floor(62*Math.random())));c=c.join("");b&&b.includes(c)&&(c=createRandomID(a,b));return c};setInterval(()=>{let a=document.getElementById("videoPlayer"),b=a.getVideoPlaybackQuality();states.video.droppedFrames=b.droppedVideoFrames;states.video.fps=b.totalVideoFrames-states.video.totalFrames;states.video.totalFrames=b.totalVideoFrames;0>=states.video.fps?buffering():stopBuffering();document.getElementById("debug-fps").innerText=states.video.fps;document.getElementById("debug-dropped-frames").innerText=states.video.droppedFrames;document.getElementById("debug-total-frames").innerText=states.video.totalFrames;
+document.getElementById("debug-dimensions").innerText=a.videoWidth.toString()+"x"+a.videoHeight.toString();document.getElementById("debug-source").innerText=a.currentSrc;document.getElementById("debug-current-time").innerText=a.currentTime;document.getElementById("debug-paused").innerText=a.paused;document.getElementById("debug-seeking").innerText=a.seeking;document.getElementById("debug-autoplay").innerText=a.autoplay;document.getElementById("debug-volume").innerText=a.volume;document.getElementById("debug-controls").innerText=
+a.controls;document.getElementById("debug-hls-js").innerText=null!==states.video.videoBinding;document.getElementById("debug-online").innerText=states.online;document.getElementById("debug-language").innerText=states.language;document.getElementById("debug-language-edit").innerText=window.localStorage.getItem("lang-edit");document.getElementById("debug-announcement").innerText=window.localStorage.getItem("announcement");document.getElementById("debug-orientation").innerText=states.orientation;document.getElementById("debug-current-page").innerText=
+states.currentPage;document.getElementById("debug-current-channel").innerText=states.currentChannel;document.getElementById("debug-buffering").innerText=states.buffering.bufferingDetected;document.getElementById("debug-watching-id").innerText=states.watchingID;document.getElementById("debug-mouse-movement-index").innerText=states.mouseMovementIndex;document.getElementById("debug-switch-confirmation").innerText=states.switchConfirmation;document.getElementById("debug-current-stream").innerText=states.currentStream;
+document.getElementById("debug-available-channels").innerText="";document.getElementById("debug-version").innerText=constants.version.version;document.getElementById("debug-commit").innerText=constants.version.commit;document.getElementById("debug-credits").innerText=constants.credits.author},1E3);async function watchWithNative(a){try{states.video.videoBinding.destroy()}catch{}states.video.videoBinding=null;document.getElementById("videoPlayer").src=a;buffering()}
+async function watchWithHLSJS(a){try{states.video.videoBinding.destroy()}catch{}states.video.videoBinding=new Hls({debug:!1});states.video.videoBinding.attachMedia(document.getElementById("videoPlayer"));states.video.videoBinding.on(Hls.Events.MEDIA_ATTACHED,()=>{states.video.videoBinding.loadSource(a);states.video.videoBinding.on(window.Hls.Events.ERROR,function(b,c){if(states.currentStream==a){switch(c.details){case Hls.ErrorDetails.BUFFER_STALLED_ERROR:buffering();break;case Hls.ErrorDetails.MANIFEST_LOAD_ERROR:document.getElementById("videoPlayer").canPlayType("application/vnd.apple.mpegurl")?
+setTimeout(function(){states.video.videoBinding.destroy();watchWithNative(a)},100):setTimeout(function(){watchWithHLSJS(a)},100)}if(c.fatal)switch(document.getElementById("videoPlayer").canPlayType("application/vnd.apple.mpegurl")&&setTimeout(function(){states.video.videoBinding.destroy();watchWithNative(a)},100),c.type){case Hls.ErrorTypes.NETWORK_ERROR:setTimeout(function(){states.video.videoBinding.startLoad()},100);break;case Hls.ErrorTypes.MEDIA_ERROR:setTimeout(function(){states.video.videoBinding.recoverMediaError()},
+100);break;default:newInfo(localization[states.language].UI.announce.unknownPlayerError)}}});states.video.videoBinding.on(window.Hls.Events.FRAG_BUFFERED,()=>{stopBuffering()})})}async function watching(a){states.counterInterval&&window.clearInterval(states.counterInterval);states.counterInterval=setInterval(()=>{request("/watching/"+a+"?id="+String(states.watchingID)).then(b=>{b&&(states.watchingID=b.id,document.getElementById("realtimeCounter").innerText=b.count)})},3E3)}
+async function nextChannel(){request("/channels/available").then(a=>{if(a){let b=nextElement(a,states.currentChannel);watch(a[b]);goToWatch()}else newInfo(localization[states.language].UI.announce.noAvailableChannels)})}async function previousChannel(){request("/channels/available").then(a=>{if(a){let b=previousElement(a,states.currentChannel);watch(a[b]);goToWatch()}else newInfo(localization[states.language].UI.announce.noAvailableChannels)})};window.onload=function(){var a=new URLSearchParams(window.location.search);const b=a.get("channel");a=a.get("page");buffering();addAuth();checkOrientation(window.matchMedia("(orientation: portrait)"));"watch"==a?goToWatch():"guide"==a?goToGuide():goToHome();request("/channels/available").then(c=>{c&&0<c.length?b&&c.includes(b)?watch(b):watch(c[0]):newInfo(localization[states.language].Requests.errors.channels.available)});request("/announcement").then(c=>{if(c&&c.message){let d=md5(String(c));localStorage.getItem("announcement")!=
+d||c.persistent?states.language in c&&c[states.language]?newInfo(c[states.language]):c.message&&newInfo(c.message):console.info("Announcement already announced");localStorage.setItem("announcement",d)}});checkVersion();setInterval(refreshCache,9E5);setInterval(refreshActiveCache,3E5);setInterval(checkBuffering,100);setInterval(checkStatus,3E4);setInterval(checkVersion,9E5)};
+async function checkVersion(){try{if(constants.version.commit||(constants.version.commit=commit),constants.version.commit){let a="\u00a9 {author} \u2014 {year} ".format({author:constants.credits.author,year:constants.credits.year.toString()});a+=constants.version.display.format({version:constants.version.version,commit:'<a href="'+constants.credits.repo+'" target="_blank">'+constants.version.commit.substring(0,7)+"</a>"});document.getElementById("credits").innerHTML=a;request("/version").then(b=>
+{b&&b.commit&&b.commit!=constants.version.commit&&(b=localization[states.language].UI.announce.newVersionAvailable,newInfo(b),a+=" ({message})".format({message:b}),document.getElementById("credits").innerHTML=a)})}}catch{console.warn("Could not verify the current version")}}
+async function watch(a){if(a!=states.currentChannel){buffering();try{switchHomeProgram(a)}catch{console.warn("[non critical] Error while switching home")}request("/channels").then(b=>{if(b)if(a in b){states.currentStream=constants.STREAM_HOST.format({channel:a,token:window.localStorage.getItem("__japanterebi_auth")});if(videoPlayer.canPlayType("application/vnd.apple.mpegurl"))watchWithNative(states.currentStream);else if(Hls.isSupported())watchWithHLSJS(states.currentStream);else{newInfo(localization[states.language].UI.announce.browserNotCompatible);
+return}states.currentChannel=a;watching(a);playVideo();try{var c=new URLSearchParams(window.location.search);c.set("channel",a);history.replaceState(null,null,"?"+c.toString());document.getElementById("siteTitle").innerText="{channel} \u2014\u00a0Japan Terebi".format({channel:b[a].name[localization[states.language].channelNameLanguage]})}catch{}document.getElementById("channelName").innerText=b[a].name.stylized;document.getElementById("responsiveChannel").innerText=b[a].name.stylized;document.getElementById("responsiveLogo").src=
+constants.LOGO_HOST.format({channel:a});document.getElementById("repsonsiveProgram").innerText=localization[states.language].UI.dynamic.home.currentlyAiring.format({channel:b[a].name[localization[states.language].channelNameLanguage]});request("/guide/now").then(d=>{if(d){let e=!1;for(programIndex in d)if(d[programIndex].channel==a){e=!0;let f=d[programIndex].title.length,g="x-large";30<f?g="medium":20<f?g="large":10<f&&(g="larger");document.getElementById("responsiveChannel").innerText=d[programIndex].title;
+document.getElementById("responsiveChannel").setAttribute("style","font-size: {size}".format({size:g}));d=d[programIndex].description;localization[states.language].translateDescription?translate(d,localization[states.language].language).then(h=>{document.getElementById("responsiveDescription").innerText=h}):document.getElementById("responsiveDescription").innerText=d;break}e||(document.getElementById("responsiveDescription").innerText=localization[states.language].UI.dynamic.home.noprogram.description)}else document.getElementById("responsiveDescription").innerText=
+localization[states.language].UI.dynamic.home.noprogram.description})}else newInfo(localization[states.language].UI.announce.unknownChannel)})}}
+async function mouseMoved(){if("watch"!=states.currentPage)document.getElementById("controls").classList.add("hidden-controls"),document.getElementById("previousChannel").classList.add("hidden-channel-arrows"),document.getElementById("nextChannel").classList.add("hidden-channel-arrows"),document.getElementById("information").classList.add("hidden-information"),document.getElementById("header").classList.remove("hidden-header");else{states.mouseMovementIndex+=1;var a=states.mouseMovementIndex;document.getElementById("tvplayer").classList.remove("hidden-cursor");
+document.getElementById("controls").classList.remove("hidden-controls");document.getElementById("previousChannel").classList.remove("hidden-channel-arrows");document.getElementById("nextChannel").classList.remove("hidden-channel-arrows");document.getElementById("information").classList.remove("hidden-information");document.getElementById("header").classList.remove("hidden-header");setTimeout(()=>{a==states.mouseMovementIndex&&(document.getElementById("tvplayer").classList.add("hidden-cursor"),document.getElementById("controls").classList.add("hidden-controls"),
+document.getElementById("previousChannel").classList.add("hidden-channel-arrows"),document.getElementById("nextChannel").classList.add("hidden-channel-arrows"),document.getElementById("information").classList.add("hidden-information"),"watch"==states.currentPage&&document.getElementById("header").classList.add("hidden-header"))},3E3)}}
+async function shortcutHandler(a){if(["currentPassword","newPassword","accountName"].includes(document.activeElement.id))setTimeout(()=>{""!=document.activeElement.value?("Enter"==a.key&&document.activeElement.nextElementSibling.click(),document.activeElement.nextElementSibling.classList.add("show-submit-button"),document.activeElement.nextElementSibling.classList.add("submit-button-pointerevent")):(document.activeElement.nextElementSibling.classList.remove("show-submit-button"),document.activeElement.nextElementSibling.classList.remove("submit-button-pointerevent"))},
+50);else switch(a.key){case "f":fullscreen();break;case "ArrowRight":"next"!=states.switchConfirmation?(states.switchConfirmation="next",newInfo(localization[states.language].UI.announce.nextChannelSwitch),setTimeout(()=>{states.switchConfirmation=""},5E3)):nextChannel();break;case "ArrowLeft":"previous"!=states.switchConfirmation?(states.switchConfirmation="previous",newInfo(localization[states.language].UI.announce.previousChannelSwitch),setTimeout(()=>{states.switchConfirmation=""},5E3)):previousChannel();
+break;case "m":volume();break;case "w":"watch"!=states.currentPage&&goToWatch();break;case "h":"home"!=states.currentPage&&goToHome();break;case "g":"guide"!=states.currentPage&&goToGuide();break;case " ":"watch"==states.currentPage&&playPause();break;case "r":"watch"==states.currentPage&&reloadVideo()}}
+async function goToHome(){"watch"==states.currentPage&&(states.video.lastAudioVolume=document.getElementById("videoPlayer").volume);states.currentPage="home";const a=document.getElementById("currentPage");a.classList.remove("current-page-watch");a.classList.remove("current-page-guide");a.classList.add("current-page-home");document.getElementById("videoPlayer").volume=constants.NON_FOCUS_VOLUME;document.getElementById("more").classList.add("hidden-more");document.getElementById("header").classList.remove("hidden-header");
+document.getElementById("homeContainer").classList.remove("home-hidden");document.getElementById("nextChannel").classList.add("hidden-channel-arrows");document.getElementById("previousChannel").classList.add("hidden-channel-arrows");document.getElementById("tvplayer").style.pointerEvents="none";document.getElementById("returnBackButton").style.transform="scale(1)";document.getElementById("epgProgramInformation").style.display="none";try{var b=new URLSearchParams(window.location.search);b.set("page",
+"home");history.replaceState(null,null,"?"+b.toString())}catch{}window.matchMedia("(orientation: portrait)").matches&&goToWatch()}
+async function goToWatch(){states.currentPage="watch";document.getElementById("videoPlayer").volume=states.video.lastAudioVolume;const a=document.getElementById("currentPage");a.classList.remove("current-page-home");a.classList.remove("current-page-guide");a.classList.add("current-page-watch");document.getElementById("nextChannel").classList.remove("hidden-channel-arrows");document.getElementById("previousChannel").classList.remove("hidden-channel-arrows");document.getElementById("homeContainer").classList.add("home-hidden");
+document.getElementById("more").classList.add("hidden-more");mouseMoved();document.getElementById("tvplayer").style.pointerEvents="all";document.getElementById("returnBackButton").style.transform="scale(1)";document.getElementById("epgProgramInformation").style.display="none";try{var b=new URLSearchParams(window.location.search);b.set("page","watch");history.replaceState(null,null,"?"+b.toString())}catch{}}
+async function goToGuide(){"watch"==states.currentPage&&(states.video.lastAudioVolume=document.getElementById("videoPlayer").volume);states.currentPage="guide";const a=document.getElementById("currentPage");a.classList.remove("current-page-home");a.classList.remove("current-page-watch");a.classList.add("current-page-guide");document.getElementById("videoPlayer").volume=constants.NON_FOCUS_VOLUME;document.getElementById("homeContainer").classList.add("home-hidden");document.getElementById("header").classList.remove("hidden-header");
+document.getElementById("more").classList.remove("hidden-more");document.getElementById("nextChannel").classList.add("hidden-channel-arrows");document.getElementById("previousChannel").classList.add("hidden-channel-arrows");document.getElementById("tvplayer").style.pointerEvents="none";document.getElementById("returnBackButton").style.transform="scale(1.05)";document.getElementById("epgProgramInformation").style.display="flex";try{var b=new URLSearchParams(window.location.search);b.set("page","guide");
+history.replaceState(null,null,"?"+b.toString())}catch{}}
+async function addAuth(){request("/account").then(a=>{if(a)if(document.getElementById("accountName").value=a.username,document.getElementById("accountInvite").innerText=a.invite,window.localStorage.getItem("lang")&&window.localStorage.getItem("lang-edit")&&36E5>Date.now()-parseInt(window.localStorage.getItem("lang-edit"))){loadLanguage(localStorage.getItem("lang"));document.getElementById("accountLanguage").value=localStorage.getItem("lang");try{document.getElementById("accountLanguage").querySelector('option[value="{value}"]'.format({value:localStorage.getItem("lang")})).setAttribute("selected",
+"")}catch{console.warn("No such language option")}}else{loadLanguage(a.language);document.getElementById("accountLanguage").value=a.language;try{document.getElementById("accountLanguage").querySelector('option[value="{value}"]'.format({value:a.language})).setAttribute("selected","")}catch{console.warn("No such language option")}}});request("/account/picture",document.getElementById("accountPicture"))}
+async function showCurrentPasswordInput(){document.getElementById("changePasswordRequest").classList.add("hidden-password-request");setTimeout(()=>{document.getElementById("changePasswordRequest").classList.add("unload");document.getElementById("currentPassword").classList.remove("unload");document.getElementById("currentPasswordSubmitButton").classList.add("submit-button-load");setTimeout(()=>{document.getElementById("currentPassword").classList.add("input-container-shown")},50)},100)}
+async function showNewPasswordInput(){document.getElementById("currentPassword").classList.add("password-input-hidden");document.getElementById("currentPasswordSubmitButton").classList.remove("show-submit-button");document.getElementById("currentPasswordSubmitButton").classList.remove("submit-button-pointerevent");setTimeout(()=>{document.getElementById("currentPasswordSubmitButton").classList.remove("submit-button-load");document.getElementById("currentPassword").classList.add("unload");document.getElementById("newPassword").classList.remove("unload");
+document.getElementById("newPasswordSubmitButton").classList.add("submit-button-load");setTimeout(()=>{document.getElementById("newPassword").classList.add("input-container-shown")},50)},250)}
+async function changePassword(){document.getElementById("newPassword").classList.add("password-input-hidden");document.getElementById("newPasswordSubmitButton").classList.remove("show-submit-button");document.getElementById("newPasswordSubmitButton").classList.remove("submit-button-pointerevent");setTimeout(()=>{document.getElementById("newPasswordSubmitButton").classList.remove("submit-button-load");document.getElementById("newPassword").classList.add("unload");document.getElementById("changePasswordRequest").classList.remove("unload");
+setTimeout(()=>{document.getElementById("changePasswordRequest").classList.remove("hidden-password-request");document.getElementById("currentPassword").classList.remove("input-container-shown");document.getElementById("currentPassword").classList.remove("password-input-hidden");document.getElementById("newPassword").classList.remove("input-container-shown");document.getElementById("newPassword").classList.remove("password-input-hidden")},50)},250);request("/account/change/password?password={currentPassword}&newPassword={newPassword}".format({currentPassword:document.getElementById("currentPassword").value,
+newPassword:document.getElementById("newPassword").value}),null,"POST").then(a=>{document.getElementById("currentPassword").value="";document.getElementById("newPassword").value="";a&&newInfo(localization[states.language].Requests.success.account.change.password)})}
+async function changeUsername(){request("/account/change/username?username={username}".format({username:document.getElementById("accountName").value}),null,"POST").then(a=>{a?(newInfo(localization[states.language].Requests.success.account.change.username),window.localStorage.setItem("__japanterebi_auth",a.token)):addAuth()})}async function changeLanguage(){loadLanguage(this.value);request("/account/change/language?language={lang}".format({lang:this.value}),null,"POST")}
+async function addProfilePicture(){let a=document.createElement("input");a.type="file";a.accept="image/*";document.getElementsByTagName("body")[0].appendChild(a);a.addEventListener("change",()=>{let b=new FormData;b.set("image",a.files[0]);fetch(constants.MAIN_HOST+"/account/picture/new?token="+localStorage.getItem("__japanterebi_auth"),{method:"POST",body:b}).then(c=>c.json()).then(c=>{c.success?(newInfo(localization[states.language].Requests.success.account.picture.new),request("/account/picture",
+document.getElementById("accountPicture"))):newInfo(localization[states.language].Requests.errors.account.picture.new);a.remove()}).catch(c=>{a.remove()})},!1);a.click()};
